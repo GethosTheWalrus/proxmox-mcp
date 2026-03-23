@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Semantic release
+    runs-on: ubuntu-latest
+    concurrency: release
+    permissions:
+      contents: write
+    outputs:
+      released: ${{ steps.version_check.outputs.will_release }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: pip install python-semantic-release build
+
+      - name: Check for releasable commits
+        id: version_check
+        run: |
+          version=$(semantic-release version --print 2>/dev/null || true)
+          if [ -n "$version" ]; then
+            echo "will_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "will_release=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run semantic release
+        if: steps.version_check.outputs.will_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: semantic-release version --push
+
+      - name: Build package
+        if: steps.version_check.outputs.will_release == 'true'
+        run: python -m build
+
+      - name: Upload build artifacts
+        if: steps.version_check.outputs.will_release == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

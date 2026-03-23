@@ -1,0 +1,12 @@
+# Development dependencies
+-r requirements.txt
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Code quality
+black>=25.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+pre-commit>=4.0.0

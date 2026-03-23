@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "proxmox": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--env-file",
+        "${workspaceFolder}/.env",
+        "proxmox-mcp:latest"
+      ]
+    }
+  }
+}

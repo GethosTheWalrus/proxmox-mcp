@@ -1,0 +1,15 @@
+services:
+  proxmox-mcp:
+    build: .
+    image: proxmox-mcp:latest
+    container_name: proxmox-mcp
+    stdin_open: true
+    environment:
+      - PROXMOX_HOST=${PROXMOX_HOST}
+      - PROXMOX_PORT=${PROXMOX_PORT:-8006}
+      - PROXMOX_USER=${PROXMOX_USER:-root@pam}
+      - PROXMOX_TOKEN_NAME=${PROXMOX_TOKEN_NAME:-}
+      - PROXMOX_TOKEN_VALUE=${PROXMOX_TOKEN_VALUE:-}
+      - PROXMOX_PASSWORD=${PROXMOX_PASSWORD:-}
+      - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-0}
+    restart: unless-stopped

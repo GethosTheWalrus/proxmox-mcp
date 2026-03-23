@@ -1,0 +1,74 @@
+[project]
+name = "proxmox-mcp-server"
+version = "0.1.0"
+description = "MCP server for Proxmox VE infrastructure management"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "Mike Toscano", email = "mike@miketoscano.com"},
+]
+keywords = ["proxmox", "mcp", "model-context-protocol", "virtualization", "infrastructure"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "proxmoxer>=2.0.0",
+    "requests>=2.31.0",
+    "urllib3>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/GethosTheWalrus/proxmox-mcp"
+Repository = "https://github.com/GethosTheWalrus/proxmox-mcp"
+Issues = "https://github.com/GethosTheWalrus/proxmox-mcp/issues"
+
+[project.scripts]
+proxmox-mcp-server = "proxmox_mcp.server:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["proxmox_mcp*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::pytest.PytestAssertRewriteWarning"
+]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = false
+warn_return_any = true
+
+[tool.black]
+line-length = 200
+target-version = ["py311"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+tag_format = "v{version}"
+
+[tool.semantic_release.branches.main]
+match = "main"
+
+[tool.semantic_release.remote]
+type = "github"
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = true

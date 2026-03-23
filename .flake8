@@ -1,0 +1,11 @@
+[flake8]
+max-line-length = 200
+# E203 is not PEP 8 compliant and conflicts with black's slice formatting
+extend-ignore = E203
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    build,
+    dist
