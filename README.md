@@ -363,6 +363,7 @@ Recommended when running via Docker. Configuration is passed through environment
         "-e", "PROXMOX_TOKEN_NAME",
         "-e", "PROXMOX_TOKEN_VALUE",
         "-e", "PROXMOX_VERIFY_SSL",
+        "-e", "PROXMOX_TIMEOUT",
         "mcp/proxmox"
       ],
       "env": {
@@ -412,6 +413,7 @@ Recommended when running from PyPI via [`uvx`](https://docs.astral.sh/uv/guides/
 | API token value | `PROXMOX_TOKEN_VALUE` | — |
 | Password | `PROXMOX_PASSWORD` | — |
 | SSL verification | `PROXMOX_VERIFY_SSL` | `0` |
+| Request timeout (seconds) | `PROXMOX_TIMEOUT` | `30` |
 
 Either `PROXMOX_TOKEN_NAME` + `PROXMOX_TOKEN_VALUE` or `PROXMOX_PASSWORD` is required for authentication.
 

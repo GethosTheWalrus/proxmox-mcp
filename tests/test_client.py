@@ -34,6 +34,7 @@ class TestGetClient:
                 token_name="mcp",
                 token_value="secret-token",
                 verify_ssl=False,
+                timeout=30,
                 service="PVE",
             )
 
@@ -52,6 +53,7 @@ class TestGetClient:
                 user="admin@pve",
                 password="secret",
                 verify_ssl=False,
+                timeout=30,
                 service="PVE",
             )
 

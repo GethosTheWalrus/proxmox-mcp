@@ -21,6 +21,7 @@ def _get_client() -> ProxmoxAPI:
 
     verify_ssl = os.environ.get("PROXMOX_VERIFY_SSL", "0").lower() in ("1", "true", "yes")
     port = int(os.environ.get("PROXMOX_PORT", "8006"))
+    timeout = int(os.environ.get("PROXMOX_TIMEOUT", "30"))
 
     token_name = os.environ.get("PROXMOX_TOKEN_NAME", "")
     token_value = os.environ.get("PROXMOX_TOKEN_VALUE", "")
@@ -33,6 +34,7 @@ def _get_client() -> ProxmoxAPI:
             token_name=token_name,
             token_value=token_value,
             verify_ssl=verify_ssl,
+            timeout=timeout,
             service="PVE",
         )
 
@@ -50,6 +52,7 @@ def _get_client() -> ProxmoxAPI:
         user=user,
         password=password,
         verify_ssl=verify_ssl,
+        timeout=timeout,
         service="PVE",
     )
 
