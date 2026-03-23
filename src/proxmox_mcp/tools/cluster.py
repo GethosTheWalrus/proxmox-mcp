@@ -41,7 +41,7 @@ def register(mcp: FastMCP) -> None:
         Args:
             limit: Maximum number of tasks to return.
         """
-        return format_response(api_request("get", "/cluster/tasks"))
+        return format_response(api_request("get", "/cluster/tasks", limit=limit))
 
     @mcp.tool()
     def get_cluster_log(max_entries: int = 50) -> str:
@@ -95,7 +95,7 @@ def register(mcp: FastMCP) -> None:
         params: dict = {}
         for key, val in [
             ("keyboard", keyboard), ("language", language), ("console", console),
-            ("http_proxy", http_proxy), ("email_from", email_from), ("description", description),
+            ("http-proxy", http_proxy), ("email-from", email_from), ("description", description),
             ("delete", delete),
         ]:
             if val:
