@@ -12,4 +12,5 @@ services:
       - PROXMOX_TOKEN_VALUE=${PROXMOX_TOKEN_VALUE:-}
       - PROXMOX_PASSWORD=${PROXMOX_PASSWORD:-}
       - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-0}
+      - TOOL_ROUTING=${TOOL_ROUTING:-}
     restart: unless-stopped

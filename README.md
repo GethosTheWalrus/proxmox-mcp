@@ -414,8 +414,11 @@ Recommended when running from PyPI via [`uvx`](https://docs.astral.sh/uv/guides/
 | Password | `PROXMOX_PASSWORD` | — |
 | SSL verification | `PROXMOX_VERIFY_SSL` | `0` |
 | Request timeout (seconds) | `PROXMOX_TIMEOUT` | `30` |
+| Tool routing | `TOOL_ROUTING` | `false` |
 
 Either `PROXMOX_TOKEN_NAME` + `PROXMOX_TOKEN_VALUE` or `PROXMOX_PASSWORD` is required for authentication.
+
+When `TOOL_ROUTING` is set to `true`, the server exposes only 3 tools — `route_tools`, `call_routed_tool`, and `proxmox_api_raw` — instead of the full set. Use `route_tools` with a natural-language query to find relevant tools, then invoke them via `call_routed_tool`. This significantly reduces LLM context usage. Requires the `router` extra (`pip install proxmox-mcp-server[router]`).
 
 ## Development
 

@@ -432,7 +432,11 @@ def register(mcp: FastMCP) -> None:
         return format_response(api_request("get", f"/nodes/{node}/qemu/{vmid}/firewall/rules"))
 
     @mcp.tool()
-    def create_vm_firewall_rule(node: str, vmid: int, action: str, type: str, enable: int = 1, source: str = "", dest: str = "", proto: str = "", dport: str = "", macro: str = "", comment: str = "") -> str:
+    def create_vm_firewall_rule(
+        node: str, vmid: int, action: str, type: str, enable: int = 1,
+        source: str = "", dest: str = "", proto: str = "",
+        dport: str = "", macro: str = "", comment: str = "",
+    ) -> str:
         """Create a firewall rule for a QEMU VM.
 
         Args:
@@ -476,7 +480,11 @@ def register(mcp: FastMCP) -> None:
         return format_response(api_request("get", f"/nodes/{node}/lxc/{vmid}/firewall/rules"))
 
     @mcp.tool()
-    def create_container_firewall_rule(node: str, vmid: int, action: str, type: str, enable: int = 1, source: str = "", dest: str = "", proto: str = "", dport: str = "", macro: str = "", comment: str = "") -> str:
+    def create_container_firewall_rule(
+        node: str, vmid: int, action: str, type: str, enable: int = 1,
+        source: str = "", dest: str = "", proto: str = "",
+        dport: str = "", macro: str = "", comment: str = "",
+    ) -> str:
         """Create a firewall rule for an LXC container.
 
         Args:
