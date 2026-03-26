@@ -49,3 +49,10 @@ htmlcov/
 
 # macOS
 .DS_Store
+
+# Large model files (download separately or use HuggingFace)
+*.safetensors
+*.litertlm
+*.gguf
+fine-tuning/model/
+fine-tuning/output/

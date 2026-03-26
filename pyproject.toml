@@ -27,6 +27,13 @@ dependencies = [
     "urllib3>=2.0.0",
 ]
 
+[project.optional-dependencies]
+router = [
+    "torch>=2.0.0",
+    "transformers>=4.45.0",
+    "safetensors>=0.4.3",
+]
+
 [project.urls]
 Homepage = "https://github.com/GethosTheWalrus/proxmox-mcp"
 Repository = "https://github.com/GethosTheWalrus/proxmox-mcp"

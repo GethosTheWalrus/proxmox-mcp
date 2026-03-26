@@ -1,6 +1,17 @@
 {
   "servers": {
-    "proxmox": {
+    // "proxmox": {
+    //   "command": "docker",
+    //   "args": [
+    //     "run",
+    //     "-i",
+    //     "--rm",
+    //     "--env-file",
+    //     "${workspaceFolder}/.env",
+    //     "proxmox-mcp:latest"
+    //   ]
+    // },
+    "proxmox-routed": {
       "command": "docker",
       "args": [
         "run",
@@ -8,8 +19,24 @@
         "--rm",
         "--env-file",
         "${workspaceFolder}/.env",
-        "proxmox-mcp:latest"
+        "-e",
+        "TOOL_ROUTER_MODEL=/app/model",
+        "-v",
+        "${workspaceFolder}/fine-tuning/output:/app/model:ro",
+        "proxmox-mcp-routed:latest"
       ]
-    }
+    },
+    // "proxmox-native": {
+    //   "command": "uv",
+    //   "args": [
+    //     "run",
+    //     "--directory",
+    //     "${workspaceFolder}",
+    //     "proxmox-mcp-server"
+    //   ],
+    //   "env": {
+    //     "TOOL_ROUTER_MODEL": "${workspaceFolder}/fine-tuning/output"
+    //   }
+    // }
   }
 }

@@ -1,0 +1,4 @@
+transformers>=4.45.0
+huggingface_hub>=0.25.0
+accelerate>=0.30.0
+peft>=0.12.0

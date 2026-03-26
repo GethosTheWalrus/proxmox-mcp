@@ -13,3 +13,43 @@ services:
       - PROXMOX_PASSWORD=${PROXMOX_PASSWORD:-}
       - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-0}
     restart: unless-stopped
+
+  proxmox-mcp-routed:
+    build:
+      context: .
+      args:
+        INSTALL_ROUTER: "true"
+    image: proxmox-mcp-routed:latest
+    container_name: proxmox-mcp-routed
+    stdin_open: true
+    environment:
+      - PROXMOX_HOST=${PROXMOX_HOST}
+      - PROXMOX_PORT=${PROXMOX_PORT:-8006}
+      - PROXMOX_USER=${PROXMOX_USER:-root@pam}
+      - PROXMOX_TOKEN_NAME=${PROXMOX_TOKEN_NAME:-}
+      - PROXMOX_TOKEN_VALUE=${PROXMOX_TOKEN_VALUE:-}
+      - PROXMOX_PASSWORD=${PROXMOX_PASSWORD:-}
+      - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-0}
+      - TOOL_ROUTER_MODEL=/app/model
+    volumes:
+      - ./fine-tuning/output:/app/model:ro
+    profiles:
+      - router
+
+  fine-tune:
+    build:
+      context: .
+      dockerfile: fine-tuning/Dockerfile
+      args:
+        # Compute platform: cpu, cu124 (NVIDIA), rocm6.2 (AMD)
+        COMPUTE_PLATFORM: ${COMPUTE_PLATFORM:-cpu}
+    image: proxmox-mcp-fine-tune:latest
+    container_name: proxmox-mcp-fine-tune
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+    volumes:
+      - ./fine-tuning/model:/app/fine-tuning/model
+      - ./fine-tuning/data:/app/fine-tuning/data
+      - ./fine-tuning/output:/app/fine-tuning/output
+    profiles:
+      - fine-tune
