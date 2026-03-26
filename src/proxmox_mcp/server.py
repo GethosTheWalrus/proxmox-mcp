@@ -127,7 +127,6 @@ def _tool_summary(tool: Any) -> str:
     return f"{tool.name}({sig}) — {desc}"
 
 
-@mcp.tool()
 def route_tools(query: str) -> str:
     """Find tools relevant to your task. Call this FIRST, then use call_routed_tool to invoke them.
 
@@ -168,7 +167,6 @@ def route_tools(query: str) -> str:
     return "\n".join(lines)
 
 
-@mcp.tool()
 async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None) -> str:  # type: ignore[assignment]
     """Invoke a tool returned by route_tools.
 
@@ -205,6 +203,8 @@ def _install_routing_hooks() -> None:
         return
 
     logger.info("Tool routing enabled — only 3 base tools visible")
+    mcp.tool()(route_tools)
+    mcp.tool()(call_routed_tool)
     tm = mcp._tool_manager  # type: ignore[attr-defined]
     tm.list_tools = _filtered_list_tools
 
