@@ -27,6 +27,12 @@ dependencies = [
     "urllib3>=2.0.0",
 ]
 
+[project.optional-dependencies]
+router = [
+    "fastembed>=0.4.0",
+    "numpy>=1.26.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/GethosTheWalrus/proxmox-mcp"
 Repository = "https://github.com/GethosTheWalrus/proxmox-mcp"
