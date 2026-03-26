@@ -206,7 +206,7 @@ def _install_routing_hooks() -> None:
     mcp.tool()(route_tools)
     mcp.tool()(call_routed_tool)
     tm = mcp._tool_manager  # type: ignore[attr-defined]
-    tm.list_tools = _filtered_list_tools
+    tm.list_tools = _filtered_list_tools  # type: ignore[method-assign]
 
 
 # ── Entrypoint ───────────────────────────────────────────────────────

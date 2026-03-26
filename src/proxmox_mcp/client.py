@@ -88,7 +88,7 @@ def api_request(method: str, path: str, **params) -> dict | list | str:
         resource = getattr(resource, seg)
 
     fn = getattr(resource, method.lower())
-    result = fn(**params)
+    result: dict | list | str = fn(**params)
 
     # proxmoxer returns the data portion already unwrapped
     return result

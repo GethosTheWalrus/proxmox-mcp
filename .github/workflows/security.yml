@@ -27,7 +27,7 @@ jobs:
       - name: Run pip-audit
         run: |
           pip install pip-audit
-          pip-audit -r requirements.txt
+          pip-audit -r requirements.txt --ignore-vuln CVE-2026-4539  # pygments; no fix available yet
 
   semgrep:
     name: SAST (Semgrep)
