@@ -24,7 +24,6 @@ _active_tools_lock = threading.Lock()
 _registered_modules: set[str] = set()
 _registration_lock = threading.Lock()
 _router_indexed = False
-_routing_hooks_installed = False
 _ROUTED_MODE = os.environ.get("TOOL_ROUTING", "").lower() in ("1", "true", "yes")
 
 
@@ -295,12 +294,8 @@ async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None
 
 def _install_routing_hooks() -> None:
     """Patch FastMCP's tool manager so only the 3 facade tools are listed."""
-    global _routing_hooks_installed
     if not _is_routed_mode():
         logger.info("Tool routing disabled — all %d tools visible", len(get_registered_tool_map(mcp)))
-        return
-    if _routing_hooks_installed:
-        logger.info("Tool routing already enabled — only 3 base tools visible")
         return
 
     logger.info("Tool routing enabled — only 3 base tools visible")
@@ -311,7 +306,6 @@ def _install_routing_hooks() -> None:
         mcp.tool()(call_routed_tool)
     tm = get_tool_manager(mcp)
     tm.list_tools = _filtered_list_tools  # type: ignore[method-assign]
-    _routing_hooks_installed = True
 
 
 if _is_routed_mode():

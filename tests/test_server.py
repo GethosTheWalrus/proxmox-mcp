@@ -10,27 +10,27 @@ from unittest.mock import patch, MagicMock
 class TestServerImport:
     def test_mcp_server_loads(self):
         """Server module should import and create the FastMCP instance."""
-        from proxmox_mcp.server import mcp
+        import proxmox_mcp.server as mod
 
-        assert mcp is not None
-        assert mcp.name == "Proxmox MCP Server"
+        assert mod.mcp is not None
+        assert mod.mcp.name == "Proxmox MCP Server"
 
     def test_all_tools_registered(self):
         """All 286 tools should be registered without duplicates."""
-        from proxmox_mcp.server import mcp
+        import proxmox_mcp.server as mod
 
         from proxmox_mcp.mcp_compat import get_registered_tool_map
 
-        tools = get_registered_tool_map(mcp)
+        tools = get_registered_tool_map(mod.mcp)
         assert len(tools) == 286
 
     def test_no_duplicate_tool_names(self):
         """Tool names should be unique."""
-        from proxmox_mcp.server import mcp
+        import proxmox_mcp.server as mod
 
         from proxmox_mcp.mcp_compat import get_registered_tool_map
 
-        tools = get_registered_tool_map(mcp)
+        tools = get_registered_tool_map(mod.mcp)
         names = list(tools.keys())
         assert len(names) == len(set(names)), f"Duplicate tools found: {[n for n in names if names.count(n) > 1]}"
 
@@ -83,12 +83,10 @@ class TestToolModuleRegistration:
 
 class TestMainEntryPoint:
     def test_main_calls_mcp_run(self):
-        from proxmox_mcp.server import mcp
+        import proxmox_mcp.server as mod
 
-        with patch.object(mcp, "run") as mock_run:
-            from proxmox_mcp.server import main
-
-            main()
+        with patch.object(mod.mcp, "run") as mock_run:
+            mod.main()
             mock_run.assert_called_once_with(transport="stdio")
 
 
@@ -186,10 +184,10 @@ class TestToolRouting:
             importlib.reload(mod)
 
     def test_raw_api_can_be_disabled(self):
-        from proxmox_mcp.server import proxmox_api_raw
+        import proxmox_mcp.server as mod
 
         with patch.dict("os.environ", {"PROXMOX_DISABLE_RAW_API": "true"}):
-            result = proxmox_api_raw("get", "/nodes")
+            result = mod.proxmox_api_raw("get", "/nodes")
 
         assert "disabled" in result
 
