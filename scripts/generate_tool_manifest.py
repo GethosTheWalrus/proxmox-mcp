@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib
+import inspect
 import json
 import sys
 from pathlib import Path
@@ -40,7 +41,7 @@ def build_manifest() -> dict[str, Any]:
                 {
                     "name": tool.name,
                     "module": module_name,
-                    "description": tool.description or "",
+                    "description": inspect.cleandoc(tool.description or ""),
                     "parameters": tool.parameters or {},
                 }
             )

@@ -2,7 +2,7 @@
   "generated_by": "scripts/generate_tool_manifest.py",
   "tools": [
     {
-      "description": "Change a user's password.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    password: New password.\n",
+      "description": "Change a user's password.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    password: New password.",
       "module": "access",
       "name": "change_password",
       "parameters": {
@@ -25,7 +25,7 @@
       }
     },
     {
-      "description": "Create a new group.\n\nArgs:\n    groupid: Group ID.\n    comment: Description.\n",
+      "description": "Create a new group.\n\nArgs:\n    groupid: Group ID.\n    comment: Description.",
       "module": "access",
       "name": "create_group",
       "parameters": {
@@ -48,7 +48,7 @@
       }
     },
     {
-      "description": "Create a new role with specific privileges.\n\nArgs:\n    roleid: Role ID.\n    privs: Comma-separated list of privileges (e.g. 'VM.Allocate,VM.Config.Disk,VM.PowerMgmt').\n",
+      "description": "Create a new role with specific privileges.\n\nArgs:\n    roleid: Role ID.\n    privs: Comma-separated list of privileges (e.g. 'VM.Allocate,VM.Config.Disk,VM.PowerMgmt').",
       "module": "access",
       "name": "create_role",
       "parameters": {
@@ -71,7 +71,7 @@
       }
     },
     {
-      "description": "Create a new user.\n\nArgs:\n    userid: User ID (format: 'user@realm', e.g. 'myuser@pve').\n    password: Password (only for pve/pam realms).\n    email: Email address.\n    firstname: First name.\n    lastname: Last name.\n    groups: Comma-separated group list.\n    comment: Description.\n    enable: Enable user.\n    expire: Account expiration (Unix epoch, 0 = never).\n",
+      "description": "Create a new user.\n\nArgs:\n    userid: User ID (format: 'user@realm', e.g. 'myuser@pve').\n    password: Password (only for pve/pam realms).\n    email: Email address.\n    firstname: First name.\n    lastname: Last name.\n    groups: Comma-separated group list.\n    comment: Description.\n    enable: Enable user.\n    expire: Account expiration (Unix epoch, 0 = never).",
       "module": "access",
       "name": "create_user",
       "parameters": {
@@ -129,7 +129,7 @@
       }
     },
     {
-      "description": "Create a new API token for a user. Returns the token value (shown only once).\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID (alphanumeric).\n    comment: Token description.\n    privsep: Enable privilege separation (token has own permissions, not user's full permissions).\n    expire: Expiration (Unix epoch, 0 = never).\n",
+      "description": "Create a new API token for a user. Returns the token value (shown only once).\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID (alphanumeric).\n    comment: Token description.\n    privsep: Enable privilege separation (token has own permissions, not user's full permissions).\n    expire: Expiration (Unix epoch, 0 = never).",
       "module": "access",
       "name": "create_user_token",
       "parameters": {
@@ -167,7 +167,7 @@
       }
     },
     {
-      "description": "Delete a group.\n\nArgs:\n    groupid: Group ID.\n",
+      "description": "Delete a group.\n\nArgs:\n    groupid: Group ID.",
       "module": "access",
       "name": "delete_group",
       "parameters": {
@@ -185,7 +185,7 @@
       }
     },
     {
-      "description": "Delete a role.\n\nArgs:\n    roleid: Role ID.\n",
+      "description": "Delete a role.\n\nArgs:\n    roleid: Role ID.",
       "module": "access",
       "name": "delete_role",
       "parameters": {
@@ -203,7 +203,7 @@
       }
     },
     {
-      "description": "Delete a user.\n\nArgs:\n    userid: User ID to delete (format: 'user@realm').\n",
+      "description": "Delete a user.\n\nArgs:\n    userid: User ID to delete (format: 'user@realm').",
       "module": "access",
       "name": "delete_user",
       "parameters": {
@@ -221,7 +221,7 @@
       }
     },
     {
-      "description": "Delete an API token.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID.\n",
+      "description": "Delete an API token.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID.",
       "module": "access",
       "name": "delete_user_token",
       "parameters": {
@@ -254,7 +254,7 @@
       }
     },
     {
-      "description": "Get authentication domain configuration.\n\nArgs:\n    realm: Realm ID (e.g. 'pam', 'pve', 'my-ldap').\n",
+      "description": "Get authentication domain configuration.\n\nArgs:\n    realm: Realm ID (e.g. 'pam', 'pve', 'my-ldap').",
       "module": "access",
       "name": "get_auth_domain",
       "parameters": {
@@ -272,7 +272,7 @@
       }
     },
     {
-      "description": "Get group details.\n\nArgs:\n    groupid: Group ID.\n",
+      "description": "Get group details.\n\nArgs:\n    groupid: Group ID.",
       "module": "access",
       "name": "get_group",
       "parameters": {
@@ -290,7 +290,7 @@
       }
     },
     {
-      "description": "Check effective permissions for a user on a given path.\n\nArgs:\n    userid: User to check (empty = current user).\n    path: Object path to check (empty = root).\n",
+      "description": "Check effective permissions for a user on a given path.\n\nArgs:\n    userid: User to check (empty = current user).\n    path: Object path to check (empty = root).",
       "module": "access",
       "name": "get_permissions",
       "parameters": {
@@ -311,7 +311,7 @@
       }
     },
     {
-      "description": "Get role details and its privileges.\n\nArgs:\n    roleid: Role ID.\n",
+      "description": "Get role details and its privileges.\n\nArgs:\n    roleid: Role ID.",
       "module": "access",
       "name": "get_role",
       "parameters": {
@@ -329,7 +329,7 @@
       }
     },
     {
-      "description": "Get details for a specific user.\n\nArgs:\n    userid: User ID (format: 'user@realm', e.g. 'admin@pam').\n",
+      "description": "Get details for a specific user.\n\nArgs:\n    userid: User ID (format: 'user@realm', e.g. 'admin@pam').",
       "module": "access",
       "name": "get_user",
       "parameters": {
@@ -347,7 +347,7 @@
       }
     },
     {
-      "description": "Get details for a specific API token.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID.\n",
+      "description": "Get details for a specific API token.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    tokenid: Token ID.",
       "module": "access",
       "name": "get_user_token",
       "parameters": {
@@ -400,7 +400,7 @@
       }
     },
     {
-      "description": "List TFA (two-factor auth) entries.\n\nArgs:\n    userid: Filter by user ID (empty = all users).\n",
+      "description": "List TFA (two-factor auth) entries.\n\nArgs:\n    userid: Filter by user ID (empty = all users).",
       "module": "access",
       "name": "list_tfa",
       "parameters": {
@@ -416,7 +416,7 @@
       }
     },
     {
-      "description": "List API tokens for a user.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n",
+      "description": "List API tokens for a user.\n\nArgs:\n    userid: User ID (format: 'user@realm').",
       "module": "access",
       "name": "list_user_tokens",
       "parameters": {
@@ -434,7 +434,7 @@
       }
     },
     {
-      "description": "List all users in Proxmox.\n\nArgs:\n    enabled: Only show enabled users.\n    full: Include detailed info (groups, tokens, etc.).\n",
+      "description": "List all users in Proxmox.\n\nArgs:\n    enabled: Only show enabled users.\n    full: Include detailed info (groups, tokens, etc.).",
       "module": "access",
       "name": "list_users",
       "parameters": {
@@ -455,7 +455,7 @@
       }
     },
     {
-      "description": "Sync users/groups from an external auth domain (LDAP/AD).\n\nArgs:\n    realm: Realm ID to sync.\n    dry_run: Only show what would change.\n    full: Full sync (not just incremental).\n    enable_new: Enable newly synced users.\n    remove_vanished: Comma-separated: 'entry' (remove users), 'properties' (clear), 'acl' (remove ACLs).\n",
+      "description": "Sync users/groups from an external auth domain (LDAP/AD).\n\nArgs:\n    realm: Realm ID to sync.\n    dry_run: Only show what would change.\n    full: Full sync (not just incremental).\n    enable_new: Enable newly synced users.\n    remove_vanished: Comma-separated: 'entry' (remove users), 'properties' (clear), 'acl' (remove ACLs).",
       "module": "access",
       "name": "sync_auth_domain",
       "parameters": {
@@ -493,7 +493,7 @@
       }
     },
     {
-      "description": "Add or remove ACL entries (permission assignments).\n\nArgs:\n    path: Object path (e.g. '/', '/vms/100', '/storage/local', '/pool/mypool').\n    roles: Comma-separated role list.\n    users: Comma-separated user list (format: 'user@realm').\n    groups: Comma-separated group list.\n    tokens: Comma-separated token list (format: 'user@realm!tokenid').\n    propagate: Propagate permissions to child objects.\n    delete: Remove the ACL entry instead of adding.\n",
+      "description": "Add or remove ACL entries (permission assignments).\n\nArgs:\n    path: Object path (e.g. '/', '/vms/100', '/storage/local', '/pool/mypool').\n    roles: Comma-separated role list.\n    users: Comma-separated user list (format: 'user@realm').\n    groups: Comma-separated group list.\n    tokens: Comma-separated token list (format: 'user@realm!tokenid').\n    propagate: Propagate permissions to child objects.\n    delete: Remove the ACL entry instead of adding.",
       "module": "access",
       "name": "update_acl",
       "parameters": {
@@ -541,7 +541,7 @@
       }
     },
     {
-      "description": "Update a group.\n\nArgs:\n    groupid: Group ID.\n    comment: Description.\n",
+      "description": "Update a group.\n\nArgs:\n    groupid: Group ID.\n    comment: Description.",
       "module": "access",
       "name": "update_group",
       "parameters": {
@@ -564,7 +564,7 @@
       }
     },
     {
-      "description": "Update role privileges.\n\nArgs:\n    roleid: Role ID.\n    privs: Comma-separated list of privileges.\n    append: Append privileges instead of replacing.\n",
+      "description": "Update role privileges.\n\nArgs:\n    roleid: Role ID.\n    privs: Comma-separated list of privileges.\n    append: Append privileges instead of replacing.",
       "module": "access",
       "name": "update_role",
       "parameters": {
@@ -592,7 +592,7 @@
       }
     },
     {
-      "description": "Update an existing user.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    email: Email address.\n    firstname: First name.\n    lastname: Last name.\n    groups: Comma-separated group list.\n    comment: Description.\n    enable: Enable/disable user.\n    expire: Account expiration (Unix epoch, 0 = never, -1 = don't change).\n    append: Append groups instead of replacing.\n",
+      "description": "Update an existing user.\n\nArgs:\n    userid: User ID (format: 'user@realm').\n    email: Email address.\n    firstname: First name.\n    lastname: Last name.\n    groups: Comma-separated group list.\n    comment: Description.\n    enable: Enable/disable user.\n    expire: Account expiration (Unix epoch, 0 = never, -1 = don't change).\n    append: Append groups instead of replacing.",
       "module": "access",
       "name": "update_user",
       "parameters": {
@@ -650,7 +650,7 @@
       }
     },
     {
-      "description": "Create a scheduled backup job.\n\nArgs:\n    storage: Target storage ID for backups.\n    schedule: Schedule in systemd calendar format (e.g. 'daily', 'weekly', '02:00').\n    all_guests: Backup all guests.\n    vmid: Comma-separated VMIDs to back up (if not all_guests).\n    node: Only back up guests on this node.\n    mode: Backup mode: 'snapshot', 'suspend', 'stop'.\n    compress: Compression: 'none', 'lzo', 'gzip', 'zstd'.\n    mailnotification: 'always' or 'failure'.\n    mailto: Comma-separated email addresses.\n    maxfiles: Max backup files to keep (0 = unlimited, deprecated - use prune_backups).\n    prune_backups: Retention schedule (e.g. 'keep-daily=7,keep-weekly=4').\n    notes_template: Template for backup notes.\n    enabled: Enable the job.\n    comment: Description.\n",
+      "description": "Create a scheduled backup job.\n\nArgs:\n    storage: Target storage ID for backups.\n    schedule: Schedule in systemd calendar format (e.g. 'daily', 'weekly', '02:00').\n    all_guests: Backup all guests.\n    vmid: Comma-separated VMIDs to back up (if not all_guests).\n    node: Only back up guests on this node.\n    mode: Backup mode: 'snapshot', 'suspend', 'stop'.\n    compress: Compression: 'none', 'lzo', 'gzip', 'zstd'.\n    mailnotification: 'always' or 'failure'.\n    mailto: Comma-separated email addresses.\n    maxfiles: Max backup files to keep (0 = unlimited, deprecated - use prune_backups).\n    prune_backups: Retention schedule (e.g. 'keep-daily=7,keep-weekly=4').\n    notes_template: Template for backup notes.\n    enabled: Enable the job.\n    comment: Description.",
       "module": "backup",
       "name": "create_backup_job",
       "parameters": {
@@ -733,7 +733,7 @@
       }
     },
     {
-      "description": "Start an immediate backup (vzdump) on a node.\n\nArgs:\n    node: The node to run the backup on.\n    vmid: Comma-separated VMIDs (required if not all_guests).\n    all_guests: Back up all guests on the node.\n    storage: Target storage (empty = default).\n    mode: Backup mode: 'snapshot', 'suspend', 'stop'.\n    compress: Compression: 'none', 'lzo', 'gzip', 'zstd'.\n    stdout: Write to stdout instead of storage.\n",
+      "description": "Start an immediate backup (vzdump) on a node.\n\nArgs:\n    node: The node to run the backup on.\n    vmid: Comma-separated VMIDs (required if not all_guests).\n    all_guests: Back up all guests on the node.\n    storage: Target storage (empty = default).\n    mode: Backup mode: 'snapshot', 'suspend', 'stop'.\n    compress: Compression: 'none', 'lzo', 'gzip', 'zstd'.\n    stdout: Write to stdout instead of storage.",
       "module": "backup",
       "name": "create_vzdump",
       "parameters": {
@@ -781,7 +781,7 @@
       }
     },
     {
-      "description": "Delete a scheduled backup job.\n\nArgs:\n    id: Backup job ID.\n",
+      "description": "Delete a scheduled backup job.\n\nArgs:\n    id: Backup job ID.",
       "module": "backup",
       "name": "delete_backup_job",
       "parameters": {
@@ -799,7 +799,7 @@
       }
     },
     {
-      "description": "Download a file from a vzdump backup.\n\nArgs:\n    node: The node name.\n    storage: Storage ID.\n    volume: Backup volume ID.\n    filepath: Path of the file to download from the backup.\n",
+      "description": "Download a file from a vzdump backup.\n\nArgs:\n    node: The node name.\n    storage: Storage ID.\n    volume: Backup volume ID.\n    filepath: Path of the file to download from the backup.",
       "module": "backup",
       "name": "download_file_restore",
       "parameters": {
@@ -832,7 +832,7 @@
       }
     },
     {
-      "description": "Get details of a specific backup job.\n\nArgs:\n    id: Backup job ID.\n",
+      "description": "Get details of a specific backup job.\n\nArgs:\n    id: Backup job ID.",
       "module": "backup",
       "name": "get_backup_job",
       "parameters": {
@@ -850,7 +850,7 @@
       }
     },
     {
-      "description": "Get volumes included in a backup job.\n\nArgs:\n    id: Backup job ID.\n",
+      "description": "Get volumes included in a backup job.\n\nArgs:\n    id: Backup job ID.",
       "module": "backup",
       "name": "get_backup_job_included_volumes",
       "parameters": {
@@ -868,7 +868,7 @@
       }
     },
     {
-      "description": "Get the default vzdump configuration for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get the default vzdump configuration for a node.\n\nArgs:\n    node: The node name.",
       "module": "backup",
       "name": "get_vzdump_defaults",
       "parameters": {
@@ -886,7 +886,7 @@
       }
     },
     {
-      "description": "Extract the guest configuration from a vzdump backup archive.\n\nArgs:\n    node: The node name.\n    volume: Backup volume ID (e.g. 'local:backup/vzdump-qemu-100-2024_01_01-00_00_00.vma.zst').\n",
+      "description": "Extract the guest configuration from a vzdump backup archive.\n\nArgs:\n    node: The node name.\n    volume: Backup volume ID (e.g. 'local:backup/vzdump-qemu-100-2024_01_01-00_00_00.vma.zst').",
       "module": "backup",
       "name": "get_vzdump_extractconfig",
       "parameters": {
@@ -909,7 +909,7 @@
       }
     },
     {
-      "description": "List files in a vzdump backup for single-file restore.\n\nArgs:\n    node: The node name.\n    storage: Storage ID.\n    volume: Backup volume ID.\n    filepath: Path within the backup (default '/').\n",
+      "description": "List files in a vzdump backup for single-file restore.\n\nArgs:\n    node: The node name.\n    storage: Storage ID.\n    volume: Backup volume ID.\n    filepath: Path within the backup (default '/').",
       "module": "backup",
       "name": "list_backup_file_restore",
       "parameters": {
@@ -952,7 +952,7 @@
       }
     },
     {
-      "description": "Update a scheduled backup job.\n\nArgs:\n    id: Backup job ID.\n    storage: Target storage ID.\n    schedule: Schedule in systemd calendar format.\n    all_guests: Backup all guests.\n    vmid: Comma-separated VMIDs.\n    node: Node filter.\n    mode: Backup mode.\n    compress: Compression.\n    enabled: Enable/disable.\n    delete: Comma-separated properties to delete.\n",
+      "description": "Update a scheduled backup job.\n\nArgs:\n    id: Backup job ID.\n    storage: Target storage ID.\n    schedule: Schedule in systemd calendar format.\n    all_guests: Backup all guests.\n    vmid: Comma-separated VMIDs.\n    node: Node filter.\n    mode: Backup mode.\n    compress: Compression.\n    enabled: Enable/disable.\n    delete: Comma-separated properties to delete.",
       "module": "backup",
       "name": "update_backup_job",
       "parameters": {
@@ -1015,7 +1015,7 @@
       }
     },
     {
-      "description": "Bulk migrate guests to a target node.\n\nArgs:\n    target: Target node name.\n    vms: Comma-separated VMIDs.\n",
+      "description": "Bulk migrate guests to a target node.\n\nArgs:\n    target: Target node name.\n    vms: Comma-separated VMIDs.",
       "module": "cluster",
       "name": "bulk_migrate_guests",
       "parameters": {
@@ -1038,7 +1038,7 @@
       }
     },
     {
-      "description": "Bulk shutdown guests across the cluster.\n\nArgs:\n    vms: Comma-separated list of VMIDs (empty = all).\n",
+      "description": "Bulk shutdown guests across the cluster.\n\nArgs:\n    vms: Comma-separated list of VMIDs (empty = all).",
       "module": "cluster",
       "name": "bulk_shutdown_guests",
       "parameters": {
@@ -1054,7 +1054,7 @@
       }
     },
     {
-      "description": "Bulk start guests across the cluster.\n\nArgs:\n    vms: Comma-separated list of VMIDs (empty = all).\n",
+      "description": "Bulk start guests across the cluster.\n\nArgs:\n    vms: Comma-separated list of VMIDs (empty = all).",
       "module": "cluster",
       "name": "bulk_start_guests",
       "parameters": {
@@ -1070,7 +1070,7 @@
       }
     },
     {
-      "description": "Create a new Ceph OSD on a device.\n\nArgs:\n    node: The node name.\n    dev: Block device for the OSD (e.g. '/dev/sdb').\n    db_dev: Separate block device for DB.\n    wal_dev: Separate block device for WAL.\n    encrypted: Encrypt the OSD.\n",
+      "description": "Create a new Ceph OSD on a device.\n\nArgs:\n    node: The node name.\n    dev: Block device for the OSD (e.g. '/dev/sdb').\n    db_dev: Separate block device for DB.\n    wal_dev: Separate block device for WAL.\n    encrypted: Encrypt the OSD.",
       "module": "cluster",
       "name": "create_ceph_osd",
       "parameters": {
@@ -1108,7 +1108,7 @@
       }
     },
     {
-      "description": "Create a new Ceph pool.\n\nArgs:\n    node: The node name.\n    name: Pool name.\n    size: Number of replicas (default 3).\n    min_size: Minimum replicas for I/O (default 2).\n    pg_num: Number of placement groups (default 128).\n    application: Pool application (rbd, cephfs, rgw).\n",
+      "description": "Create a new Ceph pool.\n\nArgs:\n    node: The node name.\n    name: Pool name.\n    size: Number of replicas (default 3).\n    min_size: Minimum replicas for I/O (default 2).\n    pg_num: Number of placement groups (default 128).\n    application: Pool application (rbd, cephfs, rgw).",
       "module": "cluster",
       "name": "create_ceph_pool",
       "parameters": {
@@ -1151,7 +1151,7 @@
       }
     },
     {
-      "description": "Create a storage replication job.\n\nArgs:\n    id: Job ID (format: GUEST-JOBNUM, e.g. '100-0').\n    target: Target node.\n    type: Replication type (currently only 'local').\n    schedule: Schedule in systemd calendar format (default '*/15' = every 15 min).\n    comment: Description.\n    rate: Rate limit in mbps.\n    disable: Create disabled.\n",
+      "description": "Create a storage replication job.\n\nArgs:\n    id: Job ID (format: GUEST-JOBNUM, e.g. '100-0').\n    target: Target node.\n    type: Replication type (currently only 'local').\n    schedule: Schedule in systemd calendar format (default '*/15' = every 15 min).\n    comment: Description.\n    rate: Rate limit in mbps.\n    disable: Create disabled.",
       "module": "cluster",
       "name": "create_replication_job",
       "parameters": {
@@ -1199,7 +1199,7 @@
       }
     },
     {
-      "description": "Delete a replication job.\n\nArgs:\n    id: Replication job ID.\n    force: Force removal (skip cleanup).\n    keep: Keep replicated data on target.\n",
+      "description": "Delete a replication job.\n\nArgs:\n    id: Replication job ID.\n    force: Force removal (skip cleanup).\n    keep: Keep replicated data on target.",
       "module": "cluster",
       "name": "delete_replication_job",
       "parameters": {
@@ -1227,7 +1227,7 @@
       }
     },
     {
-      "description": "Get the raw Ceph configuration.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get the raw Ceph configuration.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "get_ceph_config",
       "parameters": {
@@ -1245,7 +1245,7 @@
       }
     },
     {
-      "description": "Get Ceph CRUSH rules.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get Ceph CRUSH rules.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "get_ceph_crush_rules",
       "parameters": {
@@ -1293,7 +1293,7 @@
       }
     },
     {
-      "description": "Get Ceph status from a specific node's perspective.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get Ceph status from a specific node's perspective.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "get_ceph_status_node",
       "parameters": {
@@ -1341,7 +1341,7 @@
       }
     },
     {
-      "description": "Get the cluster log (recent events).\n\nArgs:\n    max_entries: Max log entries.\n",
+      "description": "Get the cluster log (recent events).\n\nArgs:\n    max_entries: Max log entries.",
       "module": "cluster",
       "name": "get_cluster_log",
       "parameters": {
@@ -1367,7 +1367,7 @@
       }
     },
     {
-      "description": "List all resources across the cluster (VMs, containers, storage, nodes).\n\nArgs:\n    type: Filter by type: 'vm', 'storage', 'node', 'sdn', 'pool' (empty = all).\n",
+      "description": "List all resources across the cluster (VMs, containers, storage, nodes).\n\nArgs:\n    type: Filter by type: 'vm', 'storage', 'node', 'sdn', 'pool' (empty = all).",
       "module": "cluster",
       "name": "get_cluster_resources",
       "parameters": {
@@ -1393,7 +1393,7 @@
       }
     },
     {
-      "description": "List recent tasks across all nodes in the cluster.\n\nArgs:\n    limit: Maximum number of tasks to return.\n",
+      "description": "List recent tasks across all nodes in the cluster.\n\nArgs:\n    limit: Maximum number of tasks to return.",
       "module": "cluster",
       "name": "get_cluster_tasks",
       "parameters": {
@@ -1419,7 +1419,7 @@
       }
     },
     {
-      "description": "Get metric server configuration.\n\nArgs:\n    id: Metric server ID.\n",
+      "description": "Get metric server configuration.\n\nArgs:\n    id: Metric server ID.",
       "module": "cluster",
       "name": "get_metric_server",
       "parameters": {
@@ -1437,7 +1437,7 @@
       }
     },
     {
-      "description": "Get the next available VMID in the cluster.\n\nArgs:\n    vmid: Specific VMID to check availability for (0 = auto-assign).\n",
+      "description": "Get the next available VMID in the cluster.\n\nArgs:\n    vmid: Specific VMID to check availability for (0 = auto-assign).",
       "module": "cluster",
       "name": "get_next_vmid",
       "parameters": {
@@ -1453,7 +1453,7 @@
       }
     },
     {
-      "description": "Get a specific replication job configuration.\n\nArgs:\n    id: Replication job ID (format: GUEST-JOBNUM, e.g. '100-0').\n",
+      "description": "Get a specific replication job configuration.\n\nArgs:\n    id: Replication job ID (format: GUEST-JOBNUM, e.g. '100-0').",
       "module": "cluster",
       "name": "get_replication_job",
       "parameters": {
@@ -1481,7 +1481,7 @@
       }
     },
     {
-      "description": "Join a node to an existing cluster.\n\nArgs:\n    hostname: Hostname/IP of existing cluster node.\n    fingerprint: SSL fingerprint of the cluster node.\n    password: Root password of the cluster node.\n    nodeid: Force specific node ID.\n    force: Force join even with warnings.\n",
+      "description": "Join a node to an existing cluster.\n\nArgs:\n    hostname: Hostname/IP of existing cluster node.\n    fingerprint: SSL fingerprint of the cluster node.\n    password: Root password of the cluster node.\n    nodeid: Force specific node ID.\n    force: Force join even with warnings.",
       "module": "cluster",
       "name": "join_cluster",
       "parameters": {
@@ -1519,7 +1519,7 @@
       }
     },
     {
-      "description": "List CephFS filesystems.\n\nArgs:\n    node: The node name.\n",
+      "description": "List CephFS filesystems.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_fs",
       "parameters": {
@@ -1537,7 +1537,7 @@
       }
     },
     {
-      "description": "List Ceph managers.\n\nArgs:\n    node: The node name.\n",
+      "description": "List Ceph managers.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_managers",
       "parameters": {
@@ -1555,7 +1555,7 @@
       }
     },
     {
-      "description": "List Ceph metadata servers (MDS, for CephFS).\n\nArgs:\n    node: The node name.\n",
+      "description": "List Ceph metadata servers (MDS, for CephFS).\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_mds",
       "parameters": {
@@ -1573,7 +1573,7 @@
       }
     },
     {
-      "description": "List Ceph monitors.\n\nArgs:\n    node: The node name.\n",
+      "description": "List Ceph monitors.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_monitors",
       "parameters": {
@@ -1591,7 +1591,7 @@
       }
     },
     {
-      "description": "List Ceph OSDs on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List Ceph OSDs on a node.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_osds",
       "parameters": {
@@ -1609,7 +1609,7 @@
       }
     },
     {
-      "description": "List Ceph pools.\n\nArgs:\n    node: The node name.\n",
+      "description": "List Ceph pools.\n\nArgs:\n    node: The node name.",
       "module": "cluster",
       "name": "list_ceph_pools",
       "parameters": {
@@ -1727,7 +1727,7 @@
       }
     },
     {
-      "description": "Set a Ceph global flag.\n\nArgs:\n    flag: Flag name (noout, noscrub, nobackfill, norebalance, nodown, noup, etc.).\n    value: True to set, False to unset.\n",
+      "description": "Set a Ceph global flag.\n\nArgs:\n    flag: Flag name (noout, noscrub, nobackfill, norebalance, nodown, noup, etc.).\n    value: True to set, False to unset.",
       "module": "cluster",
       "name": "set_ceph_flags",
       "parameters": {
@@ -1750,7 +1750,7 @@
       }
     },
     {
-      "description": "Send a test notification to a target.\n\nArgs:\n    name: Target name.\n",
+      "description": "Send a test notification to a target.\n\nArgs:\n    name: Target name.",
       "module": "cluster",
       "name": "test_notification_target",
       "parameters": {
@@ -1768,7 +1768,7 @@
       }
     },
     {
-      "description": "Update datacenter/cluster-wide options.\n\nArgs:\n    keyboard: Keyboard layout (e.g. 'en-us', 'de').\n    language: Default language.\n    console: Default console viewer: 'applet', 'vv', 'html5', 'xtermjs'.\n    http_proxy: HTTP proxy URL.\n    email_from: Default email sender address.\n    max_workers: Max parallel workers.\n    description: Datacenter description.\n    delete: Comma-separated settings to delete.\n",
+      "description": "Update datacenter/cluster-wide options.\n\nArgs:\n    keyboard: Keyboard layout (e.g. 'en-us', 'de').\n    language: Default language.\n    console: Default console viewer: 'applet', 'vv', 'html5', 'xtermjs'.\n    http_proxy: HTTP proxy URL.\n    email_from: Default email sender address.\n    max_workers: Max parallel workers.\n    description: Datacenter description.\n    delete: Comma-separated settings to delete.",
       "module": "cluster",
       "name": "update_cluster_options",
       "parameters": {
@@ -1819,7 +1819,7 @@
       }
     },
     {
-      "description": "Add an IP/CIDR to an IP set.\n\nArgs:\n    name: IP set name.\n    cidr: IP address or CIDR.\n    comment: Description.\n    nomatch: Exclude this entry (nomatch).\n",
+      "description": "Add an IP/CIDR to an IP set.\n\nArgs:\n    name: IP set name.\n    cidr: IP address or CIDR.\n    comment: Description.\n    nomatch: Exclude this entry (nomatch).",
       "module": "firewall",
       "name": "add_firewall_ipset_entry",
       "parameters": {
@@ -1852,7 +1852,7 @@
       }
     },
     {
-      "description": "Create a cluster-level firewall rule.\n\nArgs:\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source address/range (CIDR or alias).\n    dest: Destination address/range.\n    proto: Protocol (tcp, udp, icmp, etc.).\n    sport: Source port(s).\n    dport: Destination port(s).\n    iface: Network interface.\n    macro: Use predefined macro (e.g. 'SSH', 'HTTP', 'HTTPS', 'Ping').\n    comment: Description.\n    log: Log level: 'emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug', 'nolog'.\n    pos: Rule position (-1 = append).\n",
+      "description": "Create a cluster-level firewall rule.\n\nArgs:\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source address/range (CIDR or alias).\n    dest: Destination address/range.\n    proto: Protocol (tcp, udp, icmp, etc.).\n    sport: Source port(s).\n    dport: Destination port(s).\n    iface: Network interface.\n    macro: Use predefined macro (e.g. 'SSH', 'HTTP', 'HTTPS', 'Ping').\n    comment: Description.\n    log: Log level: 'emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug', 'nolog'.\n    pos: Rule position (-1 = append).",
       "module": "firewall",
       "name": "create_cluster_firewall_rule",
       "parameters": {
@@ -1930,7 +1930,7 @@
       }
     },
     {
-      "description": "Create a firewall rule for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source CIDR or alias.\n    dest: Destination CIDR or alias.\n    proto: Protocol.\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.\n",
+      "description": "Create a firewall rule for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source CIDR or alias.\n    dest: Destination CIDR or alias.\n    proto: Protocol.\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.",
       "module": "firewall",
       "name": "create_container_firewall_rule",
       "parameters": {
@@ -1998,7 +1998,7 @@
       }
     },
     {
-      "description": "Create a firewall alias (named IP address or CIDR).\n\nArgs:\n    name: Alias name.\n    cidr: IP address or CIDR (e.g. '10.0.0.0/24' or '192.168.1.1').\n    comment: Description.\n",
+      "description": "Create a firewall alias (named IP address or CIDR).\n\nArgs:\n    name: Alias name.\n    cidr: IP address or CIDR (e.g. '10.0.0.0/24' or '192.168.1.1').\n    comment: Description.",
       "module": "firewall",
       "name": "create_firewall_alias",
       "parameters": {
@@ -2026,7 +2026,7 @@
       }
     },
     {
-      "description": "Create a new firewall security group.\n\nArgs:\n    group: Group name.\n    comment: Description.\n",
+      "description": "Create a new firewall security group.\n\nArgs:\n    group: Group name.\n    comment: Description.",
       "module": "firewall",
       "name": "create_firewall_group",
       "parameters": {
@@ -2049,7 +2049,7 @@
       }
     },
     {
-      "description": "Add a rule to a firewall security group.\n\nArgs:\n    group: Security group name.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source address/range.\n    dest: Destination address/range.\n    proto: Protocol.\n    sport: Source port(s).\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.\n",
+      "description": "Add a rule to a firewall security group.\n\nArgs:\n    group: Security group name.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source address/range.\n    dest: Destination address/range.\n    proto: Protocol.\n    sport: Source port(s).\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.",
       "module": "firewall",
       "name": "create_firewall_group_rule",
       "parameters": {
@@ -2117,7 +2117,7 @@
       }
     },
     {
-      "description": "Create a new firewall IP set.\n\nArgs:\n    name: IP set name.\n    comment: Description.\n",
+      "description": "Create a new firewall IP set.\n\nArgs:\n    name: IP set name.\n    comment: Description.",
       "module": "firewall",
       "name": "create_firewall_ipset",
       "parameters": {
@@ -2140,7 +2140,7 @@
       }
     },
     {
-      "description": "Create a firewall rule for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source CIDR or alias.\n    dest: Destination CIDR or alias.\n    proto: Protocol.\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.\n",
+      "description": "Create a firewall rule for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    type: 'in', 'out', 'group'.\n    enable: 1 = enabled, 0 = disabled.\n    source: Source CIDR or alias.\n    dest: Destination CIDR or alias.\n    proto: Protocol.\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.",
       "module": "firewall",
       "name": "create_vm_firewall_rule",
       "parameters": {
@@ -2208,7 +2208,7 @@
       }
     },
     {
-      "description": "Delete a cluster-level firewall rule.\n\nArgs:\n    pos: Rule position to delete.\n",
+      "description": "Delete a cluster-level firewall rule.\n\nArgs:\n    pos: Rule position to delete.",
       "module": "firewall",
       "name": "delete_cluster_firewall_rule",
       "parameters": {
@@ -2226,7 +2226,7 @@
       }
     },
     {
-      "description": "Delete a firewall alias.\n\nArgs:\n    name: Alias name.\n",
+      "description": "Delete a firewall alias.\n\nArgs:\n    name: Alias name.",
       "module": "firewall",
       "name": "delete_firewall_alias",
       "parameters": {
@@ -2244,7 +2244,7 @@
       }
     },
     {
-      "description": "Remove an IP/CIDR from an IP set.\n\nArgs:\n    name: IP set name.\n    cidr: IP address or CIDR to remove.\n",
+      "description": "Remove an IP/CIDR from an IP set.\n\nArgs:\n    name: IP set name.\n    cidr: IP address or CIDR to remove.",
       "module": "firewall",
       "name": "delete_firewall_ipset_entry",
       "parameters": {
@@ -2277,7 +2277,7 @@
       }
     },
     {
-      "description": "Get a specific cluster firewall rule.\n\nArgs:\n    pos: Rule position number.\n",
+      "description": "Get a specific cluster firewall rule.\n\nArgs:\n    pos: Rule position number.",
       "module": "firewall",
       "name": "get_cluster_firewall_rule",
       "parameters": {
@@ -2295,7 +2295,7 @@
       }
     },
     {
-      "description": "Get firewall options for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Get firewall options for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "firewall",
       "name": "get_container_firewall_options",
       "parameters": {
@@ -2318,7 +2318,7 @@
       }
     },
     {
-      "description": "List rules in a firewall security group.\n\nArgs:\n    group: Security group name.\n",
+      "description": "List rules in a firewall security group.\n\nArgs:\n    group: Security group name.",
       "module": "firewall",
       "name": "get_firewall_group_rules",
       "parameters": {
@@ -2346,7 +2346,7 @@
       }
     },
     {
-      "description": "Get firewall log for a node.\n\nArgs:\n    node: The node name.\n    limit: Max entries.\n",
+      "description": "Get firewall log for a node.\n\nArgs:\n    node: The node name.\n    limit: Max entries.",
       "module": "firewall",
       "name": "get_node_firewall_log",
       "parameters": {
@@ -2369,7 +2369,7 @@
       }
     },
     {
-      "description": "Get firewall options for a specific node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get firewall options for a specific node.\n\nArgs:\n    node: The node name.",
       "module": "firewall",
       "name": "get_node_firewall_options",
       "parameters": {
@@ -2387,7 +2387,7 @@
       }
     },
     {
-      "description": "Get firewall options for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Get firewall options for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "firewall",
       "name": "get_vm_firewall_options",
       "parameters": {
@@ -2420,7 +2420,7 @@
       }
     },
     {
-      "description": "List firewall rules for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "List firewall rules for an LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "firewall",
       "name": "list_container_firewall_rules",
       "parameters": {
@@ -2463,7 +2463,7 @@
       }
     },
     {
-      "description": "List entries in a firewall IP set.\n\nArgs:\n    name: IP set name.\n",
+      "description": "List entries in a firewall IP set.\n\nArgs:\n    name: IP set name.",
       "module": "firewall",
       "name": "list_firewall_ipset_entries",
       "parameters": {
@@ -2501,7 +2501,7 @@
       }
     },
     {
-      "description": "List firewall rules for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List firewall rules for a node.\n\nArgs:\n    node: The node name.",
       "module": "firewall",
       "name": "list_node_firewall_rules",
       "parameters": {
@@ -2519,7 +2519,7 @@
       }
     },
     {
-      "description": "List firewall rules for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "List firewall rules for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "firewall",
       "name": "list_vm_firewall_rules",
       "parameters": {
@@ -2542,7 +2542,7 @@
       }
     },
     {
-      "description": "Set cluster-wide firewall options.\n\nArgs:\n    enable: 1 to enable, 0 to disable, -1 to not change.\n    policy_in: Default input policy: 'ACCEPT', 'REJECT', 'DROP'.\n    policy_out: Default output policy: 'ACCEPT', 'REJECT', 'DROP'.\n    log_ratelimit: Log rate limit (e.g. 'enable=1,rate=1/second,burst=5').\n    ebtables: 1 to enable ebtables rules, 0 to disable, -1 to not change.\n    delete: Comma-separated options to delete.\n",
+      "description": "Set cluster-wide firewall options.\n\nArgs:\n    enable: 1 to enable, 0 to disable, -1 to not change.\n    policy_in: Default input policy: 'ACCEPT', 'REJECT', 'DROP'.\n    policy_out: Default output policy: 'ACCEPT', 'REJECT', 'DROP'.\n    log_ratelimit: Log rate limit (e.g. 'enable=1,rate=1/second,burst=5').\n    ebtables: 1 to enable ebtables rules, 0 to disable, -1 to not change.\n    delete: Comma-separated options to delete.",
       "module": "firewall",
       "name": "set_cluster_firewall_options",
       "parameters": {
@@ -2583,7 +2583,7 @@
       }
     },
     {
-      "description": "Set firewall options for a node.\n\nArgs:\n    node: The node name.\n    enable: 1 = enable, 0 = disable, -1 = don't change.\n    log_level_in: Input log level.\n    log_level_out: Output log level.\n    ndp: 1 = enable NDP, 0 = disable, -1 = don't change.\n    nf_conntrack_max: Max conntrack entries (0 = don't change).\n    delete: Comma-separated options to delete.\n",
+      "description": "Set firewall options for a node.\n\nArgs:\n    node: The node name.\n    enable: 1 = enable, 0 = disable, -1 = don't change.\n    log_level_in: Input log level.\n    log_level_out: Output log level.\n    ndp: 1 = enable NDP, 0 = disable, -1 = don't change.\n    nf_conntrack_max: Max conntrack entries (0 = don't change).\n    delete: Comma-separated options to delete.",
       "module": "firewall",
       "name": "set_node_firewall_options",
       "parameters": {
@@ -2631,7 +2631,7 @@
       }
     },
     {
-      "description": "Set firewall options for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    enable: 1 = enable, 0 = disable.\n    dhcp: 1 = enable DHCP.\n    ipfilter: 1 = enable IP filter.\n    macfilter: 1 = enable MAC filter.\n    policy_in: Input policy.\n    policy_out: Output policy.\n    delete: Comma-separated options to delete.\n",
+      "description": "Set firewall options for a QEMU VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    enable: 1 = enable, 0 = disable.\n    dhcp: 1 = enable DHCP.\n    ipfilter: 1 = enable IP filter.\n    macfilter: 1 = enable MAC filter.\n    policy_in: Input policy.\n    policy_out: Output policy.\n    delete: Comma-separated options to delete.",
       "module": "firewall",
       "name": "set_vm_firewall_options",
       "parameters": {
@@ -2689,7 +2689,7 @@
       }
     },
     {
-      "description": "Update a cluster-level firewall rule.\n\nArgs:\n    pos: Rule position to update.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    enable: 1 = enabled, 0 = disabled, -1 = don't change.\n    source: Source address/range.\n    dest: Destination address/range.\n    proto: Protocol.\n    sport: Source port(s).\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.\n    moveto: Move rule to this position.\n    delete: Comma-separated properties to delete.\n",
+      "description": "Update a cluster-level firewall rule.\n\nArgs:\n    pos: Rule position to update.\n    action: 'ACCEPT', 'DROP', 'REJECT'.\n    enable: 1 = enabled, 0 = disabled, -1 = don't change.\n    source: Source address/range.\n    dest: Destination address/range.\n    proto: Protocol.\n    sport: Source port(s).\n    dport: Destination port(s).\n    macro: Predefined macro.\n    comment: Description.\n    moveto: Move rule to this position.\n    delete: Comma-separated properties to delete.",
       "module": "firewall",
       "name": "update_cluster_firewall_rule",
       "parameters": {
@@ -2762,7 +2762,7 @@
       }
     },
     {
-      "description": "Create an HA group.\n\nArgs:\n    group: Group ID.\n    nodes: Node list with optional priority (e.g. 'node1:2,node2:1' \u2014 higher = preferred).\n    nofailback: If true, don't fail back to higher-priority nodes once recovered.\n    restricted: Only run on nodes in this group (otherwise runs anywhere but prefers group nodes).\n    comment: Description.\n",
+      "description": "Create an HA group.\n\nArgs:\n    group: Group ID.\n    nodes: Node list with optional priority (e.g. 'node1:2,node2:1' \u2014 higher = preferred).\n    nofailback: If true, don't fail back to higher-priority nodes once recovered.\n    restricted: Only run on nodes in this group (otherwise runs anywhere but prefers group nodes).\n    comment: Description.",
       "module": "ha",
       "name": "create_ha_group",
       "parameters": {
@@ -2800,7 +2800,7 @@
       }
     },
     {
-      "description": "Add a resource to HA management.\n\nArgs:\n    sid: Resource ID (format: 'type:vmid', e.g. 'vm:100' or 'ct:101').\n    group: HA group name.\n    max_relocate: Max relocations on failure.\n    max_restart: Max restarts on failure.\n    state: Desired state: 'started', 'stopped', 'enabled', 'disabled', 'ignored'.\n    comment: Description.\n",
+      "description": "Add a resource to HA management.\n\nArgs:\n    sid: Resource ID (format: 'type:vmid', e.g. 'vm:100' or 'ct:101').\n    group: HA group name.\n    max_relocate: Max relocations on failure.\n    max_restart: Max restarts on failure.\n    state: Desired state: 'started', 'stopped', 'enabled', 'disabled', 'ignored'.\n    comment: Description.",
       "module": "ha",
       "name": "create_ha_resource",
       "parameters": {
@@ -2843,7 +2843,7 @@
       }
     },
     {
-      "description": "Delete an HA group.\n\nArgs:\n    group: Group ID.\n",
+      "description": "Delete an HA group.\n\nArgs:\n    group: Group ID.",
       "module": "ha",
       "name": "delete_ha_group",
       "parameters": {
@@ -2861,7 +2861,7 @@
       }
     },
     {
-      "description": "Remove a resource from HA management.\n\nArgs:\n    sid: Resource ID (format: 'type:vmid').\n",
+      "description": "Remove a resource from HA management.\n\nArgs:\n    sid: Resource ID (format: 'type:vmid').",
       "module": "ha",
       "name": "delete_ha_resource",
       "parameters": {
@@ -2879,7 +2879,7 @@
       }
     },
     {
-      "description": "Get HA group configuration.\n\nArgs:\n    group: Group ID.\n",
+      "description": "Get HA group configuration.\n\nArgs:\n    group: Group ID.",
       "module": "ha",
       "name": "get_ha_group",
       "parameters": {
@@ -2907,7 +2907,7 @@
       }
     },
     {
-      "description": "Get HA resource configuration.\n\nArgs:\n    sid: HA resource ID (format: 'type:vmid', e.g. 'vm:100' or 'ct:101').\n",
+      "description": "Get HA resource configuration.\n\nArgs:\n    sid: HA resource ID (format: 'type:vmid', e.g. 'vm:100' or 'ct:101').",
       "module": "ha",
       "name": "get_ha_resource",
       "parameters": {
@@ -2955,7 +2955,7 @@
       }
     },
     {
-      "description": "Request migration of an HA resource to a different node.\n\nArgs:\n    sid: Resource ID.\n    node: Target node.\n",
+      "description": "Request migration of an HA resource to a different node.\n\nArgs:\n    sid: Resource ID.\n    node: Target node.",
       "module": "ha",
       "name": "migrate_ha_resource",
       "parameters": {
@@ -2978,7 +2978,7 @@
       }
     },
     {
-      "description": "Request relocation of an HA resource to a different node.\n\nArgs:\n    sid: Resource ID.\n    node: Target node.\n",
+      "description": "Request relocation of an HA resource to a different node.\n\nArgs:\n    sid: Resource ID.\n    node: Target node.",
       "module": "ha",
       "name": "relocate_ha_resource",
       "parameters": {
@@ -3001,7 +3001,7 @@
       }
     },
     {
-      "description": "Update an HA group.\n\nArgs:\n    group: Group ID.\n    nodes: Node list with optional priority.\n    nofailback: Don't fail back.\n    restricted: Only run on group nodes.\n    comment: Description.\n    delete: Comma-separated properties to delete.\n",
+      "description": "Update an HA group.\n\nArgs:\n    group: Group ID.\n    nodes: Node list with optional priority.\n    nofailback: Don't fail back.\n    restricted: Only run on group nodes.\n    comment: Description.\n    delete: Comma-separated properties to delete.",
       "module": "ha",
       "name": "update_ha_group",
       "parameters": {
@@ -3044,7 +3044,7 @@
       }
     },
     {
-      "description": "Update an HA resource configuration.\n\nArgs:\n    sid: Resource ID.\n    group: HA group name.\n    max_relocate: Max relocations (-1 = don't change).\n    max_restart: Max restarts (-1 = don't change).\n    state: Desired state.\n    comment: Description.\n    delete: Comma-separated properties to delete.\n",
+      "description": "Update an HA resource configuration.\n\nArgs:\n    sid: Resource ID.\n    group: HA group name.\n    max_relocate: Max relocations (-1 = don't change).\n    max_restart: Max restarts (-1 = don't change).\n    state: Desired state.\n    comment: Description.\n    delete: Comma-separated properties to delete.",
       "module": "ha",
       "name": "update_ha_resource",
       "parameters": {
@@ -3092,7 +3092,7 @@
       }
     },
     {
-      "description": "Clone a container.\n\nArgs:\n    node: The source node name.\n    vmid: The source container ID.\n    newid: ID for the new container.\n    hostname: Hostname for the clone.\n    target: Target node (default: same node).\n    full: Full clone (True) or linked clone (False).\n    storage: Target storage for full clone.\n    description: Description.\n    pool: Resource pool.\n    snapname: Snapshot to clone from.\n",
+      "description": "Clone a container.\n\nArgs:\n    node: The source node name.\n    vmid: The source container ID.\n    newid: ID for the new container.\n    hostname: Hostname for the clone.\n    target: Target node (default: same node).\n    full: Full clone (True) or linked clone (False).\n    storage: Target storage for full clone.\n    description: Description.\n    pool: Resource pool.\n    snapname: Snapshot to clone from.",
       "module": "lxc",
       "name": "clone_container",
       "parameters": {
@@ -3155,7 +3155,7 @@
       }
     },
     {
-      "description": "Convert a container into a template (irreversible).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Convert a container into a template (irreversible).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "convert_container_to_template",
       "parameters": {
@@ -3178,7 +3178,7 @@
       }
     },
     {
-      "description": "Create a new LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    ostemplate: Template volume (e.g. 'local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst').\n    hostname: Container hostname.\n    password: Root password.\n    ssh_public_keys: SSH public keys (newline delimited).\n    storage: Storage for rootfs (default 'local').\n    rootfs: Root filesystem spec (e.g. 'local-lvm:8' for 8GB).\n    memory: Memory in MB (default 512).\n    swap: Swap in MB (default 512).\n    cores: CPU cores (default 1).\n    cpulimit: CPU limit (0 = unlimited).\n    net0: Network config (e.g. 'name=eth0,bridge=vmbr0,ip=dhcp').\n    nameserver: DNS nameserver.\n    searchdomain: DNS search domain.\n    onboot: Start on host boot.\n    start: Start after creation.\n    unprivileged: Create an unprivileged container (default True, recommended).\n    features: Comma-separated features (e.g. 'nesting=1,keyctl=1').\n    description: Container description.\n    pool: Resource pool.\n    tags: Semicolon-separated tags.\n    mp0: Mount point (e.g. 'local-lvm:4,mp=/mnt/data').\n",
+      "description": "Create a new LXC container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    ostemplate: Template volume (e.g. 'local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst').\n    hostname: Container hostname.\n    password: Root password.\n    ssh_public_keys: SSH public keys (newline delimited).\n    storage: Storage for rootfs (default 'local').\n    rootfs: Root filesystem spec (e.g. 'local-lvm:8' for 8GB).\n    memory: Memory in MB (default 512).\n    swap: Swap in MB (default 512).\n    cores: CPU cores (default 1).\n    cpulimit: CPU limit (0 = unlimited).\n    net0: Network config (e.g. 'name=eth0,bridge=vmbr0,ip=dhcp').\n    nameserver: DNS nameserver.\n    searchdomain: DNS search domain.\n    onboot: Start on host boot.\n    start: Start after creation.\n    unprivileged: Create an unprivileged container (default True, recommended).\n    features: Comma-separated features (e.g. 'nesting=1,keyctl=1').\n    description: Container description.\n    pool: Resource pool.\n    tags: Semicolon-separated tags.\n    mp0: Mount point (e.g. 'local-lvm:4,mp=/mnt/data').",
       "module": "lxc",
       "name": "create_container",
       "parameters": {
@@ -3306,7 +3306,7 @@
       }
     },
     {
-      "description": "Create a snapshot of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.\n    description: Snapshot description.\n",
+      "description": "Create a snapshot of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.\n    description: Snapshot description.",
       "module": "lxc",
       "name": "create_container_snapshot",
       "parameters": {
@@ -3339,7 +3339,7 @@
       }
     },
     {
-      "description": "Delete a container. Must be stopped first unless force=True.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    purge: Remove from replication, HA, backup and ACLs too.\n    destroy_unreferenced_disks: Destroy unreferenced disks.\n    force: Force destroy even if running.\n",
+      "description": "Delete a container. Must be stopped first unless force=True.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    purge: Remove from replication, HA, backup and ACLs too.\n    destroy_unreferenced_disks: Destroy unreferenced disks.\n    force: Force destroy even if running.",
       "module": "lxc",
       "name": "delete_container",
       "parameters": {
@@ -3377,7 +3377,7 @@
       }
     },
     {
-      "description": "Delete a container snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.\n    force: Force delete.\n",
+      "description": "Delete a container snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.\n    force: Force delete.",
       "module": "lxc",
       "name": "delete_container_snapshot",
       "parameters": {
@@ -3410,7 +3410,7 @@
       }
     },
     {
-      "description": "Get the configuration of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Get the configuration of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "get_container_config",
       "parameters": {
@@ -3433,7 +3433,7 @@
       }
     },
     {
-      "description": "Check if a feature is available for a container (snapshot, clone, copy).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    feature: Feature to check ('snapshot', 'clone', 'copy').\n",
+      "description": "Check if a feature is available for a container (snapshot, clone, copy).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    feature: Feature to check ('snapshot', 'clone', 'copy').",
       "module": "lxc",
       "name": "get_container_feature",
       "parameters": {
@@ -3461,7 +3461,7 @@
       }
     },
     {
-      "description": "Get network interfaces and IPs of a running container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Get network interfaces and IPs of a running container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "get_container_interfaces",
       "parameters": {
@@ -3484,7 +3484,7 @@
       }
     },
     {
-      "description": "Get pending configuration changes for a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Get pending configuration changes for a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "get_container_pending",
       "parameters": {
@@ -3507,7 +3507,7 @@
       }
     },
     {
-      "description": "Get RRD statistics data for a container (CPU, memory, disk, network over time).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.\n",
+      "description": "Get RRD statistics data for a container (CPU, memory, disk, network over time).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.",
       "module": "lxc",
       "name": "get_container_rrddata",
       "parameters": {
@@ -3535,7 +3535,7 @@
       }
     },
     {
-      "description": "Get the current runtime status of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID (CTID).\n",
+      "description": "Get the current runtime status of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID (CTID).",
       "module": "lxc",
       "name": "get_container_status",
       "parameters": {
@@ -3558,7 +3558,7 @@
       }
     },
     {
-      "description": "List all snapshots of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "List all snapshots of a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "list_container_snapshots",
       "parameters": {
@@ -3581,7 +3581,7 @@
       }
     },
     {
-      "description": "List all LXC containers on a node with status, memory, CPU, and disk info.\n\nArgs:\n    node: The node name.\n",
+      "description": "List all LXC containers on a node with status, memory, CPU, and disk info.\n\nArgs:\n    node: The node name.",
       "module": "lxc",
       "name": "list_containers",
       "parameters": {
@@ -3599,7 +3599,7 @@
       }
     },
     {
-      "description": "Migrate a container to another node.\n\nArgs:\n    node: The source node.\n    vmid: The container ID.\n    target: Target node name.\n    online: Live migration.\n    restart: Restart container after migration (for non-live).\n    target_storage: Target storage mapping.\n",
+      "description": "Migrate a container to another node.\n\nArgs:\n    node: The source node.\n    vmid: The container ID.\n    target: Target node name.\n    online: Live migration.\n    restart: Restart container after migration (for non-live).\n    target_storage: Target storage mapping.",
       "module": "lxc",
       "name": "migrate_container",
       "parameters": {
@@ -3642,7 +3642,7 @@
       }
     },
     {
-      "description": "Move a container volume to different storage or to another container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    volume: Volume name (e.g. 'rootfs', 'mp0').\n    storage: Target storage.\n    target_vmid: Target container ID.\n    target_volume: Target volume slot.\n    delete_original: Delete original after move.\n",
+      "description": "Move a container volume to different storage or to another container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    volume: Volume name (e.g. 'rootfs', 'mp0').\n    storage: Target storage.\n    target_vmid: Target container ID.\n    target_volume: Target volume slot.\n    delete_original: Delete original after move.",
       "module": "lxc",
       "name": "move_container_volume",
       "parameters": {
@@ -3690,7 +3690,7 @@
       }
     },
     {
-      "description": "Reboot a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeout: Timeout in seconds.\n",
+      "description": "Reboot a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeout: Timeout in seconds.",
       "module": "lxc",
       "name": "reboot_container",
       "parameters": {
@@ -3718,7 +3718,7 @@
       }
     },
     {
-      "description": "Resize a container disk/volume.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    disk: Disk name (e.g. 'rootfs', 'mp0').\n    size: New size or increment (e.g. '10G', '+2G').\n",
+      "description": "Resize a container disk/volume.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    disk: Disk name (e.g. 'rootfs', 'mp0').\n    size: New size or increment (e.g. '10G', '+2G').",
       "module": "lxc",
       "name": "resize_container_disk",
       "parameters": {
@@ -3751,7 +3751,7 @@
       }
     },
     {
-      "description": "Resume a suspended container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Resume a suspended container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "resume_container",
       "parameters": {
@@ -3774,7 +3774,7 @@
       }
     },
     {
-      "description": "Rollback a container to a previous snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.\n",
+      "description": "Rollback a container to a previous snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    snapname: Snapshot name.",
       "module": "lxc",
       "name": "rollback_container_snapshot",
       "parameters": {
@@ -3802,7 +3802,7 @@
       }
     },
     {
-      "description": "Gracefully shut down a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeout: Timeout in seconds before force stop.\n    force_stop: Force stop after timeout.\n",
+      "description": "Gracefully shut down a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    timeout: Timeout in seconds before force stop.\n    force_stop: Force stop after timeout.",
       "module": "lxc",
       "name": "shutdown_container",
       "parameters": {
@@ -3835,7 +3835,7 @@
       }
     },
     {
-      "description": "Start a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Start a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "start_container",
       "parameters": {
@@ -3858,7 +3858,7 @@
       }
     },
     {
-      "description": "Hard-stop a container (immediate, like power off).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Hard-stop a container (immediate, like power off).\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "stop_container",
       "parameters": {
@@ -3881,7 +3881,7 @@
       }
     },
     {
-      "description": "Suspend (freeze) a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n",
+      "description": "Suspend (freeze) a container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.",
       "module": "lxc",
       "name": "suspend_container",
       "parameters": {
@@ -3904,7 +3904,7 @@
       }
     },
     {
-      "description": "Update the configuration of an existing container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    hostname: Container hostname.\n    memory: Memory in MB.\n    swap: Swap in MB.\n    cores: CPU cores.\n    cpulimit: CPU limit (0 = unlimited).\n    net0: Network config.\n    nameserver: DNS nameserver.\n    searchdomain: DNS search domain.\n    onboot: Start on boot.\n    description: Description.\n    features: Comma-separated features.\n    tags: Semicolon-separated tags.\n    delete: Comma-separated list of settings to delete.\n",
+      "description": "Update the configuration of an existing container.\n\nArgs:\n    node: The node name.\n    vmid: The container ID.\n    hostname: Container hostname.\n    memory: Memory in MB.\n    swap: Swap in MB.\n    cores: CPU cores.\n    cpulimit: CPU limit (0 = unlimited).\n    net0: Network config.\n    nameserver: DNS nameserver.\n    searchdomain: DNS search domain.\n    onboot: Start on boot.\n    description: Description.\n    features: Comma-separated features.\n    tags: Semicolon-separated tags.\n    delete: Comma-separated list of settings to delete.",
       "module": "lxc",
       "name": "update_container_config",
       "parameters": {
@@ -3999,7 +3999,7 @@
       }
     },
     {
-      "description": "Create a network interface on a node.\n\nArgs:\n    node: The node name.\n    iface: Interface name (e.g. 'vmbr1').\n    type: Interface type (bridge, bond, eth, alias, vlan, OVSBridge, OVSPort, OVSIntPort, OVSBond).\n    address: IP address (CIDR notation or IP).\n    netmask: Subnet mask.\n    gateway: Default gateway.\n    bridge_ports: Bridge ports (for bridge type).\n    autostart: Whether to start on boot.\n    comments: Comments for the interface.\n",
+      "description": "Create a network interface on a node.\n\nArgs:\n    node: The node name.\n    iface: Interface name (e.g. 'vmbr1').\n    type: Interface type (bridge, bond, eth, alias, vlan, OVSBridge, OVSPort, OVSIntPort, OVSBond).\n    address: IP address (CIDR notation or IP).\n    netmask: Subnet mask.\n    gateway: Default gateway.\n    bridge_ports: Bridge ports (for bridge type).\n    autostart: Whether to start on boot.\n    comments: Comments for the interface.",
       "module": "nodes",
       "name": "create_node_network_interface",
       "parameters": {
@@ -4057,7 +4057,7 @@
       }
     },
     {
-      "description": "Download an appliance template to local storage.\n\nArgs:\n    node: The node name.\n    storage: Target storage ID.\n    template: Template name to download.\n",
+      "description": "Download an appliance template to local storage.\n\nArgs:\n    node: The node name.\n    storage: Target storage ID.\n    template: Template name to download.",
       "module": "nodes",
       "name": "download_appliance_template",
       "parameters": {
@@ -4085,7 +4085,7 @@
       }
     },
     {
-      "description": "Get S.M.A.R.T. health data for a disk.\n\nArgs:\n    node: The node name.\n    disk: Disk device path (e.g. '/dev/sda').\n",
+      "description": "Get S.M.A.R.T. health data for a disk.\n\nArgs:\n    node: The node name.\n    disk: Disk device path (e.g. '/dev/sda').",
       "module": "nodes",
       "name": "get_disk_smart",
       "parameters": {
@@ -4108,7 +4108,7 @@
       }
     },
     {
-      "description": "List available appliance templates (LXC templates) that can be downloaded.\n\nArgs:\n    node: The node name.\n",
+      "description": "List available appliance templates (LXC templates) that can be downloaded.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_aplinfo",
       "parameters": {
@@ -4126,7 +4126,7 @@
       }
     },
     {
-      "description": "List available package updates on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List available package updates on a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_apt_update",
       "parameters": {
@@ -4144,7 +4144,7 @@
       }
     },
     {
-      "description": "Get QEMU capabilities for a node: supported CPU models, machine types, etc.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get QEMU capabilities for a node: supported CPU models, machine types, etc.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_capabilities_qemu",
       "parameters": {
@@ -4162,7 +4162,7 @@
       }
     },
     {
-      "description": "Get the configuration of a node (description, wakeonlan, etc.).\n\nArgs:\n    node: The node name.\n",
+      "description": "Get the configuration of a node (description, wakeonlan, etc.).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_config",
       "parameters": {
@@ -4180,7 +4180,7 @@
       }
     },
     {
-      "description": "List physical disks on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List physical disks on a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_disks",
       "parameters": {
@@ -4198,7 +4198,7 @@
       }
     },
     {
-      "description": "Get DNS settings for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get DNS settings for a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_dns",
       "parameters": {
@@ -4216,7 +4216,7 @@
       }
     },
     {
-      "description": "List PCI hardware devices on a node (for passthrough).\n\nArgs:\n    node: The node name.\n",
+      "description": "List PCI hardware devices on a node (for passthrough).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_hardware_pci",
       "parameters": {
@@ -4234,7 +4234,7 @@
       }
     },
     {
-      "description": "List USB hardware devices on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List USB hardware devices on a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_hardware_usb",
       "parameters": {
@@ -4252,7 +4252,7 @@
       }
     },
     {
-      "description": "Get the /etc/hosts file content for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get the /etc/hosts file content for a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_hosts",
       "parameters": {
@@ -4270,7 +4270,7 @@
       }
     },
     {
-      "description": "Read systemd journal entries from a node.\n\nArgs:\n    node: The node name.\n    lastentries: Max number of entries (default 50).\n    since: Show entries since date/time.\n    until: Show entries until date/time.\n    startcursor: Start cursor for paging.\n",
+      "description": "Read systemd journal entries from a node.\n\nArgs:\n    node: The node name.\n    lastentries: Max number of entries (default 50).\n    since: Show entries since date/time.\n    until: Show entries until date/time.\n    startcursor: Start cursor for paging.",
       "module": "nodes",
       "name": "get_node_journal",
       "parameters": {
@@ -4308,7 +4308,7 @@
       }
     },
     {
-      "description": "Get network statistics for a node (per-interface traffic).\n\nArgs:\n    node: The node name.\n",
+      "description": "Get network statistics for a node (per-interface traffic).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_netstat",
       "parameters": {
@@ -4326,7 +4326,7 @@
       }
     },
     {
-      "description": "Get network interface configuration for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get network interface configuration for a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_network",
       "parameters": {
@@ -4344,7 +4344,7 @@
       }
     },
     {
-      "description": "Get details for a specific network interface.\n\nArgs:\n    node: The node name.\n    iface: Interface name (e.g. 'vmbr0', 'eth0').\n",
+      "description": "Get details for a specific network interface.\n\nArgs:\n    node: The node name.\n    iface: Interface name (e.g. 'vmbr0', 'eth0').",
       "module": "nodes",
       "name": "get_node_network_interface",
       "parameters": {
@@ -4367,7 +4367,7 @@
       }
     },
     {
-      "description": "Generate a system report for a node (useful for diagnostics).\n\nArgs:\n    node: The node name.\n",
+      "description": "Generate a system report for a node (useful for diagnostics).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_report",
       "parameters": {
@@ -4385,7 +4385,7 @@
       }
     },
     {
-      "description": "Get detailed status of a specific node including CPU, memory, disk, uptime, and kernel info.\n\nArgs:\n    node: The node name (e.g. 'pve1').\n",
+      "description": "Get detailed status of a specific node including CPU, memory, disk, uptime, and kernel info.\n\nArgs:\n    node: The node name (e.g. 'pve1').",
       "module": "nodes",
       "name": "get_node_status",
       "parameters": {
@@ -4403,7 +4403,7 @@
       }
     },
     {
-      "description": "Scan for available storage targets (NFS, CIFS, iSCSI, LVM, ZFS, PBS).\n\nArgs:\n    node: The node name.\n    scan_type: Type to scan: 'nfs', 'cifs', 'iscsi', 'lvm', 'lvmthin', 'zfs', 'pbs'.\n    server: Server address (required for nfs, cifs, iscsi, pbs).\n",
+      "description": "Scan for available storage targets (NFS, CIFS, iSCSI, LVM, ZFS, PBS).\n\nArgs:\n    node: The node name.\n    scan_type: Type to scan: 'nfs', 'cifs', 'iscsi', 'lvm', 'lvmthin', 'zfs', 'pbs'.\n    server: Server address (required for nfs, cifs, iscsi, pbs).",
       "module": "nodes",
       "name": "get_node_storage_scan",
       "parameters": {
@@ -4431,7 +4431,7 @@
       }
     },
     {
-      "description": "Get subscription status for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get subscription status for a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_subscription",
       "parameters": {
@@ -4449,7 +4449,7 @@
       }
     },
     {
-      "description": "Read system log (syslog) entries from a node.\n\nArgs:\n    node: The node name.\n    limit: Max number of log lines to return (default 50).\n    start: Start line number.\n    since: Only show entries since this date (YYYY-MM-DD).\n    until: Only show entries until this date (YYYY-MM-DD).\n",
+      "description": "Read system log (syslog) entries from a node.\n\nArgs:\n    node: The node name.\n    limit: Max number of log lines to return (default 50).\n    start: Start line number.\n    since: Only show entries since this date (YYYY-MM-DD).\n    until: Only show entries until this date (YYYY-MM-DD).",
       "module": "nodes",
       "name": "get_node_syslog",
       "parameters": {
@@ -4487,7 +4487,7 @@
       }
     },
     {
-      "description": "Get the current time and timezone of a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get the current time and timezone of a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_time",
       "parameters": {
@@ -4505,7 +4505,7 @@
       }
     },
     {
-      "description": "Get Proxmox VE version information for a specific node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get Proxmox VE version information for a specific node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "get_node_version",
       "parameters": {
@@ -4523,7 +4523,7 @@
       }
     },
     {
-      "description": "Get log output of a specific task.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.\n    limit: Max lines to return.\n    start: Start line number.\n",
+      "description": "Get log output of a specific task.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.\n    limit: Max lines to return.\n    start: Start line number.",
       "module": "nodes",
       "name": "get_task_log",
       "parameters": {
@@ -4556,7 +4556,7 @@
       }
     },
     {
-      "description": "Get the status of a specific task by its UPID.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.\n",
+      "description": "Get the status of a specific task by its UPID.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.",
       "module": "nodes",
       "name": "get_task_status",
       "parameters": {
@@ -4579,7 +4579,7 @@
       }
     },
     {
-      "description": "List all system services on a node (pve, ssh, cron, etc.).\n\nArgs:\n    node: The node name.\n",
+      "description": "List all system services on a node (pve, ssh, cron, etc.).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "list_node_services",
       "parameters": {
@@ -4597,7 +4597,7 @@
       }
     },
     {
-      "description": "List recent tasks on a node.\n\nArgs:\n    node: The node name.\n    limit: Max tasks to return (default 50).\n    start: Offset for paging.\n    vmid: Filter by VM ID (0 = all).\n    typefilter: Filter by task type (e.g. 'qmstart', 'vzstart', 'vzcreate').\n    statusfilter: Filter by status ('running', 'ok', 'error', etc.).\n",
+      "description": "List recent tasks on a node.\n\nArgs:\n    node: The node name.\n    limit: Max tasks to return (default 50).\n    start: Offset for paging.\n    vmid: Filter by VM ID (0 = all).\n    typefilter: Filter by task type (e.g. 'qmstart', 'vzstart', 'vzcreate').\n    statusfilter: Filter by status ('running', 'ok', 'error', etc.).",
       "module": "nodes",
       "name": "list_node_tasks",
       "parameters": {
@@ -4650,7 +4650,7 @@
       }
     },
     {
-      "description": "Start, stop, restart, or reload a system service on a node.\n\nArgs:\n    node: The node name.\n    service: Service name (e.g. 'pvedaemon', 'pveproxy', 'ssh', 'cron', 'postfix').\n    action: One of 'start', 'stop', 'restart', 'reload'.\n",
+      "description": "Start, stop, restart, or reload a system service on a node.\n\nArgs:\n    node: The node name.\n    service: Service name (e.g. 'pvedaemon', 'pveproxy', 'ssh', 'cron', 'postfix').\n    action: One of 'start', 'stop', 'restart', 'reload'.",
       "module": "nodes",
       "name": "manage_node_service",
       "parameters": {
@@ -4678,7 +4678,7 @@
       }
     },
     {
-      "description": "Refresh the package index on a node (apt update).\n\nArgs:\n    node: The node name.\n",
+      "description": "Refresh the package index on a node (apt update).\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "run_apt_update",
       "parameters": {
@@ -4696,7 +4696,7 @@
       }
     },
     {
-      "description": "Start all VMs and containers on a node (respecting boot order).\n\nArgs:\n    node: The node name.\n    force: Force start even if already running.\n    vms: Comma-separated list of VMIDs to start (empty = all).\n",
+      "description": "Start all VMs and containers on a node (respecting boot order).\n\nArgs:\n    node: The node name.\n    force: Force start even if already running.\n    vms: Comma-separated list of VMIDs to start (empty = all).",
       "module": "nodes",
       "name": "startall_node",
       "parameters": {
@@ -4724,7 +4724,7 @@
       }
     },
     {
-      "description": "Stop (abort) a running task.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.\n",
+      "description": "Stop (abort) a running task.\n\nArgs:\n    node: The node name.\n    upid: The task UPID string.",
       "module": "nodes",
       "name": "stop_task",
       "parameters": {
@@ -4747,7 +4747,7 @@
       }
     },
     {
-      "description": "Stop all VMs and containers on a node.\n\nArgs:\n    node: The node name.\n    vms: Comma-separated list of VMIDs to stop (empty = all).\n",
+      "description": "Stop all VMs and containers on a node.\n\nArgs:\n    node: The node name.\n    vms: Comma-separated list of VMIDs to stop (empty = all).",
       "module": "nodes",
       "name": "stopall_node",
       "parameters": {
@@ -4770,7 +4770,7 @@
       }
     },
     {
-      "description": "Send a Wake-on-LAN magic packet to a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Send a Wake-on-LAN magic packet to a node.\n\nArgs:\n    node: The node name.",
       "module": "nodes",
       "name": "wakeonlan_node",
       "parameters": {
@@ -4788,7 +4788,7 @@
       }
     },
     {
-      "description": "Create a resource pool.\n\nArgs:\n    poolid: Pool ID.\n    comment: Description.\n",
+      "description": "Create a resource pool.\n\nArgs:\n    poolid: Pool ID.\n    comment: Description.",
       "module": "pools",
       "name": "create_pool",
       "parameters": {
@@ -4811,7 +4811,7 @@
       }
     },
     {
-      "description": "Delete a resource pool.\n\nArgs:\n    poolid: Pool ID.\n",
+      "description": "Delete a resource pool.\n\nArgs:\n    poolid: Pool ID.",
       "module": "pools",
       "name": "delete_pool",
       "parameters": {
@@ -4829,7 +4829,7 @@
       }
     },
     {
-      "description": "Get ACME account details.\n\nArgs:\n    name: Account name (default: 'default').\n",
+      "description": "Get ACME account details.\n\nArgs:\n    name: Account name (default: 'default').",
       "module": "pools",
       "name": "get_acme_account",
       "parameters": {
@@ -4855,7 +4855,7 @@
       }
     },
     {
-      "description": "Get ACME plugin configuration.\n\nArgs:\n    id: Plugin ID.\n",
+      "description": "Get ACME plugin configuration.\n\nArgs:\n    id: Plugin ID.",
       "module": "pools",
       "name": "get_acme_plugin",
       "parameters": {
@@ -4883,7 +4883,7 @@
       }
     },
     {
-      "description": "Get certificate info for a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "Get certificate info for a node.\n\nArgs:\n    node: The node name.",
       "module": "pools",
       "name": "get_node_certificates",
       "parameters": {
@@ -4901,7 +4901,7 @@
       }
     },
     {
-      "description": "Get pool configuration and members.\n\nArgs:\n    poolid: Pool ID.\n",
+      "description": "Get pool configuration and members.\n\nArgs:\n    poolid: Pool ID.",
       "module": "pools",
       "name": "get_pool",
       "parameters": {
@@ -4949,7 +4949,7 @@
       }
     },
     {
-      "description": "Order/renew ACME certificate for a node.\n\nArgs:\n    node: The node name.\n    force: Force renewal even if not due.\n",
+      "description": "Order/renew ACME certificate for a node.\n\nArgs:\n    node: The node name.\n    force: Force renewal even if not due.",
       "module": "pools",
       "name": "order_node_certificate",
       "parameters": {
@@ -4972,7 +4972,7 @@
       }
     },
     {
-      "description": "Register a new ACME account.\n\nArgs:\n    contact: Contact email address.\n    directory: ACME directory URL (empty = Let's Encrypt production).\n    name: Account name.\n    tos_url: Terms of service URL to accept.\n",
+      "description": "Register a new ACME account.\n\nArgs:\n    contact: Contact email address.\n    directory: ACME directory URL (empty = Let's Encrypt production).\n    name: Account name.\n    tos_url: Terms of service URL to accept.",
       "module": "pools",
       "name": "register_acme_account",
       "parameters": {
@@ -5005,7 +5005,7 @@
       }
     },
     {
-      "description": "Update a resource pool (add/remove members).\n\nArgs:\n    poolid: Pool ID.\n    comment: Description.\n    vms: Comma-separated VMIDs to add/remove.\n    storage: Comma-separated storage IDs to add/remove.\n    delete: If true, remove the specified vms/storage from the pool instead of adding.\n",
+      "description": "Update a resource pool (add/remove members).\n\nArgs:\n    poolid: Pool ID.\n    comment: Description.\n    vms: Comma-separated VMIDs to add/remove.\n    storage: Comma-separated storage IDs to add/remove.\n    delete: If true, remove the specified vms/storage from the pool instead of adding.",
       "module": "pools",
       "name": "update_pool",
       "parameters": {
@@ -5043,7 +5043,7 @@
       }
     },
     {
-      "description": "Clone a VM to create a new one. Can be a full copy or linked clone.\n\nArgs:\n    node: The source node name.\n    vmid: The source VM ID.\n    newid: The VMID for the new clone.\n    name: Name for the clone.\n    target: Target node for the clone (default: same node).\n    full: Full clone (True) or linked clone (False).\n    storage: Target storage for full clone.\n    description: Description for the clone.\n    pool: Resource pool.\n    snapname: Snapshot name to clone from.\n",
+      "description": "Clone a VM to create a new one. Can be a full copy or linked clone.\n\nArgs:\n    node: The source node name.\n    vmid: The source VM ID.\n    newid: The VMID for the new clone.\n    name: Name for the clone.\n    target: Target node for the clone (default: same node).\n    full: Full clone (True) or linked clone (False).\n    storage: Target storage for full clone.\n    description: Description for the clone.\n    pool: Resource pool.\n    snapname: Snapshot name to clone from.",
       "module": "qemu",
       "name": "clone_vm",
       "parameters": {
@@ -5106,7 +5106,7 @@
       }
     },
     {
-      "description": "Convert a VM into a template (irreversible).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Convert a VM into a template (irreversible).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "convert_vm_to_template",
       "parameters": {
@@ -5129,7 +5129,7 @@
       }
     },
     {
-      "description": "Create a new QEMU virtual machine.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID number.\n    name: VM name.\n    memory: Memory in MB (default 2048).\n    cores: Number of CPU cores per socket (default 1).\n    sockets: Number of CPU sockets (default 1).\n    cpu: CPU type (default 'host').\n    ostype: OS type: l26 (Linux 2.6+), win10, win11, wxp, other, etc.\n    scsihw: SCSI controller: virtio-scsi-single, virtio-scsi-pci, lsi, megasas, pvscsi.\n    scsi0: First SCSI disk (e.g. 'local-lvm:32' for 32GB on local-lvm).\n    ide2: IDE device, often used for CD-ROM (e.g. 'local:iso/ubuntu.iso,media=cdrom').\n    net0: Network device (e.g. 'virtio,bridge=vmbr0').\n    boot: Boot order (e.g. 'order=scsi0;ide2;net0').\n    bios: BIOS type: seabios, ovmf (UEFI).\n    machine: Machine type (e.g. 'q35', 'i440fx').\n    cdrom: CD-ROM ISO image path.\n    agent: QEMU guest agent: '1' to enable, 'enabled=1,fstrim_cloned_disks=1'.\n    start: Start the VM after creation.\n    onboot: Start on host boot.\n    description: VM description.\n    pool: Resource pool to add the VM to.\n    tags: Semicolon-separated tags.\n",
+      "description": "Create a new QEMU virtual machine.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID number.\n    name: VM name.\n    memory: Memory in MB (default 2048).\n    cores: Number of CPU cores per socket (default 1).\n    sockets: Number of CPU sockets (default 1).\n    cpu: CPU type (default 'host').\n    ostype: OS type: l26 (Linux 2.6+), win10, win11, wxp, other, etc.\n    scsihw: SCSI controller: virtio-scsi-single, virtio-scsi-pci, lsi, megasas, pvscsi.\n    scsi0: First SCSI disk (e.g. 'local-lvm:32' for 32GB on local-lvm).\n    ide2: IDE device, often used for CD-ROM (e.g. 'local:iso/ubuntu.iso,media=cdrom').\n    net0: Network device (e.g. 'virtio,bridge=vmbr0').\n    boot: Boot order (e.g. 'order=scsi0;ide2;net0').\n    bios: BIOS type: seabios, ovmf (UEFI).\n    machine: Machine type (e.g. 'q35', 'i440fx').\n    cdrom: CD-ROM ISO image path.\n    agent: QEMU guest agent: '1' to enable, 'enabled=1,fstrim_cloned_disks=1'.\n    start: Start the VM after creation.\n    onboot: Start on host boot.\n    description: VM description.\n    pool: Resource pool to add the VM to.\n    tags: Semicolon-separated tags.",
       "module": "qemu",
       "name": "create_vm",
       "parameters": {
@@ -5252,7 +5252,7 @@
       }
     },
     {
-      "description": "Create a snapshot of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: Snapshot name.\n    description: Snapshot description.\n    vmstate: Include RAM state (for running VMs).\n",
+      "description": "Create a snapshot of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: Snapshot name.\n    description: Snapshot description.\n    vmstate: Include RAM state (for running VMs).",
       "module": "qemu",
       "name": "create_vm_snapshot",
       "parameters": {
@@ -5290,7 +5290,7 @@
       }
     },
     {
-      "description": "Delete a VM. The VM must be stopped first.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    purge: Remove from replication, HA, backup jobs and ACLs too.\n    destroy_unreferenced_disks: Also destroy unreferenced disks owned by the VM.\n",
+      "description": "Delete a VM. The VM must be stopped first.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    purge: Remove from replication, HA, backup jobs and ACLs too.\n    destroy_unreferenced_disks: Also destroy unreferenced disks owned by the VM.",
       "module": "qemu",
       "name": "delete_vm",
       "parameters": {
@@ -5323,7 +5323,7 @@
       }
     },
     {
-      "description": "Delete a VM snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: Snapshot name to delete.\n    force: Force delete even if snapshot is in use.\n",
+      "description": "Delete a VM snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: Snapshot name to delete.\n    force: Force delete even if snapshot is in use.",
       "module": "qemu",
       "name": "delete_vm_snapshot",
       "parameters": {
@@ -5356,7 +5356,7 @@
       }
     },
     {
-      "description": "Dump the Cloud-Init generated config file (user-data, network-data, or meta-data).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    type: Config type: 'user', 'network', or 'meta'.\n",
+      "description": "Dump the Cloud-Init generated config file (user-data, network-data, or meta-data).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    type: Config type: 'user', 'network', or 'meta'.",
       "module": "qemu",
       "name": "dump_vm_cloudinit",
       "parameters": {
@@ -5384,7 +5384,7 @@
       }
     },
     {
-      "description": "Get Cloud-Init configuration for a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Get Cloud-Init configuration for a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "get_vm_cloudinit",
       "parameters": {
@@ -5407,7 +5407,7 @@
       }
     },
     {
-      "description": "Get the configuration of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    current: If True, return current (runtime) config. If False, return pending config.\n",
+      "description": "Get the configuration of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    current: If True, return current (runtime) config. If False, return pending config.",
       "module": "qemu",
       "name": "get_vm_config",
       "parameters": {
@@ -5435,7 +5435,7 @@
       }
     },
     {
-      "description": "Check if a specific feature is available/supported for a VM (e.g. snapshot, clone, copy).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    feature: Feature to check ('snapshot', 'clone', 'copy').\n",
+      "description": "Check if a specific feature is available/supported for a VM (e.g. snapshot, clone, copy).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    feature: Feature to check ('snapshot', 'clone', 'copy').",
       "module": "qemu",
       "name": "get_vm_feature",
       "parameters": {
@@ -5463,7 +5463,7 @@
       }
     },
     {
-      "description": "Get pending configuration changes for a VM (not yet applied).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Get pending configuration changes for a VM (not yet applied).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "get_vm_pending",
       "parameters": {
@@ -5486,7 +5486,7 @@
       }
     },
     {
-      "description": "Get RRD statistics data for a VM (CPU, memory, disk, network over time).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.\n",
+      "description": "Get RRD statistics data for a VM (CPU, memory, disk, network over time).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.",
       "module": "qemu",
       "name": "get_vm_rrddata",
       "parameters": {
@@ -5514,7 +5514,7 @@
       }
     },
     {
-      "description": "Get the configuration stored in a VM snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: The snapshot name.\n",
+      "description": "Get the configuration stored in a VM snapshot.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: The snapshot name.",
       "module": "qemu",
       "name": "get_vm_snapshot_config",
       "parameters": {
@@ -5542,7 +5542,7 @@
       }
     },
     {
-      "description": "Create a SPICE proxy connection for a VM console.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Create a SPICE proxy connection for a VM console.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "get_vm_spiceproxy",
       "parameters": {
@@ -5565,7 +5565,7 @@
       }
     },
     {
-      "description": "Get the current runtime status of a VM (state, CPU, memory, disk, network, uptime).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Get the current runtime status of a VM (state, CPU, memory, disk, network, uptime).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "get_vm_status",
       "parameters": {
@@ -5588,7 +5588,7 @@
       }
     },
     {
-      "description": "Create a VNC proxy connection ticket for a VM (for console access).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    websocket: Use WebSocket connection.\n",
+      "description": "Create a VNC proxy connection ticket for a VM (for console access).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    websocket: Use WebSocket connection.",
       "module": "qemu",
       "name": "get_vm_vncproxy",
       "parameters": {
@@ -5616,7 +5616,7 @@
       }
     },
     {
-      "description": "List all snapshots of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "List all snapshots of a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "list_vm_snapshots",
       "parameters": {
@@ -5639,7 +5639,7 @@
       }
     },
     {
-      "description": "List all QEMU virtual machines on a node with status, memory, CPU, and disk info.\n\nArgs:\n    node: The node name.\n",
+      "description": "List all QEMU virtual machines on a node with status, memory, CPU, and disk info.\n\nArgs:\n    node: The node name.",
       "module": "qemu",
       "name": "list_vms",
       "parameters": {
@@ -5657,7 +5657,7 @@
       }
     },
     {
-      "description": "Migrate a VM to another node in the cluster.\n\nArgs:\n    node: The source node.\n    vmid: The VM ID.\n    target: Target node name.\n    online: Live migration (True) or offline (False).\n    with_local_disks: Migrate local disks as well.\n    targetstorage: Target storage mapping for migration (e.g. 'local-lvm').\n",
+      "description": "Migrate a VM to another node in the cluster.\n\nArgs:\n    node: The source node.\n    vmid: The VM ID.\n    target: Target node name.\n    online: Live migration (True) or offline (False).\n    with_local_disks: Migrate local disks as well.\n    targetstorage: Target storage mapping for migration (e.g. 'local-lvm').",
       "module": "qemu",
       "name": "migrate_vm",
       "parameters": {
@@ -5700,7 +5700,7 @@
       }
     },
     {
-      "description": "Move a VM disk to different storage or attach to another VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    disk: Source disk name (e.g. 'scsi0').\n    storage: Target storage ID (for moving to different storage).\n    target_vmid: Target VM ID (for moving disk to another VM).\n    target_disk: Target disk slot on the target VM.\n    delete_original: Delete the original disk after moving.\n",
+      "description": "Move a VM disk to different storage or attach to another VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    disk: Source disk name (e.g. 'scsi0').\n    storage: Target storage ID (for moving to different storage).\n    target_vmid: Target VM ID (for moving disk to another VM).\n    target_disk: Target disk slot on the target VM.\n    delete_original: Delete the original disk after moving.",
       "module": "qemu",
       "name": "move_vm_disk",
       "parameters": {
@@ -5748,7 +5748,7 @@
       }
     },
     {
-      "description": "Reboot a VM via ACPI.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Wait timeout in seconds.\n",
+      "description": "Reboot a VM via ACPI.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Wait timeout in seconds.",
       "module": "qemu",
       "name": "reboot_vm",
       "parameters": {
@@ -5776,7 +5776,7 @@
       }
     },
     {
-      "description": "Hard reset a VM (like pressing the reset button).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Hard reset a VM (like pressing the reset button).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "reset_vm",
       "parameters": {
@@ -5799,7 +5799,7 @@
       }
     },
     {
-      "description": "Resize a VM disk. Can only grow, not shrink.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    disk: Disk name (e.g. 'scsi0', 'virtio0', 'ide0').\n    size: New size or size increment (e.g. '50G', '+10G').\n",
+      "description": "Resize a VM disk. Can only grow, not shrink.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    disk: Disk name (e.g. 'scsi0', 'virtio0', 'ide0').\n    size: New size or size increment (e.g. '50G', '+10G').",
       "module": "qemu",
       "name": "resize_vm_disk",
       "parameters": {
@@ -5832,7 +5832,7 @@
       }
     },
     {
-      "description": "Resume a suspended/paused VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n",
+      "description": "Resume a suspended/paused VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.",
       "module": "qemu",
       "name": "resume_vm",
       "parameters": {
@@ -5855,7 +5855,7 @@
       }
     },
     {
-      "description": "Rollback a VM to a previous snapshot (current state will be lost).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: The snapshot name to rollback to.\n",
+      "description": "Rollback a VM to a previous snapshot (current state will be lost).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    snapname: The snapshot name to rollback to.",
       "module": "qemu",
       "name": "rollback_vm_snapshot",
       "parameters": {
@@ -5883,7 +5883,7 @@
       }
     },
     {
-      "description": "Send a key event to a VM (e.g. ctrl-alt-del).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    key: Key combination (e.g. 'ctrl-alt-delete').\n",
+      "description": "Send a key event to a VM (e.g. ctrl-alt-del).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    key: Key combination (e.g. 'ctrl-alt-delete').",
       "module": "qemu",
       "name": "send_vm_key",
       "parameters": {
@@ -5911,7 +5911,7 @@
       }
     },
     {
-      "description": "Send a QEMU monitor command to a VM (advanced/low-level).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The QEMU monitor command.\n",
+      "description": "Send a QEMU monitor command to a VM (advanced/low-level).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The QEMU monitor command.",
       "module": "qemu",
       "name": "send_vm_monitor_command",
       "parameters": {
@@ -5939,7 +5939,7 @@
       }
     },
     {
-      "description": "Gracefully shut down a VM via ACPI. Falls back to hard stop after timeout if force_stop is true.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Timeout in seconds before force stop.\n    force_stop: Force stop after timeout (default True).\n",
+      "description": "Gracefully shut down a VM via ACPI. Falls back to hard stop after timeout if force_stop is true.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Timeout in seconds before force stop.\n    force_stop: Force stop after timeout (default True).",
       "module": "qemu",
       "name": "shutdown_vm",
       "parameters": {
@@ -5972,7 +5972,7 @@
       }
     },
     {
-      "description": "Start a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Timeout in seconds (0 = default).\n",
+      "description": "Start a VM.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Timeout in seconds (0 = default).",
       "module": "qemu",
       "name": "start_vm",
       "parameters": {
@@ -6000,7 +6000,7 @@
       }
     },
     {
-      "description": "Hard-stop a VM (like pulling the power plug). Prefer shutdown_vm for graceful stop.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Wait timeout in seconds.\n    skiplock: Ignore locks (requires root).\n",
+      "description": "Hard-stop a VM (like pulling the power plug). Prefer shutdown_vm for graceful stop.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    timeout: Wait timeout in seconds.\n    skiplock: Ignore locks (requires root).",
       "module": "qemu",
       "name": "stop_vm",
       "parameters": {
@@ -6033,7 +6033,7 @@
       }
     },
     {
-      "description": "Suspend a VM (pause execution or hibernate to disk).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    todisk: If True, hibernate to disk. If False, pause in RAM.\n",
+      "description": "Suspend a VM (pause execution or hibernate to disk).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    todisk: If True, hibernate to disk. If False, pause in RAM.",
       "module": "qemu",
       "name": "suspend_vm",
       "parameters": {
@@ -6061,7 +6061,7 @@
       }
     },
     {
-      "description": "Set Cloud-Init parameters for a VM (user, password, SSH keys, network).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    ciuser: Cloud-Init user name.\n    cipassword: Cloud-Init password.\n    sshkeys: SSH public keys (URL-encoded, newline delimited).\n    ipconfig0: IP config for first interface (e.g. 'ip=dhcp' or 'ip=10.0.0.5/24,gw=10.0.0.1').\n    nameserver: DNS nameserver IP.\n    searchdomain: DNS search domain.\n",
+      "description": "Set Cloud-Init parameters for a VM (user, password, SSH keys, network).\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    ciuser: Cloud-Init user name.\n    cipassword: Cloud-Init password.\n    sshkeys: SSH public keys (URL-encoded, newline delimited).\n    ipconfig0: IP config for first interface (e.g. 'ip=dhcp' or 'ip=10.0.0.5/24,gw=10.0.0.1').\n    nameserver: DNS nameserver IP.\n    searchdomain: DNS search domain.",
       "module": "qemu",
       "name": "update_vm_cloudinit",
       "parameters": {
@@ -6114,7 +6114,7 @@
       }
     },
     {
-      "description": "Update the configuration of an existing VM. Only provided parameters are changed.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    name: VM name.\n    memory: Memory in MB.\n    cores: CPU cores per socket.\n    sockets: CPU sockets.\n    cpu: CPU type.\n    net0: Network config.\n    description: Description.\n    onboot: Start on boot.\n    agent: Guest agent config.\n    boot: Boot order.\n    tags: Semicolon-separated tags.\n    hotplug: Hotplug features (disk, network, usb, memory, cpu).\n    delete: Comma-separated list of settings to delete.\n",
+      "description": "Update the configuration of an existing VM. Only provided parameters are changed.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    name: VM name.\n    memory: Memory in MB.\n    cores: CPU cores per socket.\n    sockets: CPU sockets.\n    cpu: CPU type.\n    net0: Network config.\n    description: Description.\n    onboot: Start on boot.\n    agent: Guest agent config.\n    boot: Boot order.\n    tags: Semicolon-separated tags.\n    hotplug: Hotplug features (disk, network, usb, memory, cpu).\n    delete: Comma-separated list of settings to delete.",
       "module": "qemu",
       "name": "update_vm_config",
       "parameters": {
@@ -6209,7 +6209,7 @@
       }
     },
     {
-      "description": "Execute a command inside a VM via the QEMU Guest Agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The command to execute.\n    input_data: Data to pass to stdin.\n",
+      "description": "Execute a command inside a VM via the QEMU Guest Agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The command to execute.\n    input_data: Data to pass to stdin.",
       "module": "qemu",
       "name": "vm_agent_exec",
       "parameters": {
@@ -6242,7 +6242,7 @@
       }
     },
     {
-      "description": "Get the status/result of a command previously executed via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    pid: The PID returned by the exec call.\n",
+      "description": "Get the status/result of a command previously executed via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    pid: The PID returned by the exec call.",
       "module": "qemu",
       "name": "vm_agent_exec_status",
       "parameters": {
@@ -6270,7 +6270,7 @@
       }
     },
     {
-      "description": "Read a file from inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    file: Absolute file path inside the guest.\n",
+      "description": "Read a file from inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    file: Absolute file path inside the guest.",
       "module": "qemu",
       "name": "vm_agent_file_read",
       "parameters": {
@@ -6298,7 +6298,7 @@
       }
     },
     {
-      "description": "Write content to a file inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    file: Absolute file path inside the guest.\n    content: File content to write.\n",
+      "description": "Write content to a file inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    file: Absolute file path inside the guest.\n    content: File content to write.",
       "module": "qemu",
       "name": "vm_agent_file_write",
       "parameters": {
@@ -6331,7 +6331,7 @@
       }
     },
     {
-      "description": "Get various system information from a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    info_type: Info to retrieve: 'get-osinfo', 'get-host-name', 'get-time',\n               'get-timezone', 'get-users', 'get-vcpus', 'get-fsinfo',\n               'get-memory-blocks', 'get-memory-block-info', 'info',\n               'network-get-interfaces'.\n",
+      "description": "Get various system information from a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    info_type: Info to retrieve: 'get-osinfo', 'get-host-name', 'get-time',\n               'get-timezone', 'get-users', 'get-vcpus', 'get-fsinfo',\n               'get-memory-blocks', 'get-memory-block-info', 'info',\n               'network-get-interfaces'.",
       "module": "qemu",
       "name": "vm_agent_get_info",
       "parameters": {
@@ -6359,7 +6359,7 @@
       }
     },
     {
-      "description": "Set a user password inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    username: The username.\n    password: The new password.\n    crypted: If True, password is already encrypted.\n",
+      "description": "Set a user password inside a VM via the guest agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    username: The username.\n    password: The new password.\n    crypted: If True, password is already encrypted.",
       "module": "qemu",
       "name": "vm_agent_set_password",
       "parameters": {
@@ -6407,7 +6407,7 @@
       }
     },
     {
-      "description": "Create a subnet for an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    subnet: Subnet CIDR (e.g. '10.0.0.0/24').\n    gateway: Gateway IP.\n    snat: Enable SNAT.\n    dnszoneprefix: DNS zone prefix.\n",
+      "description": "Create a subnet for an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    subnet: Subnet CIDR (e.g. '10.0.0.0/24').\n    gateway: Gateway IP.\n    snat: Enable SNAT.\n    dnszoneprefix: DNS zone prefix.",
       "module": "sdn",
       "name": "create_sdn_subnet",
       "parameters": {
@@ -6445,7 +6445,7 @@
       }
     },
     {
-      "description": "Create an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    zone: Zone ID.\n    tag: VLAN tag.\n    alias: Display alias.\n    vlanaware: Enable VLAN-aware bridge.\n",
+      "description": "Create an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    zone: Zone ID.\n    tag: VLAN tag.\n    alias: Display alias.\n    vlanaware: Enable VLAN-aware bridge.",
       "module": "sdn",
       "name": "create_sdn_vnet",
       "parameters": {
@@ -6483,7 +6483,7 @@
       }
     },
     {
-      "description": "Create an SDN zone.\n\nArgs:\n    zone: Zone ID.\n    type: Zone type: 'simple', 'vlan', 'qinq', 'vxlan', 'evpn'.\n    nodes: Comma-separated node list.\n    ipam: IPAM plugin name.\n    dns: DNS plugin name.\n    bridge: Bridge name.\n    mtu: MTU.\n",
+      "description": "Create an SDN zone.\n\nArgs:\n    zone: Zone ID.\n    type: Zone type: 'simple', 'vlan', 'qinq', 'vxlan', 'evpn'.\n    nodes: Comma-separated node list.\n    ipam: IPAM plugin name.\n    dns: DNS plugin name.\n    bridge: Bridge name.\n    mtu: MTU.",
       "module": "sdn",
       "name": "create_sdn_zone",
       "parameters": {
@@ -6531,7 +6531,7 @@
       }
     },
     {
-      "description": "Delete an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n",
+      "description": "Delete an SDN VNet.\n\nArgs:\n    vnet: VNet ID.",
       "module": "sdn",
       "name": "delete_sdn_vnet",
       "parameters": {
@@ -6549,7 +6549,7 @@
       }
     },
     {
-      "description": "Delete an SDN zone.\n\nArgs:\n    zone: Zone ID.\n",
+      "description": "Delete an SDN zone.\n\nArgs:\n    zone: Zone ID.",
       "module": "sdn",
       "name": "delete_sdn_zone",
       "parameters": {
@@ -6567,7 +6567,7 @@
       }
     },
     {
-      "description": "Get SDN controller configuration.\n\nArgs:\n    controller: Controller ID.\n",
+      "description": "Get SDN controller configuration.\n\nArgs:\n    controller: Controller ID.",
       "module": "sdn",
       "name": "get_sdn_controller",
       "parameters": {
@@ -6585,7 +6585,7 @@
       }
     },
     {
-      "description": "Get IPAM plugin configuration.\n\nArgs:\n    ipam: IPAM ID.\n",
+      "description": "Get IPAM plugin configuration.\n\nArgs:\n    ipam: IPAM ID.",
       "module": "sdn",
       "name": "get_sdn_ipam",
       "parameters": {
@@ -6603,7 +6603,7 @@
       }
     },
     {
-      "description": "Get SDN VNet configuration.\n\nArgs:\n    vnet: VNet ID.\n",
+      "description": "Get SDN VNet configuration.\n\nArgs:\n    vnet: VNet ID.",
       "module": "sdn",
       "name": "get_sdn_vnet",
       "parameters": {
@@ -6621,7 +6621,7 @@
       }
     },
     {
-      "description": "Get SDN zone configuration.\n\nArgs:\n    zone: Zone ID.\n",
+      "description": "Get SDN zone configuration.\n\nArgs:\n    zone: Zone ID.",
       "module": "sdn",
       "name": "get_sdn_zone",
       "parameters": {
@@ -6669,7 +6669,7 @@
       }
     },
     {
-      "description": "List subnets for an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n",
+      "description": "List subnets for an SDN VNet.\n\nArgs:\n    vnet: VNet ID.",
       "module": "sdn",
       "name": "list_sdn_subnets",
       "parameters": {
@@ -6707,7 +6707,7 @@
       }
     },
     {
-      "description": "Update an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    zone: Zone ID.\n    tag: VLAN tag (-1 = don't change).\n    alias: Display alias.\n    delete: Comma-separated properties to delete.\n",
+      "description": "Update an SDN VNet.\n\nArgs:\n    vnet: VNet ID.\n    zone: Zone ID.\n    tag: VLAN tag (-1 = don't change).\n    alias: Display alias.\n    delete: Comma-separated properties to delete.",
       "module": "sdn",
       "name": "update_sdn_vnet",
       "parameters": {
@@ -6745,7 +6745,7 @@
       }
     },
     {
-      "description": "Allocate a new disk volume in storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    vmid: VM ID to associate with.\n    filename: Volume name.\n    size: Volume size (e.g. '10G').\n    format: Disk format (raw, qcow2, vmdk). Auto-detected if empty.\n",
+      "description": "Allocate a new disk volume in storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    vmid: VM ID to associate with.\n    filename: Volume name.\n    size: Volume size (e.g. '10G').\n    format: Disk format (raw, qcow2, vmdk). Auto-detected if empty.",
       "module": "storage",
       "name": "allocate_storage_volume",
       "parameters": {
@@ -6788,7 +6788,7 @@
       }
     },
     {
-      "description": "Create a directory-based storage mount from a device.\n\nArgs:\n    node: The node name.\n    name: Storage name.\n    device: Block device path.\n    filesystem: Filesystem type (ext4, xfs).\n    add_to_storage: Auto-add as Proxmox storage.\n",
+      "description": "Create a directory-based storage mount from a device.\n\nArgs:\n    node: The node name.\n    name: Storage name.\n    device: Block device path.\n    filesystem: Filesystem type (ext4, xfs).\n    add_to_storage: Auto-add as Proxmox storage.",
       "module": "storage",
       "name": "create_directory_storage",
       "parameters": {
@@ -6826,7 +6826,7 @@
       }
     },
     {
-      "description": "Create a new LVM volume group on a device.\n\nArgs:\n    node: The node name.\n    name: VG name.\n    device: Block device path (e.g. '/dev/sdb').\n    add_to_storage: Auto-add as Proxmox storage.\n",
+      "description": "Create a new LVM volume group on a device.\n\nArgs:\n    node: The node name.\n    name: VG name.\n    device: Block device path (e.g. '/dev/sdb').\n    add_to_storage: Auto-add as Proxmox storage.",
       "module": "storage",
       "name": "create_lvm",
       "parameters": {
@@ -6859,7 +6859,7 @@
       }
     },
     {
-      "description": "Create a new LVM thin pool.\n\nArgs:\n    node: The node name.\n    name: Thin pool name.\n    device: Block device path.\n    add_to_storage: Auto-add as Proxmox storage.\n",
+      "description": "Create a new LVM thin pool.\n\nArgs:\n    node: The node name.\n    name: Thin pool name.\n    device: Block device path.\n    add_to_storage: Auto-add as Proxmox storage.",
       "module": "storage",
       "name": "create_lvmthin",
       "parameters": {
@@ -6892,7 +6892,7 @@
       }
     },
     {
-      "description": "Create a new storage pool configuration.\n\nArgs:\n    storage: Storage ID.\n    type: Storage type: dir, lvm, lvmthin, zfspool, nfs, cifs, iscsi, rbd, cephfs, pbs, glusterfs, btrfs.\n    path: File system path (for dir, nfs mounts).\n    server: Server IP/hostname (for nfs, cifs, iscsi, pbs, glusterfs, rbd, cephfs).\n    export: NFS export path.\n    vgname: LVM volume group name.\n    thinpool: LVM thin pool name (for lvmthin).\n    pool: Pool name (for Ceph RBD/CephFS, ZFS).\n    portal: iSCSI portal.\n    target: iSCSI target.\n    datastore: PBS datastore name.\n    content: Comma-separated content types (images, rootdir, vztmpl, iso, backup, snippets, import).\n    nodes: Restrict storage to these nodes (comma-separated).\n    shared: Mark as shared storage.\n    disable: Create disabled.\n    maxfiles: Max backup files (0 = unlimited).\n    prune_backups: Backup retention policy.\n",
+      "description": "Create a new storage pool configuration.\n\nArgs:\n    storage: Storage ID.\n    type: Storage type: dir, lvm, lvmthin, zfspool, nfs, cifs, iscsi, rbd, cephfs, pbs, glusterfs, btrfs.\n    path: File system path (for dir, nfs mounts).\n    server: Server IP/hostname (for nfs, cifs, iscsi, pbs, glusterfs, rbd, cephfs).\n    export: NFS export path.\n    vgname: LVM volume group name.\n    thinpool: LVM thin pool name (for lvmthin).\n    pool: Pool name (for Ceph RBD/CephFS, ZFS).\n    portal: iSCSI portal.\n    target: iSCSI target.\n    datastore: PBS datastore name.\n    content: Comma-separated content types (images, rootdir, vztmpl, iso, backup, snippets, import).\n    nodes: Restrict storage to these nodes (comma-separated).\n    shared: Mark as shared storage.\n    disable: Create disabled.\n    maxfiles: Max backup files (0 = unlimited).\n    prune_backups: Backup retention policy.",
       "module": "storage",
       "name": "create_storage",
       "parameters": {
@@ -6990,7 +6990,7 @@
       }
     },
     {
-      "description": "Create a new ZFS pool.\n\nArgs:\n    node: The node name.\n    name: Pool name.\n    raidlevel: RAID level: single, mirror, raid10, raidz, raidz2, raidz3, draid, draid2, draid3.\n    devices: Space-separated device paths (e.g. '/dev/sdb /dev/sdc').\n    add_to_storage: Auto-add as Proxmox storage.\n    ashift: ashift value (default 12).\n    compression: Compression (on, off, lz4, zstd, etc.).\n",
+      "description": "Create a new ZFS pool.\n\nArgs:\n    node: The node name.\n    name: Pool name.\n    raidlevel: RAID level: single, mirror, raid10, raidz, raidz2, raidz3, draid, draid2, draid3.\n    devices: Space-separated device paths (e.g. '/dev/sdb /dev/sdc').\n    add_to_storage: Auto-add as Proxmox storage.\n    ashift: ashift value (default 12).\n    compression: Compression (on, off, lz4, zstd, etc.).",
       "module": "storage",
       "name": "create_zfs_pool",
       "parameters": {
@@ -7038,7 +7038,7 @@
       }
     },
     {
-      "description": "Delete a storage pool configuration (does not delete data on the backend).\n\nArgs:\n    storage: The storage ID.\n",
+      "description": "Delete a storage pool configuration (does not delete data on the backend).\n\nArgs:\n    storage: The storage ID.",
       "module": "storage",
       "name": "delete_storage",
       "parameters": {
@@ -7056,7 +7056,7 @@
       }
     },
     {
-      "description": "Delete a volume from storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The volume ID.\n",
+      "description": "Delete a volume from storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The volume ID.",
       "module": "storage",
       "name": "delete_storage_volume",
       "parameters": {
@@ -7084,7 +7084,7 @@
       }
     },
     {
-      "description": "Download a file from a URL directly to storage (ISO, template, etc.).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    url: URL to download from.\n    content: Content type: 'iso', 'vztmpl'.\n    filename: Target filename.\n    checksum: Expected checksum.\n    checksum_algorithm: Checksum algorithm (sha256, sha512, md5).\n",
+      "description": "Download a file from a URL directly to storage (ISO, template, etc.).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    url: URL to download from.\n    content: Content type: 'iso', 'vztmpl'.\n    filename: Target filename.\n    checksum: Expected checksum.\n    checksum_algorithm: Checksum algorithm (sha256, sha512, md5).",
       "module": "storage",
       "name": "download_url_to_storage",
       "parameters": {
@@ -7132,7 +7132,7 @@
       }
     },
     {
-      "description": "Get usage status of a storage pool on a node (total, used, available).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n",
+      "description": "Get usage status of a storage pool on a node (total, used, available).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.",
       "module": "storage",
       "name": "get_node_storage_status",
       "parameters": {
@@ -7155,7 +7155,7 @@
       }
     },
     {
-      "description": "Get configuration of a specific storage pool.\n\nArgs:\n    storage: The storage ID.\n",
+      "description": "Get configuration of a specific storage pool.\n\nArgs:\n    storage: The storage ID.",
       "module": "storage",
       "name": "get_storage_config",
       "parameters": {
@@ -7173,7 +7173,7 @@
       }
     },
     {
-      "description": "Get RRD statistics for a storage pool (usage over time).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.\n",
+      "description": "Get RRD statistics for a storage pool (usage over time).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    timeframe: Time range: 'hour', 'day', 'week', 'month', 'year'.",
       "module": "storage",
       "name": "get_storage_rrddata",
       "parameters": {
@@ -7201,7 +7201,7 @@
       }
     },
     {
-      "description": "Get details about a specific volume in storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The volume ID.\n",
+      "description": "Get details about a specific volume in storage.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The volume ID.",
       "module": "storage",
       "name": "get_storage_volume_info",
       "parameters": {
@@ -7229,7 +7229,7 @@
       }
     },
     {
-      "description": "Get details of a ZFS pool.\n\nArgs:\n    node: The node name.\n    name: ZFS pool name.\n",
+      "description": "Get details of a ZFS pool.\n\nArgs:\n    node: The node name.\n    name: ZFS pool name.",
       "module": "storage",
       "name": "get_zfs_pool",
       "parameters": {
@@ -7252,7 +7252,7 @@
       }
     },
     {
-      "description": "Initialize a disk with GPT partition table (WARNING: destroys all data).\n\nArgs:\n    node: The node name.\n    disk: Disk device path (e.g. '/dev/sdb').\n",
+      "description": "Initialize a disk with GPT partition table (WARNING: destroys all data).\n\nArgs:\n    node: The node name.\n    disk: Disk device path (e.g. '/dev/sdb').",
       "module": "storage",
       "name": "initialize_gpt",
       "parameters": {
@@ -7275,7 +7275,7 @@
       }
     },
     {
-      "description": "List directory-based storage mounts on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List directory-based storage mounts on a node.\n\nArgs:\n    node: The node name.",
       "module": "storage",
       "name": "list_directory_storage",
       "parameters": {
@@ -7293,7 +7293,7 @@
       }
     },
     {
-      "description": "List files in a backup volume for file-level restore (PBS backups).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The backup volume ID.\n    filepath: Path inside the backup to list (default '/').\n",
+      "description": "List files in a backup volume for file-level restore (PBS backups).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    volume: The backup volume ID.\n    filepath: Path inside the backup to list (default '/').",
       "module": "storage",
       "name": "list_file_restore",
       "parameters": {
@@ -7326,7 +7326,7 @@
       }
     },
     {
-      "description": "List LVM volume groups on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List LVM volume groups on a node.\n\nArgs:\n    node: The node name.",
       "module": "storage",
       "name": "list_lvm_volumes",
       "parameters": {
@@ -7344,7 +7344,7 @@
       }
     },
     {
-      "description": "List LVM thin pools on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List LVM thin pools on a node.\n\nArgs:\n    node: The node name.",
       "module": "storage",
       "name": "list_lvmthin_pools",
       "parameters": {
@@ -7362,7 +7362,7 @@
       }
     },
     {
-      "description": "List storage pools available on a specific node with usage info.\n\nArgs:\n    node: The node name.\n    content: Filter by content type (images, rootdir, vztmpl, iso, backup).\n    enabled: Only show enabled storage.\n",
+      "description": "List storage pools available on a specific node with usage info.\n\nArgs:\n    node: The node name.\n    content: Filter by content type (images, rootdir, vztmpl, iso, backup).\n    enabled: Only show enabled storage.",
       "module": "storage",
       "name": "list_node_storage",
       "parameters": {
@@ -7390,7 +7390,7 @@
       }
     },
     {
-      "description": "List all configured storage pools at the datacenter level.\n\nArgs:\n    type: Filter by type (dir, lvm, lvmthin, zfspool, nfs, cifs, iscsi, rbd, cephfs, pbs, glusterfs, btrfs).\n    enabled: Only show enabled storage (default True).\n",
+      "description": "List all configured storage pools at the datacenter level.\n\nArgs:\n    type: Filter by type (dir, lvm, lvmthin, zfspool, nfs, cifs, iscsi, rbd, cephfs, pbs, glusterfs, btrfs).\n    enabled: Only show enabled storage (default True).",
       "module": "storage",
       "name": "list_storage",
       "parameters": {
@@ -7411,7 +7411,7 @@
       }
     },
     {
-      "description": "List content of a storage pool (disk images, ISOs, templates, backups).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    content: Filter by type: 'images', 'rootdir', 'vztmpl', 'iso', 'backup', 'snippets'.\n    vmid: Filter by VM ID.\n",
+      "description": "List content of a storage pool (disk images, ISOs, templates, backups).\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    content: Filter by type: 'images', 'rootdir', 'vztmpl', 'iso', 'backup', 'snippets'.\n    vmid: Filter by VM ID.",
       "module": "storage",
       "name": "list_storage_content",
       "parameters": {
@@ -7444,7 +7444,7 @@
       }
     },
     {
-      "description": "List ZFS pools on a node.\n\nArgs:\n    node: The node name.\n",
+      "description": "List ZFS pools on a node.\n\nArgs:\n    node: The node name.",
       "module": "storage",
       "name": "list_zfs_pools",
       "parameters": {
@@ -7462,7 +7462,7 @@
       }
     },
     {
-      "description": "Prune (delete) old backups from storage according to retention policy.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    type: Guest type filter ('qemu' or 'lxc').\n    vmid: Filter by VM ID.\n    prune_backups: Retention spec (e.g. 'keep-last=3,keep-daily=7,keep-weekly=4').\n    dry_run: If True, only simulate (default True for safety).\n",
+      "description": "Prune (delete) old backups from storage according to retention policy.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    type: Guest type filter ('qemu' or 'lxc').\n    vmid: Filter by VM ID.\n    prune_backups: Retention spec (e.g. 'keep-last=3,keep-daily=7,keep-weekly=4').\n    dry_run: If True, only simulate (default True for safety).",
       "module": "storage",
       "name": "prune_storage_backups",
       "parameters": {
@@ -7505,7 +7505,7 @@
       }
     },
     {
-      "description": "Update an existing storage pool configuration.\n\nArgs:\n    storage: The storage ID to update.\n    content: Content types (images, rootdir, vztmpl, iso, backup, snippets, import).\n    nodes: Allowed nodes (comma-separated).\n    shared: Mark as shared.\n    disable: Disable this storage.\n    prune_backups: Backup retention policy.\n    delete: Comma-separated list of settings to delete.\n",
+      "description": "Update an existing storage pool configuration.\n\nArgs:\n    storage: The storage ID to update.\n    content: Content types (images, rootdir, vztmpl, iso, backup, snippets, import).\n    nodes: Allowed nodes (comma-separated).\n    shared: Mark as shared.\n    disable: Disable this storage.\n    prune_backups: Backup retention policy.\n    delete: Comma-separated list of settings to delete.",
       "module": "storage",
       "name": "update_storage",
       "parameters": {
@@ -7567,7 +7567,7 @@
       }
     },
     {
-      "description": "Upload a file (ISO, template, etc.) to storage. Note: actual file upload must go through the HTTP API directly.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    content: Content type: 'iso', 'vztmpl', 'snippets', 'import'.\n    filename: Target filename.\n    tmpfilename: Temporary filename for the upload.\n",
+      "description": "Upload a file (ISO, template, etc.) to storage. Note: actual file upload must go through the HTTP API directly.\n\nArgs:\n    node: The node name.\n    storage: The storage ID.\n    content: Content type: 'iso', 'vztmpl', 'snippets', 'import'.\n    filename: Target filename.\n    tmpfilename: Temporary filename for the upload.",
       "module": "storage",
       "name": "upload_to_storage",
       "parameters": {

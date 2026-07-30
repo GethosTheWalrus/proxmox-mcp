@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import importlib
 import logging
 import os
 import threading
-from typing import Any
+from typing import Any, Callable
 
 from proxmox_mcp.client import api_request, format_response
 from proxmox_mcp.mcp_compat import Context, MCPServer, call_registered_tool, get_registered_tool_map, get_tool_manager
@@ -27,6 +26,87 @@ _registration_lock = threading.Lock()
 _router_indexed = False
 _routing_hooks_installed = False
 _ROUTED_MODE = os.environ.get("TOOL_ROUTING", "").lower() in ("1", "true", "yes")
+
+
+def _import_access() -> Any:
+    from proxmox_mcp.tools import access
+
+    return access
+
+
+def _import_backup() -> Any:
+    from proxmox_mcp.tools import backup
+
+    return backup
+
+
+def _import_cluster() -> Any:
+    from proxmox_mcp.tools import cluster
+
+    return cluster
+
+
+def _import_firewall() -> Any:
+    from proxmox_mcp.tools import firewall
+
+    return firewall
+
+
+def _import_ha() -> Any:
+    from proxmox_mcp.tools import ha
+
+    return ha
+
+
+def _import_lxc() -> Any:
+    from proxmox_mcp.tools import lxc
+
+    return lxc
+
+
+def _import_nodes() -> Any:
+    from proxmox_mcp.tools import nodes
+
+    return nodes
+
+
+def _import_pools() -> Any:
+    from proxmox_mcp.tools import pools
+
+    return pools
+
+
+def _import_qemu() -> Any:
+    from proxmox_mcp.tools import qemu
+
+    return qemu
+
+
+def _import_sdn() -> Any:
+    from proxmox_mcp.tools import sdn
+
+    return sdn
+
+
+def _import_storage() -> Any:
+    from proxmox_mcp.tools import storage
+
+    return storage
+
+
+_TOOL_IMPORTERS: dict[str, Callable[[], Any]] = {
+    "access": _import_access,
+    "backup": _import_backup,
+    "cluster": _import_cluster,
+    "firewall": _import_firewall,
+    "ha": _import_ha,
+    "lxc": _import_lxc,
+    "nodes": _import_nodes,
+    "pools": _import_pools,
+    "qemu": _import_qemu,
+    "sdn": _import_sdn,
+    "storage": _import_storage,
+}
 
 
 def _is_routed_mode() -> bool:
@@ -55,7 +135,7 @@ def _register_domain_module(module_name: str) -> None:
         if module_name in _registered_modules:
             return
 
-        module = importlib.import_module(f"proxmox_mcp.tools.{module_name}")
+        module = _TOOL_IMPORTERS[module_name]()
         module.register(mcp)
         _registered_modules.add(module_name)
 
