@@ -52,7 +52,7 @@ jobs:
 
       - name: Upload build artifacts
         if: steps.version_check.outputs.will_release == 'true'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/

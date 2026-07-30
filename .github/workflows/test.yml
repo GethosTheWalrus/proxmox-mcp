@@ -4,11 +4,22 @@ on:
   pull_request:
     branches:
       - main
+  merge_group:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     name: Run test suite
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     strategy:
       matrix:
@@ -17,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v7
@@ -24,9 +37,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: |
-          pip install -e .
-          pip install pytest pytest-asyncio
+        run: pip install -e ".[dev]"
 
       - name: Run tests
         run: pytest tests/ -v
+
+      - name: Check generated tool manifest
+        run: python scripts/generate_tool_manifest.py --check

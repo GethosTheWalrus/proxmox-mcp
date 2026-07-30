@@ -1,0 +1,78 @@
+name: Docker Scout PR Build
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-scout-pr-build-${{ github.event.pull_request.head.repo.full_name }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-fork-pr-image:
+    name: Build fork PR image for Docker Scout
+    if: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build image archive
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          outputs: type=docker,dest=/tmp/proxmox-mcp-image.tar
+
+      - name: Write scan metadata
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs');
+            const path = require('node:path');
+            const { execFileSync } = require('node:child_process');
+            const outputDir = '/tmp/docker-scout-pr';
+            const sourceImage = '/tmp/proxmox-mcp-image.tar';
+            const image = path.join(outputDir, 'proxmox-mcp-image.tar');
+            const metadata = path.join(outputDir, 'metadata.json');
+            const pr = context.payload.pull_request;
+
+            fs.mkdirSync(outputDir, { recursive: true });
+            fs.renameSync(sourceImage, image);
+            const imageSha256 = execFileSync('sha256sum', [image], { encoding: 'utf8' }).split(' ')[0];
+            fs.writeFileSync(metadata, JSON.stringify({
+              repository: context.repo.owner + '/' + context.repo.repo,
+              pr_number: pr.number,
+              head_sha: pr.head.sha,
+              head_repo: pr.head.repo.full_name,
+              head_branch: pr.head.ref,
+              image_sha256: imageSha256,
+            }, null, 2) + '\n');
+
+      - name: Enforce image archive size limit
+        run: |
+          image_size=$(stat -c %s /tmp/docker-scout-pr/proxmox-mcp-image.tar)
+          max_size=$((2 * 1024 * 1024 * 1024))
+          if [ "$image_size" -gt "$max_size" ]; then
+            echo "::error::Docker image archive is too large: ${image_size} bytes"
+            exit 1
+          fi
+
+      - name: Upload image archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-scout-pr-image
+          path: /tmp/docker-scout-pr/
+          retention-days: 1
+          compression-level: 0

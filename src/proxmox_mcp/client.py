@@ -8,6 +8,10 @@ import os
 from proxmoxer import ProxmoxAPI
 
 
+def _env_flag(name: str, default: str = "") -> bool:
+    return os.environ.get(name, default).lower() in ("1", "true", "yes")
+
+
 def _get_client() -> ProxmoxAPI:
     """Create a ProxmoxAPI client from environment variables.
 
@@ -41,10 +45,7 @@ def _get_client() -> ProxmoxAPI:
     password = os.environ.get("PROXMOX_PASSWORD", "")
     user = os.environ.get("PROXMOX_USER", "root@pam")
     if not password:
-        raise RuntimeError(
-            "Either PROXMOX_TOKEN_NAME+PROXMOX_TOKEN_VALUE or "
-            "PROXMOX_USER+PROXMOX_PASSWORD must be set"
-        )
+        raise RuntimeError("Either PROXMOX_TOKEN_NAME+PROXMOX_TOKEN_VALUE or " "PROXMOX_USER+PROXMOX_PASSWORD must be set")
 
     return ProxmoxAPI(
         host,
@@ -79,6 +80,12 @@ def api_request(method: str, path: str, **params) -> dict | list | str:
     Returns:
         The API response data.
     """
+    method_name = method.lower()
+    if method_name not in {"get", "post", "put", "delete"}:
+        raise ValueError(f"Unsupported Proxmox API method: {method}")
+    if _env_flag("PROXMOX_READ_ONLY") and method_name != "get":
+        raise RuntimeError("Proxmox MCP server is running in read-only mode; write operations are disabled")
+
     client = get_client()
 
     # Walk the path segments to build the proxmoxer resource
@@ -87,7 +94,7 @@ def api_request(method: str, path: str, **params) -> dict | list | str:
     for seg in segments:
         resource = getattr(resource, seg)
 
-    fn = getattr(resource, method.lower())
+    fn = getattr(resource, method_name)
     result: dict | list | str = fn(**params)
 
     # proxmoxer returns the data portion already unwrapped

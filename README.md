@@ -364,6 +364,10 @@ Recommended when running via Docker. Configuration is passed through environment
         "-e", "PROXMOX_TOKEN_VALUE",
         "-e", "PROXMOX_VERIFY_SSL",
         "-e", "PROXMOX_TIMEOUT",
+        "-e", "TOOL_ROUTING",
+        "-e", "ROUTER_TOP_K",
+        "-e", "PROXMOX_READ_ONLY",
+        "-e", "PROXMOX_DISABLE_RAW_API",
         "mcp/proxmox"
       ],
       "env": {
@@ -414,11 +418,18 @@ Recommended when running from PyPI via [`uvx`](https://docs.astral.sh/uv/guides/
 | Password | `PROXMOX_PASSWORD` | — |
 | SSL verification | `PROXMOX_VERIFY_SSL` | `0` |
 | Request timeout (seconds) | `PROXMOX_TIMEOUT` | `30` |
-| Tool routing | `TOOL_ROUTING` | `false` |
+| Semantic tool routing | `TOOL_ROUTING` | `false` |
+| Routed tool result count | `ROUTER_TOP_K` | `10` |
+| Read-only mode | `PROXMOX_READ_ONLY` | `false` |
+| Disable raw API tool | `PROXMOX_DISABLE_RAW_API` | `false` |
 
 Either `PROXMOX_TOKEN_NAME` + `PROXMOX_TOKEN_VALUE` or `PROXMOX_PASSWORD` is required for authentication.
 
-When `TOOL_ROUTING` is set to `true`, the server exposes only 3 tools — `route_tools`, `call_routed_tool`, and `proxmox_api_raw` — instead of the full set. Use `route_tools` with a natural-language query to find relevant tools, then invoke them via `call_routed_tool`. This significantly reduces LLM context usage. Requires the `router` extra (`pip install proxmox-mcp-server[router]`).
+When `TOOL_ROUTING` is set to `true`, the server uses manifest-backed semantic tool routing. MCP clients only see 3 tools — `route_tools`, `call_routed_tool`, and `proxmox_api_raw` — while domain tool modules are imported and registered lazily only when `call_routed_tool` invokes one of their tools. Use `route_tools` with a natural-language query to find relevant tools, then invoke them via `call_routed_tool`. This significantly reduces LLM context usage and routed-mode startup work. Requires the `router` extra (`pip install proxmox-mcp-server[router]`). Docker images include this extra.
+
+Set `ROUTER_TOP_K` to control how many candidate tools `route_tools` returns. Lower values save more response context; higher values improve recall for broad queries.
+
+Set `PROXMOX_READ_ONLY=true` to block all non-GET Proxmox API operations. Set `PROXMOX_DISABLE_RAW_API=true` to keep the generic `proxmox_api_raw` escape-hatch visible but unavailable at runtime.
 
 ## Development
 
@@ -434,6 +445,13 @@ Run the test suite:
 
 ```bash
 pytest tests/ -v
+```
+
+Regenerate the routed-mode tool manifest after adding, removing, or changing tool signatures:
+
+```bash
+python scripts/generate_tool_manifest.py
+python scripts/generate_tool_manifest.py --check
 ```
 
 ### Building the Docker Image

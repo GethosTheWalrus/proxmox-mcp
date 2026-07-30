@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from mcp.server.fastmcp import FastMCP
+from proxmox_mcp.mcp_compat import MCPServer
 
 from proxmox_mcp.client import api_request, format_response
 
 
-def register(mcp: FastMCP) -> None:
+def register(mcp: MCPServer) -> None:
     """Register node management tools."""
 
     @mcp.tool()
