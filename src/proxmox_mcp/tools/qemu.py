@@ -117,7 +117,7 @@ def register(mcp: MCPServer) -> None:
             scsi0: First SCSI disk (e.g. 'local-lvm:32' for 32GB on local-lvm).
             ide2: IDE device, often used for CD-ROM (e.g. 'local:iso/ubuntu.iso,media=cdrom').
             net0: Network device (e.g. 'virtio,bridge=vmbr0').
-            boot: Boot order (e.g. 'order=scsi0;ide2;net0').
+            boot: Boot order, for example scsi0 then ide2 then net0.
             bios: BIOS type: seabios, ovmf (UEFI).
             machine: Machine type (e.g. 'q35', 'i440fx').
             cdrom: CD-ROM ISO image path.
@@ -126,7 +126,7 @@ def register(mcp: MCPServer) -> None:
             onboot: Start on host boot.
             description: VM description.
             pool: Resource pool to add the VM to.
-            tags: Semicolon-separated tags.
+            tags: Tags for the VM.
         """
         params: dict = {
             "vmid": vmid,
@@ -183,7 +183,7 @@ def register(mcp: MCPServer) -> None:
             onboot: Start on boot.
             agent: Guest agent config.
             boot: Boot order.
-            tags: Semicolon-separated tags.
+            tags: Tags for the VM.
             hotplug: Hotplug features (disk, network, usb, memory, cpu).
             delete: Comma-separated list of settings to delete.
         """
