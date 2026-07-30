@@ -2,46 +2,68 @@
 
 from __future__ import annotations
 
+import importlib
 import logging
 import os
+import threading
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP, Context
-
-from proxmox_mcp.tools import (
-    access,
-    backup,
-    cluster,
-    firewall,
-    ha,
-    lxc,
-    nodes,
-    pools,
-    qemu,
-    sdn,
-    storage,
-)
 from proxmox_mcp.client import api_request, format_response
+from proxmox_mcp.mcp_compat import Context, MCPServer, call_registered_tool, get_registered_tool_map, get_tool_manager
+from proxmox_mcp.tool_manifest import ALWAYS_VISIBLE_TOOLS, ManifestTool, load_manifest
+from proxmox_mcp.tool_registry import TOOL_MODULES
 
 logger = logging.getLogger(__name__)
 
-mcp = FastMCP(
+mcp = MCPServer(
     "Proxmox MCP Server",
     instructions="Manage Proxmox VE clusters, nodes, VMs, containers, storage, networking, and more.",
 )
 
-# Register all domain-specific tool modules
-access.register(mcp)
-backup.register(mcp)
-cluster.register(mcp)
-firewall.register(mcp)
-ha.register(mcp)
-lxc.register(mcp)
-nodes.register(mcp)
-pools.register(mcp)
-qemu.register(mcp)
-sdn.register(mcp)
-storage.register(mcp)
+_active_tools: dict[str, ManifestTool] = {}
+_active_tools_lock = threading.Lock()
+_registered_modules: set[str] = set()
+_registration_lock = threading.Lock()
+_router_indexed = False
+_routing_hooks_installed = False
+_ROUTED_MODE = os.environ.get("TOOL_ROUTING", "").lower() in ("1", "true", "yes")
+
+
+def _is_routed_mode() -> bool:
+    return _ROUTED_MODE
+
+
+def _env_flag(name: str, default: str = "") -> bool:
+    return os.environ.get(name, default).lower() in ("1", "true", "yes")
+
+
+def _router_top_k() -> int:
+    raw_value = os.environ.get("ROUTER_TOP_K", "10")
+    try:
+        return max(1, int(raw_value))
+    except ValueError:
+        logger.warning("Invalid ROUTER_TOP_K=%r; using 10", raw_value)
+        return 10
+
+
+def _register_domain_module(module_name: str) -> None:
+    """Import and register one domain tool module exactly once."""
+    if module_name not in TOOL_MODULES:
+        raise RuntimeError(f"Unknown Proxmox tool module: {module_name}")
+
+    with _registration_lock:
+        if module_name in _registered_modules:
+            return
+
+        module = importlib.import_module(f"proxmox_mcp.tools.{module_name}")
+        module.register(mcp)
+        _registered_modules.add(module_name)
+
+
+def _register_all_domain_tools() -> None:
+    """Register every domain-specific tool module for full-tool mode."""
+    for module_name in TOOL_MODULES:
+        _register_domain_module(module_name)
 
 
 # ── Generic escape-hatch tool ────────────────────────────────────────
@@ -58,6 +80,9 @@ def proxmox_api_raw(method: str, path: str, params: str = "{}") -> str:
     """
     import json as _json
 
+    if _env_flag("PROXMOX_DISABLE_RAW_API"):
+        return "Raw Proxmox API access is disabled by PROXMOX_DISABLE_RAW_API."
+
     parsed: dict = {}
     if params and params != "{}":
         parsed = _json.loads(params)
@@ -66,51 +91,35 @@ def proxmox_api_raw(method: str, path: str, params: str = "{}") -> str:
 
 # ── Semantic tool routing ────────────────────────────────────────────
 
-_ALWAYS_VISIBLE = {"route_tools", "call_routed_tool", "proxmox_api_raw"}
-_active_tools: dict[str, Any] = {}  # name → Tool object
-_router_indexed = False
-
-
-def _is_routed_mode() -> bool:
-    return os.environ.get("TOOL_ROUTING", "").lower() in ("1", "true", "yes")
-
-
-def _all_tools() -> list[Any]:
-    """Return every registered tool (bypasses filtering)."""
-    tm = mcp._tool_manager  # type: ignore[attr-defined]
-    return list(tm._tools.values())  # type: ignore[attr-defined]
-
 
 def _ensure_router_indexed() -> None:
-    """Lazily initialise the router and build the embedding index."""
+    """Lazily initialise the router and build the embedding index from the manifest."""
     global _router_indexed
     if _router_indexed:
         return
 
-    from proxmox_mcp.router import get_router
+    try:
+        from proxmox_mcp.router import get_router
+    except ImportError as exc:
+        logger.warning("Tool routing unavailable: %s", exc)
+        return
 
     router = get_router()
     if router is None:
         return
 
-    all_tools = _all_tools()
-    tool_pairs = [
-        (t.name, (t.description or t.name)[:200]) for t in all_tools
-    ]
+    manifest = load_manifest()
+    tool_pairs = [(tool.name, (tool.description or tool.name)[:200]) for tool in manifest.tools]
     router.index(tool_pairs)
     _router_indexed = True
 
 
 def _filtered_list_tools() -> list[Any]:
-    """Return only the 3 always-visible tools (static)."""
-    tm = mcp._tool_manager  # type: ignore[attr-defined]
-    return [
-        t for t in tm._tools.values()  # type: ignore[attr-defined]
-        if t.name in _ALWAYS_VISIBLE
-    ]
+    """Return only the always-visible facade tools in routed mode."""
+    return [tool for tool in get_registered_tool_map(mcp).values() if tool.name in ALWAYS_VISIBLE_TOOLS]
 
 
-def _tool_summary(tool: Any) -> str:
+def _tool_summary(tool: ManifestTool) -> str:
     """Compact one-line summary: name(params) — description."""
     params = tool.parameters or {}
     props = params.get("properties", {})
@@ -143,21 +152,23 @@ def route_tools(query: str) -> str:
 
     _ensure_router_indexed()
 
-    from proxmox_mcp.router import get_router
+    try:
+        from proxmox_mcp.router import get_router, get_router_error
+    except ImportError as exc:
+        return f"Router failed to initialise. Install proxmox-mcp-server[router] to use TOOL_ROUTING. ({exc})"
 
     router = get_router()
     if router is None:
+        detail = get_router_error()
+        if detail:
+            return f"Router failed to initialise. Install proxmox-mcp-server[router] to use TOOL_ROUTING. ({detail})"
         return "Router failed to initialise."
 
-    results = router.search(query)
-
-    # Build name → tool mapping for the activated set
-    tm = mcp._tool_manager  # type: ignore[attr-defined]
-    _active_tools = {
-        name: tm._tools[name]  # type: ignore[attr-defined]
-        for name in results
-        if name in tm._tools  # type: ignore[attr-defined]
-    }
+    manifest = load_manifest()
+    results = router.search(query, top_k=_router_top_k())
+    active_tools = {name: manifest.by_name[name] for name in results if name in manifest.by_name}
+    with _active_tools_lock:
+        _active_tools = active_tools
 
     logger.info("route_tools(%r) → %d tools activated", query, len(_active_tools))
 
@@ -179,10 +190,13 @@ async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None
     if not _is_routed_mode():
         return "Tool routing is not enabled."
 
-    if name in _ALWAYS_VISIBLE:
+    if name in ALWAYS_VISIBLE_TOOLS:
         return f"Cannot call '{name}' through this tool. Call it directly."
 
-    if name not in _active_tools:
+    with _active_tools_lock:
+        tool = _active_tools.get(name)
+
+    if tool is None:
         return f"Tool '{name}' is not active. Call route_tools first to find available tools."
 
     try:
@@ -190,23 +204,40 @@ async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None
     except _json.JSONDecodeError as e:
         return f"Invalid JSON arguments: {e}"
 
-    tm = mcp._tool_manager  # type: ignore[attr-defined]
-    result = await tm.call_tool(name, parsed, ctx)
+    _register_domain_module(tool.module)
 
+    if name not in get_registered_tool_map(mcp):
+        return f"Tool '{name}' was not registered by module '{tool.module}'. The tool manifest may be stale."
+
+    result = await call_registered_tool(mcp, name, parsed, ctx)
     return str(result)
 
 
 def _install_routing_hooks() -> None:
-    """Patch FastMCP's tool manager so only the 3 base tools are listed."""
+    """Patch FastMCP's tool manager so only the 3 facade tools are listed."""
+    global _routing_hooks_installed
     if not _is_routed_mode():
-        logger.info("Tool routing disabled — all %d tools visible", len(mcp._tool_manager._tools))  # type: ignore[attr-defined]
+        logger.info("Tool routing disabled — all %d tools visible", len(get_registered_tool_map(mcp)))
+        return
+    if _routing_hooks_installed:
+        logger.info("Tool routing already enabled — only 3 base tools visible")
         return
 
     logger.info("Tool routing enabled — only 3 base tools visible")
-    mcp.tool()(route_tools)
-    mcp.tool()(call_routed_tool)
-    tm = mcp._tool_manager  # type: ignore[attr-defined]
+    registered_tools = get_registered_tool_map(mcp)
+    if "route_tools" not in registered_tools:
+        mcp.tool()(route_tools)
+    if "call_routed_tool" not in registered_tools:
+        mcp.tool()(call_routed_tool)
+    tm = get_tool_manager(mcp)
     tm.list_tools = _filtered_list_tools  # type: ignore[method-assign]
+    _routing_hooks_installed = True
+
+
+if _is_routed_mode():
+    _install_routing_hooks()
+else:
+    _register_all_domain_tools()
 
 
 # ── Entrypoint ───────────────────────────────────────────────────────
@@ -215,7 +246,15 @@ def _install_routing_hooks() -> None:
 def main() -> None:
     """Run the MCP server (stdio transport)."""
     logging.basicConfig(level=logging.INFO)
-    _install_routing_hooks()
+    logger.info(
+        "Starting Proxmox MCP server host=%s auth=%s routing=%s read_only=%s raw_api=%s tools=%d",
+        os.environ.get("PROXMOX_HOST", "<unset>"),
+        "token" if os.environ.get("PROXMOX_TOKEN_NAME") and os.environ.get("PROXMOX_TOKEN_VALUE") else "password" if os.environ.get("PROXMOX_PASSWORD") else "unset",
+        _is_routed_mode(),
+        _env_flag("PROXMOX_READ_ONLY"),
+        "disabled" if _env_flag("PROXMOX_DISABLE_RAW_API") else "enabled",
+        len(get_registered_tool_map(mcp)),
+    )
     mcp.run(transport="stdio")
 
 

@@ -87,6 +87,7 @@ class TestGetClient:
                     if mod._client is None:
                         mod._client = mod._get_client()
                     return mod._client
+
                 c1 = _real_get_client()
                 c2 = _real_get_client()
                 assert c1 is c2 is mock
@@ -107,6 +108,15 @@ class TestApiRequest:
         mock_proxmox_client.nodes.pve1.qemu.post.return_value = "UPID:pve1:..."
         result = api_request("post", "/nodes/pve1/qemu", vmid=100, name="test")
         mock_proxmox_client.nodes.pve1.qemu.post.assert_called_once_with(vmid=100, name="test")
+
+    def test_rejects_unsupported_method(self):
+        with pytest.raises(ValueError, match="Unsupported Proxmox API method"):
+            api_request("patch", "/nodes")
+
+    def test_read_only_blocks_write_methods(self):
+        with patch.dict("os.environ", {"PROXMOX_READ_ONLY": "true"}):
+            with pytest.raises(RuntimeError, match="read-only mode"):
+                api_request("post", "/nodes/pve1/qemu", vmid=100)
 
     def test_deep_path(self, mock_proxmox_client):
         mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").status.current.get.return_value = {"status": "running"}

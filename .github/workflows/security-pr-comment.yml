@@ -1,0 +1,320 @@
+name: Security PR Comment
+
+on:
+  workflow_run:
+    workflows:
+      - Docker Scout
+      - Docker Scout PR Build
+      - Docker Scout PR Scan
+      - CodeQL
+      - OSV-Scanner
+    types:
+      - completed
+
+permissions:
+  actions: read
+  checks: read
+  contents: read
+  pull-requests: write
+  security-events: read
+
+concurrency:
+  group: security-pr-comment-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  update-comment:
+    name: Update security scan comment
+    # Direct scanners are triggered by pull_request. The privileged fork-PR Scout
+    # scan is triggered by workflow_run, so admit it by trusted workflow path.
+    if: ${{ github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.path == '.github/workflows/docker-scout-pr-scan.yml' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Download Docker Scout PR result metadata
+        id: download-scout-result
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: docker-scout-pr-result
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+          path: docker-scout-pr-result
+
+      - name: Update PR comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs');
+            const marker = '<!-- proxmox-mcp-security-summary -->';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const expectedRepository = `${owner}/${repo}`;
+            const run = context.payload.workflow_run;
+            let scoutPrResult = null;
+            const scoutResultDownloadOutcome = '${{ steps.download-scout-result.outcome }}';
+            if (run.path === '.github/workflows/docker-scout-pr-scan.yml' && scoutResultDownloadOutcome === 'failure') {
+              core.warning('Docker Scout PR Scan result metadata artifact was unavailable; falling back to workflow metadata.');
+            }
+            try {
+              if (fs.existsSync('docker-scout-pr-result/metadata.json')) {
+                scoutPrResult = JSON.parse(fs.readFileSync('docker-scout-pr-result/metadata.json', 'utf8'));
+              }
+            } catch (error) {
+              core.warning(`Failed to parse Docker Scout PR result metadata: ${error.message}`);
+              scoutPrResult = null;
+            }
+            let pr = (run.pull_requests || [])[0];
+
+            if (!pr && scoutPrResult?.pr_number) {
+              pr = { number: scoutPrResult.pr_number };
+            }
+
+            if (!pr) {
+              const headOwner = run.head_repository?.owner?.login;
+              if (headOwner && run.head_branch) {
+                const matches = await github.paginate(github.rest.pulls.list, {
+                  owner,
+                  repo,
+                  state: 'open',
+                  head: `${headOwner}:${run.head_branch}`,
+                  base: 'main',
+                  per_page: 100,
+                });
+                pr = matches[0];
+              }
+            }
+
+            if (!pr) {
+              core.info('No pull request could be resolved for this workflow_run payload.');
+              return;
+            }
+
+            const prNumber = pr.number;
+            const { data: pull } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber,
+            });
+
+            if (scoutPrResult) {
+              const validScoutMetadata =
+                scoutPrResult.repository === expectedRepository &&
+                scoutPrResult.pr_number === prNumber &&
+                typeof scoutPrResult.head_sha === 'string' &&
+                scoutPrResult.head_sha.length > 0;
+              if (!validScoutMetadata) {
+                core.warning('Ignoring Docker Scout PR result metadata because it does not match this repository or pull request.');
+                scoutPrResult = null;
+              }
+            }
+
+            const headSha = scoutPrResult?.head_sha || pull.head.sha || run.head_sha || '';
+            const shortSha = headSha ? headSha.slice(0, 7) : 'unknown';
+            const runUrl = run.html_url;
+
+            const refs = [...new Set([headSha, run.head_sha].filter(Boolean))];
+            const checkRuns = [];
+            for (const ref of refs) {
+              const runs = await github.paginate(github.rest.checks.listForRef, {
+                owner,
+                repo,
+                ref,
+                per_page: 100,
+              });
+              checkRuns.push(...runs);
+            }
+
+            const checks = [...new Map(checkRuns
+              .filter((check) => check.app?.slug === 'github-actions')
+              .map((check) => [check.id, check])).values()];
+
+            function conclusionLabel(check) {
+              if (!check) return 'Not reported yet';
+              if (check.status !== 'completed') return check.status;
+              return check.conclusion || 'unknown';
+            }
+
+            function iconFor(check) {
+              if (!check) return ':hourglass_flowing_sand:';
+              if (check.status !== 'completed') return ':hourglass_flowing_sand:';
+              switch (check.conclusion) {
+                case 'success':
+                  return ':white_check_mark:';
+                case 'skipped':
+                case 'neutral':
+                  return ':fast_forward:';
+                case 'failure':
+                case 'timed_out':
+                case 'cancelled':
+                case 'action_required':
+                  return ':x:';
+                default:
+                  return ':warning:';
+              }
+            }
+
+            function newestMatching(...patterns) {
+              const matches = checks
+                .filter((check) => patterns.some((pattern) => pattern.test(check.name)))
+                .sort((a, b) => {
+                  const bTime = new Date(b.started_at || b.created_at || 0).getTime();
+                  const aTime = new Date(a.started_at || a.created_at || 0).getTime();
+                  return bTime - aTime;
+                });
+              return matches[0];
+            }
+
+            const tools = [
+              {
+                key: 'osv',
+                title: 'OSV dependency scan',
+                check: newestMatching(/OSV-Scanner/i, /Scan pull request dependencies/i, /osv/i),
+                toolPatterns: [/osv/i],
+                usesCodeScanning: false,
+                success: 'OSV PR check completed; open details for vulnerability status.',
+              },
+              {
+                key: 'codeql',
+                title: 'CodeQL',
+                check: newestMatching(/CodeQL/i, /Analyze Python/i),
+                toolPatterns: [/codeql/i],
+                usesCodeScanning: true,
+                success: 'No open CodeQL alerts reported for this PR ref.',
+              },
+              {
+                key: 'scout',
+                title: 'Docker Scout',
+                check: newestMatching(/Docker Scout PR Scan/i, /Docker Scout/i, /Scan container image/i, /Scan fork PR image/i),
+                toolPatterns: [/docker scout/i, /scout/i],
+                usesCodeScanning: true,
+                success: 'No open critical/high fixable container CVEs reported for this PR ref.',
+              },
+            ];
+
+            let codeScanningAlerts = [];
+            let codeScanningError = '';
+            const codeScanningRefs = [`refs/pull/${prNumber}/merge`, `refs/pull/${prNumber}/head`];
+            const codeScanningErrors = [];
+            const seenAlerts = new Set();
+
+            for (const ref of codeScanningRefs) {
+              try {
+                const alerts = await github.paginate(github.rest.codeScanning.listAlertsForRepo, {
+                  owner,
+                  repo,
+                  ref,
+                  state: 'open',
+                  per_page: 100,
+                });
+
+                for (const alert of alerts) {
+                  const key = `${alert.number}:${alert.tool?.name || ''}`;
+                  if (!seenAlerts.has(key)) {
+                    seenAlerts.add(key);
+                    codeScanningAlerts.push(alert);
+                  }
+                }
+              } catch (error) {
+                codeScanningErrors.push(`${ref}: ${error.message}`);
+              }
+            }
+
+            if (codeScanningErrors.length === codeScanningRefs.length) {
+              codeScanningError = codeScanningErrors.join('; ');
+            }
+
+            function alertsFor(tool) {
+              return codeScanningAlerts.filter((alert) => {
+                const name = alert.tool?.name || '';
+                const guid = alert.tool?.guid || '';
+                return tool.toolPatterns.some((pattern) => pattern.test(name) || pattern.test(guid));
+              });
+            }
+
+            function statusLine(tool) {
+              const check = tool.check;
+              const label = conclusionLabel(check);
+              const link = check?.html_url || runUrl;
+              return `${iconFor(check)} **${label}** ([details](${link}))`;
+            }
+
+            function alertSummary(tool) {
+              if (!tool.usesCodeScanning) {
+                if (tool.check?.conclusion === 'success') return tool.success;
+                if (tool.check?.conclusion === 'skipped') return 'Scan was skipped.';
+                if (!tool.check) return 'Waiting for this scan to report.';
+                return 'Check did not complete successfully; open details for output.';
+              }
+
+              if (codeScanningError) {
+                if (tool.check?.conclusion === 'success') {
+                  return `Check passed; code scanning alert lookup unavailable: ${codeScanningError}`;
+                }
+                return `Code scanning alerts unavailable: ${codeScanningError}`;
+              }
+
+              const alerts = alertsFor(tool);
+              if (alerts.length === 0) {
+                if (tool.check?.conclusion === 'success') return tool.success;
+                if (tool.check?.conclusion === 'skipped') return 'Scan was skipped.';
+                if (!tool.check) return 'Waiting for this scan to report.';
+                return 'Check did not complete successfully; open details for output.';
+              }
+
+              const bySeverity = alerts.reduce((counts, alert) => {
+                const severity = alert.rule?.security_severity_level || alert.rule?.severity || 'unknown';
+                counts[severity] = (counts[severity] || 0) + 1;
+                return counts;
+              }, {});
+              const counts = Object.entries(bySeverity)
+                .sort(([left], [right]) => left.localeCompare(right))
+                .map(([severity, count]) => `${count} ${severity}`)
+                .join(', ');
+              return `${alerts.length} open alert(s): ${counts}.`;
+            }
+
+            const rows = tools.map((tool) => {
+              return `| ${tool.title} | ${statusLine(tool)} | ${alertSummary(tool)} |`;
+            });
+
+            const body = [
+              marker,
+              '## Security Scan Results',
+              '',
+              `Updated for commit \`${shortSha}\` after a security scan completed.`,
+              '',
+              '| Scanner | Check | Result |',
+              '| --- | --- | --- |',
+              ...rows,
+              '',
+              '_This comment is updated automatically as OSV, CodeQL, and Docker Scout finish for the PR._',
+            ].join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number: prNumber,
+              per_page: 100,
+            });
+
+            const existing = comments.find((comment) => {
+              return comment.user?.type === 'Bot' && comment.body?.includes(marker);
+            });
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body,
+              });
+            }

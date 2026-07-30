@@ -1,4 +1,6 @@
-mcp[cli]>=1.0.0
+mcp[cli]>=2.0.0,<3.0.0
+msgpack>=1.2.1
 proxmoxer>=2.0.0
 requests>=2.31.0
+setuptools>=78.1.1
 urllib3>=2.0.0

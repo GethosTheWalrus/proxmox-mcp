@@ -1,0 +1,282 @@
+name: Docker Scout PR Scan
+
+on:
+  workflow_run:
+    workflows:
+      - Docker Scout PR Build
+    types:
+      - completed
+
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  security-events: write
+
+concurrency:
+  group: docker-scout-pr-scan-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: true
+
+jobs:
+  scan-fork-pr-image:
+    name: Scan fork PR image with Docker Scout
+    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_repository.full_name != github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    steps:
+      - name: Download PR image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-scout-pr-image
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+          path: docker-scout-pr
+
+      - name: Validate artifact files
+        run: |
+          test -f docker-scout-pr/metadata.json
+          test -f docker-scout-pr/proxmox-mcp-image.tar
+          image_size=$(stat -c %s docker-scout-pr/proxmox-mcp-image.tar)
+          max_size=$((2 * 1024 * 1024 * 1024))
+          if [ "$image_size" -gt "$max_size" ]; then
+            echo "::error::Docker image archive is too large: ${image_size} bytes"
+            exit 1
+          fi
+
+      - name: Compute image archive digest
+        id: image-digest
+        run: |
+          sha256=$(sha256sum docker-scout-pr/proxmox-mcp-image.tar | cut -d ' ' -f 1)
+          echo "sha256=${sha256}" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve and verify PR metadata
+        id: pr
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs');
+            const metadata = JSON.parse(fs.readFileSync('docker-scout-pr/metadata.json', 'utf8'));
+            const run = context.payload.workflow_run;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const expectedRepository = `${owner}/${repo}`;
+            const requiredKeys = ['head_branch', 'head_repo', 'head_sha', 'image_sha256', 'pr_number', 'repository'];
+            const actualKeys = Object.keys(metadata);
+
+            for (const key of requiredKeys) {
+              if (!actualKeys.includes(key)) {
+                core.setFailed(`Missing metadata field: ${key}`);
+                return;
+              }
+            }
+
+            for (const key of actualKeys) {
+              if (!requiredKeys.includes(key)) {
+                core.setFailed(`Unexpected metadata field: ${key}`);
+                return;
+              }
+            }
+
+            if (typeof metadata.repository !== 'string' ||
+                typeof metadata.pr_number !== 'number' ||
+                typeof metadata.head_sha !== 'string' ||
+                typeof metadata.head_repo !== 'string' ||
+                typeof metadata.head_branch !== 'string' ||
+                typeof metadata.image_sha256 !== 'string') {
+              core.setFailed('Metadata fields have invalid types.');
+              return;
+            }
+
+            if (!/^[0-9a-f]{64}$/.test(metadata.image_sha256)) {
+              core.setFailed('Image digest metadata is not a valid SHA-256 hex digest.');
+              return;
+            }
+
+            if (metadata.image_sha256 !== '${{ steps.image-digest.outputs.sha256 }}') {
+              core.setFailed('Image archive SHA-256 digest does not match metadata.');
+              return;
+            }
+
+            if (run.event !== 'pull_request') {
+              core.setFailed(`Unexpected workflow event: ${run.event}`);
+              return;
+            }
+
+            if (run.conclusion !== 'success') {
+              core.setFailed(`Source workflow did not complete successfully: ${run.conclusion}`);
+              return;
+            }
+
+            if (run.repository?.full_name !== expectedRepository) {
+              core.setFailed(`Workflow repository mismatch: ${run.repository?.full_name}`);
+              return;
+            }
+
+            if (run.head_repository?.full_name === expectedRepository) {
+              core.setFailed('This privileged scan path is only for fork pull requests.');
+              return;
+            }
+
+            let pr = (run.pull_requests || [])[0];
+            if (!pr) {
+              const headOwner = run.head_repository?.owner?.login;
+              if (headOwner && run.head_branch) {
+                const matches = await github.paginate(github.rest.pulls.list, {
+                  owner,
+                  repo,
+                  state: 'open',
+                  head: `${headOwner}:${run.head_branch}`,
+                  base: 'main',
+                  per_page: 100,
+                });
+                pr = matches.find((candidate) => candidate.head.sha === run.head_sha);
+              }
+            }
+
+            if (!pr) {
+              core.setFailed('No pull request could be resolved for this workflow run.');
+              return;
+            }
+
+            const { data: pull } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: pr.number,
+            });
+
+            if (pull.state !== 'open') {
+              core.setFailed(`Pull request is not open: ${pull.state}`);
+              return;
+            }
+
+            if (pull.base.repo.full_name !== expectedRepository || pull.base.ref !== 'main') {
+              core.setFailed(`Unexpected pull request base: ${pull.base.repo.full_name}:${pull.base.ref}`);
+              return;
+            }
+
+            if (pull.head.sha !== run.head_sha) {
+              core.setFailed(`Pull request head SHA mismatch: ${pull.head.sha} != ${run.head_sha}`);
+              return;
+            }
+
+            if (pull.head.repo.full_name !== run.head_repository?.full_name) {
+              core.setFailed(`Pull request head repo mismatch: ${pull.head.repo.full_name} != ${run.head_repository?.full_name}`);
+              return;
+            }
+
+            if (metadata.repository !== expectedRepository) {
+              core.setFailed(`Artifact repository mismatch: ${metadata.repository}`);
+              return;
+            }
+
+            if (Number(metadata.pr_number) !== pr.number) {
+              core.setFailed(`Artifact PR mismatch: ${metadata.pr_number} != ${pr.number}`);
+              return;
+            }
+
+            if (metadata.head_sha !== run.head_sha) {
+              core.setFailed(`Artifact SHA mismatch: ${metadata.head_sha} != ${run.head_sha}`);
+              return;
+            }
+
+            if (metadata.head_repo !== pull.head.repo.full_name) {
+              core.setFailed(`Artifact head repo mismatch: ${metadata.head_repo} != ${pull.head.repo.full_name}`);
+              return;
+            }
+
+            if (metadata.head_branch !== pull.head.ref) {
+              core.setFailed(`Artifact head branch mismatch: ${metadata.head_branch} != ${pull.head.ref}`);
+              return;
+            }
+
+            core.setOutput('number', String(pr.number));
+            core.setOutput('head_sha', run.head_sha);
+
+      - name: Verify Docker Scout credentials
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::Docker Scout requires DOCKERHUB_USERNAME and DOCKERHUB_TOKEN repository secrets."
+            echo "Create a Docker Hub access token and add both secrets, then rerun this workflow."
+            exit 1
+          fi
+
+      - name: Scan image archive with Docker Scout
+        id: scout
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: archive://${{ github.workspace }}/docker-scout-pr/proxmox-mcp-image.tar
+          dockerhub-user: ${{ env.DOCKERHUB_USERNAME }}
+          dockerhub-password: ${{ env.DOCKERHUB_TOKEN }}
+          only-severities: critical,high
+          only-fixed: true
+          sarif-file: docker-scout.sarif.json
+          summary: true
+          exit-code: true
+          write-comment: false
+
+      - name: Upload Docker Scout SARIF
+        id: upload-sarif
+        if: ${{ always() && hashFiles('docker-scout.sarif.json') != '' }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: docker-scout.sarif.json
+          ref: refs/pull/${{ steps.pr.outputs.number }}/head
+          sha: ${{ steps.pr.outputs.head_sha }}
+
+      - name: Record Docker Scout PR check
+        if: ${{ always() && steps.pr.outputs.number != '' && steps.pr.outputs.head_sha != '' }}
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const conclusionByOutcome = {
+              success: 'success',
+              failure: 'failure',
+              cancelled: 'cancelled',
+              skipped: 'skipped',
+            };
+            const outcome = '${{ steps.scout.outcome }}';
+            const sarifOutcome = '${{ steps.upload-sarif.outcome }}';
+            const conclusion = outcome === 'success' && sarifOutcome === 'failure'
+              ? 'failure'
+              : conclusionByOutcome[outcome] || 'failure';
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Docker Scout PR Scan',
+              head_sha: '${{ steps.pr.outputs.head_sha }}',
+              status: 'completed',
+              conclusion,
+              details_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              output: {
+                title: 'Docker Scout PR Scan',
+                summary: conclusion === 'success'
+                  ? 'Docker Scout completed successfully for the fork PR image archive.'
+                  : 'Docker Scout or SARIF upload did not complete successfully. Open the workflow run for details.',
+              },
+            });
+
+      - name: Write comment metadata
+        if: ${{ always() && steps.pr.outputs.number != '' && steps.pr.outputs.head_sha != '' }}
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs');
+            fs.mkdirSync('docker-scout-pr-result', { recursive: true });
+            fs.writeFileSync('docker-scout-pr-result/metadata.json', JSON.stringify({
+              repository: context.repo.owner + '/' + context.repo.repo,
+              pr_number: Number('${{ steps.pr.outputs.number }}'),
+              head_sha: '${{ steps.pr.outputs.head_sha }}',
+            }, null, 2) + '\n');
+
+      - name: Upload comment metadata
+        if: ${{ always() && hashFiles('docker-scout-pr-result/metadata.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-scout-pr-result
+          path: docker-scout-pr-result/metadata.json
+          retention-days: 1

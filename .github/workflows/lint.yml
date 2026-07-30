@@ -4,15 +4,28 @@ on:
   pull_request:
     branches:
       - main
+  merge_group:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
     name: Lint & type check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -20,9 +33,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: |
-          pip install -e .
-          pip install flake8 mypy
+        run: pip install -e ".[dev]"
 
       - name: flake8
         run: flake8 src/proxmox_mcp/

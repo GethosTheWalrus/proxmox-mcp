@@ -4,20 +4,33 @@ on:
   pull_request:
     branches:
       - main
+  merge_group:
+    branches:
+      - main
   push:
     branches:
       - main
   schedule:
     - cron: "0 8 * * 1"  # Every Monday at 08:00 UTC
 
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.event.pull_request.number || github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   pip-audit:
     name: Dependency vulnerability scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -32,12 +45,15 @@ jobs:
   semgrep:
     name: SAST (Semgrep)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     container:
       image: semgrep/semgrep
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Run Semgrep
         run: semgrep --config=auto --error src/proxmox_mcp/

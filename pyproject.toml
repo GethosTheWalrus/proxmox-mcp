@@ -21,9 +21,11 @@ classifiers = [
     "Topic :: System :: Systems Administration",
 ]
 dependencies = [
-    "mcp[cli]>=1.0.0",
+    "mcp[cli]>=2.0.0,<3.0.0",
+    "msgpack>=1.2.1",
     "proxmoxer>=2.0.0",
     "requests>=2.31.0",
+    "setuptools>=78.1.1",
     "urllib3>=2.0.0",
 ]
 
@@ -31,6 +33,14 @@ dependencies = [
 router = [
     "fastembed>=0.4.0",
     "numpy>=1.26.0",
+]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "black>=26.5.1",
+    "flake8>=7.3.0",
+    "mypy>=2.3.0",
+    "pre-commit>=4.6.1",
 ]
 
 [project.urls]
@@ -48,6 +58,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["proxmox_mcp*"]
+
+[tool.setuptools.package-data]
+proxmox_mcp = ["tools_manifest.json"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
