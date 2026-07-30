@@ -1,8 +1,6 @@
 """Tests for cluster, access, storage, and other management tools."""
 
 import json
-import pytest
-from unittest.mock import MagicMock
 
 from proxmox_mcp.client import api_request, format_response
 
@@ -21,7 +19,7 @@ class TestClusterTools:
         mock_proxmox_client.cluster.resources.get.return_value = [
             {"type": "qemu", "vmid": 100, "name": "web", "status": "running"},
         ]
-        result = api_request("get", "/cluster/resources", type="vm")
+        api_request("get", "/cluster/resources", type="vm")
         mock_proxmox_client.cluster.resources.get.assert_called_once_with(type="vm")
 
     def test_get_next_vmid(self, mock_proxmox_client):
