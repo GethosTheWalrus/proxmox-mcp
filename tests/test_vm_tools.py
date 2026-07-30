@@ -1,10 +1,6 @@
 """Tests for QEMU VM and LXC container tools."""
 
-import json
-import pytest
-from unittest.mock import MagicMock
-
-from proxmox_mcp.client import api_request, format_response
+from proxmox_mcp.client import api_request
 
 
 class TestQemuTools:
@@ -28,7 +24,7 @@ class TestQemuTools:
 
     def test_create_vm(self, mock_proxmox_client):
         mock_proxmox_client.nodes.pve1.qemu.post.return_value = "UPID:pve1:00001234"
-        result = api_request("post", "/nodes/pve1/qemu", vmid=102, name="test-vm", memory=4096, cores=2)
+        api_request("post", "/nodes/pve1/qemu", vmid=102, name="test-vm", memory=4096, cores=2)
         mock_proxmox_client.nodes.pve1.qemu.post.assert_called_once_with(
             vmid=102, name="test-vm", memory=4096, cores=2
         )
@@ -60,7 +56,7 @@ class TestLxcTools:
 
     def test_create_container(self, mock_proxmox_client):
         mock_proxmox_client.nodes.pve1.lxc.post.return_value = "UPID:pve1:..."
-        result = api_request(
+        api_request(
             "post", "/nodes/pve1/lxc",
             vmid=201, hostname="test-ct", ostemplate="local:vztmpl/debian-12.tar.zst",
             memory=512, cores=1,

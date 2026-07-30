@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-from proxmox_mcp.client import api_request, format_response, get_client, _get_client
+from proxmox_mcp.client import api_request, format_response, _get_client
 
 
 class TestGetClient:
@@ -26,7 +26,7 @@ class TestGetClient:
         }
         with patch.dict("os.environ", env, clear=True), patch("proxmox_mcp.client.ProxmoxAPI") as mock_api:
             mock_api.return_value = MagicMock()
-            client = _get_client()
+            _get_client()
             mock_api.assert_called_once_with(
                 "10.0.0.1",
                 port=8006,
@@ -46,7 +46,7 @@ class TestGetClient:
         }
         with patch.dict("os.environ", env, clear=True), patch("proxmox_mcp.client.ProxmoxAPI") as mock_api:
             mock_api.return_value = MagicMock()
-            client = _get_client()
+            _get_client()
             mock_api.assert_called_once_with(
                 "10.0.0.1",
                 port=8006,
@@ -80,7 +80,6 @@ class TestGetClient:
         mod._client = None  # reset cache
         with patch.object(mod, "_get_client", return_value=mock):
             # Temporarily restore the real get_client to test caching
-            real_fn = mod.get_client
             try:
                 # Bypass autouse patch by calling the real implementation
                 def _real_get_client():
@@ -106,7 +105,7 @@ class TestApiRequest:
 
     def test_post_with_params(self, mock_proxmox_client):
         mock_proxmox_client.nodes.pve1.qemu.post.return_value = "UPID:pve1:..."
-        result = api_request("post", "/nodes/pve1/qemu", vmid=100, name="test")
+        api_request("post", "/nodes/pve1/qemu", vmid=100, name="test")
         mock_proxmox_client.nodes.pve1.qemu.post.assert_called_once_with(vmid=100, name="test")
 
     def test_rejects_unsupported_method(self):
@@ -121,8 +120,7 @@ class TestApiRequest:
     def test_deep_path(self, mock_proxmox_client):
         mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").status.current.get.return_value = {"status": "running"}
         # MagicMock chains automatically
-        result = api_request("get", "/nodes/pve1/qemu/100/status/current")
-        assert result is not None
+        assert api_request("get", "/nodes/pve1/qemu/100/status/current") is not None
 
 
 class TestFormatResponse:
