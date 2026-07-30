@@ -135,7 +135,7 @@ def register(mcp: MCPServer) -> None:
             features: Comma-separated features (e.g. 'nesting=1,keyctl=1').
             description: Container description.
             pool: Resource pool.
-            tags: Semicolon-separated tags.
+            tags: Tags for the container.
             mp0: Mount point (e.g. 'local-lvm:4,mp=/mnt/data').
         """
         params: dict = {
@@ -199,7 +199,7 @@ def register(mcp: MCPServer) -> None:
             onboot: Start on boot.
             description: Description.
             features: Comma-separated features.
-            tags: Semicolon-separated tags.
+            tags: Tags for the container.
             delete: Comma-separated list of settings to delete.
         """
         params: dict = {}
