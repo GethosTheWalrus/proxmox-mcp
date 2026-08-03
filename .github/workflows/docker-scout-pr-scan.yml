@@ -275,7 +275,7 @@ jobs:
 
       - name: Upload comment metadata
         if: ${{ always() && hashFiles('docker-scout-pr-result/metadata.json') != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: docker-scout-pr-result
           path: docker-scout-pr-result/metadata.json
