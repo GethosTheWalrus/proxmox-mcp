@@ -70,7 +70,7 @@ jobs:
           fi
 
       - name: Upload image archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: docker-scout-pr-image
           path: /tmp/docker-scout-pr/
