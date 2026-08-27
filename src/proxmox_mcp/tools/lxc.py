@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import os
+import shlex
+import subprocess
+
 from proxmox_mcp.mcp_compat import MCPServer
 
 from proxmox_mcp.client import api_request, format_response
@@ -310,6 +314,60 @@ def register(mcp: MCPServer) -> None:
             vmid: The container ID.
         """
         return format_response(api_request("post", f"/nodes/{node}/lxc/{vmid}/status/resume"))
+
+    # ── Command Execution ─────────────────────────────────────────────
+
+    @mcp.tool()
+    def exec_container(node: str, vmid: int, command: str, timeout: int = 0) -> str:
+        """Execute a shell command inside a running LXC container over SSH.
+
+        Connects to the node's management host (PROXMOX_HOST) as root over SSH
+        and runs 'pct exec <vmid> -- bash -c <command>'. Requires passwordless
+        root SSH access from this machine to the Proxmox node. The PVE REST API
+        has no endpoint that can run shell commands inside containers.
+
+        Args:
+            node: The node name (used for context; SSH target is PROXMOX_HOST).
+            vmid: The container ID.
+            command: Shell command to run inside the container.
+            timeout: Optional timeout in seconds (0 = no timeout).
+        """
+        host = os.environ.get("PROXMOX_HOST", "")
+        if not host:
+            return format_response(
+                {"exitcode": -1, "out-data": "", "err-data": "PROXMOX_HOST is not set"}
+            )
+        remote_cmd = f"pct exec {vmid} -- bash -c {shlex.quote(command)}"
+        cmd = [
+            "ssh",
+            "-o",
+            "BatchMode=yes",
+            "-o",
+            "ConnectTimeout=10",
+            f"root@{host}",
+            remote_cmd,
+        ]
+        try:
+            res = subprocess.run(
+                cmd, capture_output=True, text=True, timeout=timeout if timeout else None
+            )
+        except FileNotFoundError:
+            return format_response(
+                {"exitcode": -1, "out-data": "", "err-data": "'ssh' binary not found on this machine"}
+            )
+        except OSError as exc:
+            return format_response({"exitcode": -1, "out-data": "", "err-data": f"SSH failed: {exc}"})
+        except subprocess.TimeoutExpired:
+            return format_response(
+                {"exitcode": -1, "out-data": "", "err-data": f"Timeout after {timeout} seconds"}
+            )
+        return format_response(
+            {
+                "exitcode": res.returncode,
+                "out-data": res.stdout,
+                "err-data": res.stderr,
+            }
+        )
 
     # ── Clone / Migrate / Template ────────────────────────────────────
 
