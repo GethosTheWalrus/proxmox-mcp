@@ -8,11 +8,17 @@ permissions:
 
 jobs:
   auto-merge:
-    name: Enable auto-merge
+    name: Merge after required checks
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Enable auto-merge
+      - name: Wait for required checks
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}" --repo ${{ github.repository }}
+        run: gh pr checks --required --watch --fail-fast "${{ github.event.pull_request.number }}" --repo ${{ github.repository }}
+
+      - name: Squash and merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --squash "${{ github.event.pull_request.number }}" --repo ${{ github.repository }}
