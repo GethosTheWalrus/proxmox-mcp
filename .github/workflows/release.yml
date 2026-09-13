@@ -11,17 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency: release
+    environment: release
     permissions:
-      contents: write
+      contents: read
     outputs:
       released: ${{ steps.version_check.outputs.will_release }}
 
     steps:
+      - name: Create release token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
@@ -44,7 +53,7 @@ jobs:
       - name: Run semantic release
         if: steps.version_check.outputs.will_release == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: semantic-release version --push
 
       - name: Build package
