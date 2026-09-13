@@ -1,11 +1,26 @@
 """Tests for cluster, access, storage, and other management tools."""
 
 import json
+from unittest.mock import patch
 
 from proxmox_mcp.client import api_request, format_response
+from proxmox_mcp.mcp_compat import MCPServer, get_registered_tool_map
+from proxmox_mcp.tools import cluster
 
 
 class TestClusterTools:
+    def test_get_cluster_tasks_limits_results_client_side(self):
+        server = MCPServer("test")
+        cluster.register(server)
+        tool = get_registered_tool_map(server)["get_cluster_tasks"]
+        tasks = [{"upid": "task-1"}, {"upid": "task-2"}, {"upid": "task-3"}]
+
+        with patch.object(cluster, "api_request", return_value=tasks) as request:
+            result = json.loads(tool.fn(limit=2))
+
+        request.assert_called_once_with("get", "/cluster/tasks")
+        assert result == tasks[:2]
+
     def test_get_cluster_status(self, mock_proxmox_client):
         mock_proxmox_client.cluster.status.get.return_value = [
             {"type": "cluster", "name": "pve-cluster", "quorate": 1},

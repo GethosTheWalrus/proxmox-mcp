@@ -41,7 +41,10 @@ def register(mcp: MCPServer) -> None:
         Args:
             limit: Maximum number of tasks to return.
         """
-        return format_response(api_request("get", "/cluster/tasks", limit=limit))
+        tasks = api_request("get", "/cluster/tasks")
+        if isinstance(tasks, list) and limit > 0:
+            tasks = tasks[:limit]
+        return format_response(tasks)
 
     @mcp.tool()
     def get_cluster_log(max_entries: int = 50) -> str:
