@@ -8,8 +8,8 @@ from typing import Any, cast
 try:  # MCP SDK >= 2
     from mcp.server.mcpserver import Context, MCPServer
 except ImportError:  # MCP SDK 1.x fallback
-    from mcp.server.fastmcp import Context  # type: ignore[no-redef]
-    from mcp.server.fastmcp import FastMCP as MCPServer  # type: ignore[no-redef]
+    from mcp.server.fastmcp import Context  # type: ignore[attr-defined, no-redef]
+    from mcp.server.fastmcp import FastMCP as MCPServer  # type: ignore[attr-defined, no-redef]
 
 FastMCP = MCPServer
 
