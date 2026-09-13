@@ -55,7 +55,7 @@ jobs:
 
       - name: Resolve and verify PR metadata
         id: pr
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('node:fs');
@@ -230,7 +230,7 @@ jobs:
 
       - name: Record Docker Scout PR check
         if: ${{ always() && steps.pr.outputs.number != '' && steps.pr.outputs.head_sha != '' }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const conclusionByOutcome = {
@@ -262,7 +262,7 @@ jobs:
 
       - name: Write comment metadata
         if: ${{ always() && steps.pr.outputs.number != '' && steps.pr.outputs.head_sha != '' }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('node:fs');
