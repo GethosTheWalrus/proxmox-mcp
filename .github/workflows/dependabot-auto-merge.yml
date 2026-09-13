@@ -11,7 +11,7 @@ jobs:
     name: Merge after required checks
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - name: Wait for required checks
         env:
