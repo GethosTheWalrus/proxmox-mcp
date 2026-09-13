@@ -43,8 +43,9 @@ jobs:
       - name: Check for releasable commits
         id: version_check
         run: |
-          version=$(semantic-release version --print 2>/dev/null || true)
-          if [ -n "$version" ]; then
+          next_version=$(semantic-release version --print 2>/dev/null || true)
+          current_version=$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')
+          if [ -n "$next_version" ] && [ "$next_version" != "$current_version" ]; then
             echo "will_release=true" >> $GITHUB_OUTPUT
           else
             echo "will_release=false" >> $GITHUB_OUTPUT
