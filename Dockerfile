@@ -21,6 +21,7 @@ WORKDIR /app
 ENV PATH=/usr/local/bin:$PATH
 
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends ca-certificates libatomic1 libgomp1 && \
     rm -rf /var/lib/apt/lists/*
 
