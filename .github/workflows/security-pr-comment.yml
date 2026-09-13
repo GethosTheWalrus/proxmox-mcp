@@ -43,7 +43,7 @@ jobs:
           path: docker-scout-pr-result
 
       - name: Update PR comment
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('node:fs');
