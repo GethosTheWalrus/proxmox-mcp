@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import shlex
+
 from proxmox_mcp.mcp_compat import MCPServer
 
 from proxmox_mcp.client import api_request, format_response
@@ -560,16 +562,22 @@ def register(mcp: MCPServer) -> None:
     # ── QEMU Guest Agent ──────────────────────────────────────────────
 
     @mcp.tool()
-    def vm_agent_exec(node: str, vmid: int, command: str, input_data: str = "") -> str:
+    def vm_agent_exec(node: str, vmid: int, command: str | list[str], input_data: str = "") -> str:
         """Execute a command inside a VM via the QEMU Guest Agent.
 
         Args:
             node: The node name.
             vmid: The VM ID.
-            command: The command to execute.
+            command: The command to execute. A string is split into arguments using
+                POSIX shell rules (quote paths containing spaces). A list is passed
+                through unchanged and is recommended for Windows guest paths with
+                backslashes, since POSIX splitting otherwise strips them.
             input_data: Data to pass to stdin.
         """
-        params: dict = {"command": command}
+        argv = shlex.split(command) if isinstance(command, str) else list(command)
+        if not argv:
+            raise ValueError("command must not be empty")
+        params: dict = {"command": argv}
         if input_data:
             params["input-data"] = input_data
         return format_response(api_request("post", f"/nodes/{node}/qemu/{vmid}/agent/exec", **params))

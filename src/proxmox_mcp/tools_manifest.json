@@ -6209,14 +6209,24 @@
       }
     },
     {
-      "description": "Execute a command inside a VM via the QEMU Guest Agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The command to execute.\n    input_data: Data to pass to stdin.",
+      "description": "Execute a command inside a VM via the QEMU Guest Agent.\n\nArgs:\n    node: The node name.\n    vmid: The VM ID.\n    command: The command to execute. A string is split into arguments using\n        POSIX shell rules (quote paths containing spaces). A list is passed\n        through unchanged and is recommended for Windows guest paths with\n        backslashes, since POSIX splitting otherwise strips them.\n    input_data: Data to pass to stdin.",
       "module": "qemu",
       "name": "vm_agent_exec",
       "parameters": {
         "properties": {
           "command": {
-            "title": "Command",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Command"
           },
           "input_data": {
             "default": "",

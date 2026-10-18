@@ -1,6 +1,12 @@
 """Tests for QEMU VM and LXC container tools."""
 
+from unittest.mock import patch
+
+import pytest
+
 from proxmox_mcp.client import api_request
+from proxmox_mcp.mcp_compat import MCPServer, get_registered_tool_map
+from proxmox_mcp.tools import qemu
 
 
 class TestQemuTools:
@@ -67,3 +73,77 @@ class TestLxcTools:
         mock_proxmox_client.nodes.pve1.lxc.__getattr__("200").delete.return_value = "UPID:..."
         result = api_request("delete", "/nodes/pve1/lxc/200")
         assert result is not None
+
+
+class TestVmAgentExec:
+    def _tool(self):
+        server = MCPServer("test")
+        qemu.register(server)
+        return get_registered_tool_map(server)["vm_agent_exec"]
+
+    def test_string_command_is_split(self):
+        tool = self._tool()
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            tool.fn(node="pve1", vmid=100, command="uname -a")
+
+        request.assert_called_once_with(
+            "post", "/nodes/pve1/qemu/100/agent/exec", command=["uname", "-a"]
+        )
+
+    def test_list_command_is_passed_through_without_mutation(self):
+        tool = self._tool()
+        command = ["C:\\Program Files\\App\\app.exe", "--flag"]
+        original = list(command)
+
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            tool.fn(node="pve1", vmid=100, command=command)
+
+        request.assert_called_once_with(
+            "post",
+            "/nodes/pve1/qemu/100/agent/exec",
+            command=["C:\\Program Files\\App\\app.exe", "--flag"],
+        )
+        assert command == original
+
+    def test_quoted_shell_pipeline_is_split(self):
+        tool = self._tool()
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            tool.fn(node="pve1", vmid=100, command='/bin/sh -c "ls -la | wc -l"')
+
+        request.assert_called_once_with(
+            "post",
+            "/nodes/pve1/qemu/100/agent/exec",
+            command=["/bin/sh", "-c", "ls -la | wc -l"],
+        )
+
+    def test_quoted_windows_path_in_string_form_is_split(self):
+        tool = self._tool()
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            tool.fn(node="pve1", vmid=100, command=r'"C:\Program Files\App\app.exe" --flag')
+
+        request.assert_called_once_with(
+            "post",
+            "/nodes/pve1/qemu/100/agent/exec",
+            command=["C:\\Program Files\\App\\app.exe", "--flag"],
+        )
+
+    def test_input_data_is_forwarded(self):
+        tool = self._tool()
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            tool.fn(node="pve1", vmid=100, command=["echo", "hello"], input_data="hello")
+
+        request.assert_called_once_with(
+            "post",
+            "/nodes/pve1/qemu/100/agent/exec",
+            command=["echo", "hello"],
+            **{"input-data": "hello"},
+        )
+
+    @pytest.mark.parametrize("command", ["", []])
+    def test_empty_command_raises(self, command):
+        tool = self._tool()
+        with patch.object(qemu, "api_request", return_value={}) as request:
+            with pytest.raises(ValueError, match="command must not be empty"):
+                tool.fn(node="pve1", vmid=100, command=command)
+
+        request.assert_not_called()
