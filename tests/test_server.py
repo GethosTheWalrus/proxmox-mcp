@@ -192,6 +192,26 @@ class TestToolRouting:
         assert "disabled" in result
 
 
+class TestRawApiParamForwarding:
+    def test_raw_api_forwards_path_param(self):
+        """proxmox_api_raw must pass a JSON ``path`` param through to api_request."""
+        import proxmox_mcp.server as mod
+
+        with patch.object(mod, "api_request", return_value={}) as request:
+            mod.proxmox_api_raw("put", "/access/acl", '{"path": "/", "roles": "PVEAdmin"}')
+
+        request.assert_called_once_with("put", "/access/acl", path="/", roles="PVEAdmin")
+
+    def test_raw_api_forwards_method_param(self):
+        """proxmox_api_raw must pass a JSON ``method`` param through to api_request."""
+        import proxmox_mcp.server as mod
+
+        with patch.object(mod, "api_request", return_value={}) as request:
+            mod.proxmox_api_raw("get", "/nodes", '{"method": "custom"}')
+
+        request.assert_called_once_with("get", "/nodes", method="custom")
+
+
 class TestToolManifest:
     def test_manifest_is_current(self):
         result = subprocess.run(

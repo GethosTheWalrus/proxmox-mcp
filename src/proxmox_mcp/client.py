@@ -69,13 +69,16 @@ def get_client() -> ProxmoxAPI:
     return _client
 
 
-def api_request(method: str, path: str, **params) -> dict | list | str:
+def api_request(method: str, path: str, /, **params) -> dict | list | str:
     """Execute an arbitrary Proxmox API call.
 
     Args:
         method: HTTP method (get, post, put, delete).
         path: API path, e.g. "/nodes" or "/nodes/pve1/qemu".
         **params: Additional parameters to pass to the API.
+
+    ``method`` and ``path`` are positional-only so that API parameters with
+    those names are forwarded in ``**params`` without colliding.
 
     Returns:
         The API response data.

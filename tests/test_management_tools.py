@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from proxmox_mcp.client import api_request, format_response
 from proxmox_mcp.mcp_compat import MCPServer, get_registered_tool_map
-from proxmox_mcp.tools import cluster
+from proxmox_mcp.tools import access, cluster, storage
 
 
 class TestClusterTools:
@@ -75,6 +75,42 @@ class TestAccessTools:
         result = api_request("get", "/access/roles")
         assert len(result) == 2
 
+    def test_update_acl_forwards_path_param(self):
+        """update_acl's ``path`` argument must reach api_request as a keyword param."""
+        server = MCPServer("test")
+        access.register(server)
+        tool = get_registered_tool_map(server)["update_acl"]
+
+        with patch.object(access, "api_request", return_value={}) as request:
+            tool.fn(
+                path="/vms/100",
+                roles="PVEAuditor",
+                users="",
+                groups="",
+                tokens="user@pve!tok",
+                propagate=True,
+                delete=False,
+            )
+
+        request.assert_called_once_with(
+            "put",
+            "/access/acl",
+            path="/vms/100",
+            roles="PVEAuditor",
+            tokens="user@pve!tok",
+        )
+
+    def test_get_permissions_forwards_path_param(self):
+        """get_permissions must forward ``path`` when it is non-empty."""
+        server = MCPServer("test")
+        access.register(server)
+        tool = get_registered_tool_map(server)["get_permissions"]
+
+        with patch.object(access, "api_request", return_value={}) as request:
+            tool.fn(path="/")
+
+        request.assert_called_once_with("get", "/access/permissions", path="/")
+
 
 class TestStorageTools:
     def test_list_storage(self, mock_proxmox_client):
@@ -92,6 +128,23 @@ class TestStorageTools:
         ]
         result = api_request("get", "/nodes/pve1/storage")
         assert result[0]["storage"] == "local"
+
+    def test_create_storage_forwards_path_param(self):
+        """create_storage must forward ``path`` for dir-backed storage."""
+        server = MCPServer("test")
+        storage.register(server)
+        tool = get_registered_tool_map(server)["create_storage"]
+
+        with patch.object(storage, "api_request", return_value={}) as request:
+            tool.fn(storage="backup", type="dir", path="/mnt/backup")
+
+        request.assert_called_once_with(
+            "post",
+            "/storage",
+            storage="backup",
+            type="dir",
+            path="/mnt/backup",
+        )
 
 
 class TestFirewallTools:
