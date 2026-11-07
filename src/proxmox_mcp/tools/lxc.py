@@ -237,10 +237,11 @@ def register(mcp: FastMCP) -> None:
         features: Annotated[str, Field(description="Comma-separated feature flags (e.g., 'nesting=1').")] = "",
         tags: Annotated[str, Field(description="Semicolon-separated tags.")] = "",
         delete: Annotated[str, Field(description="Comma-separated keys to remove from config.")] = "",
+        extra_config: Annotated[str, Field(description="JSON string or comma-separated key=value pairs for extra LXC config options, such as mount points (e.g. '{\"mp0\": \"local-lvm:8,mp=/data\"}'), secondary network devices, or custom limits.")] = "",
     ) -> str:
         """Update hardware resources, network interface options, or settings of an existing container.
 
-        Use when scaling container RAM/CPU, modifying network options, or toggling nesting.
+        Use when scaling container RAM/CPU, modifying network options, mount points, or toggling nesting.
 
         Args:
             node: The node name.
@@ -258,6 +259,7 @@ def register(mcp: FastMCP) -> None:
             features: Comma-separated features.
             tags: Semicolon-separated tags.
             delete: Comma-separated list of settings to delete.
+            extra_config: JSON string or key=value pairs for extra LXC config (e.g. mount points, net1).
         """
         params: dict = {}
         for key, val in [
@@ -282,6 +284,18 @@ def register(mcp: FastMCP) -> None:
             params["cpulimit"] = cpulimit
         if onboot is not None:
             params["onboot"] = int(onboot)
+        if extra_config:
+            import json as _json
+            try:
+                parsed_extra = _json.loads(extra_config)
+                if isinstance(parsed_extra, dict):
+                    params.update(parsed_extra)
+            except _json.JSONDecodeError:
+                # Support key=value,key2=value2 format fallback
+                for item in extra_config.split(","):
+                    if "=" in item:
+                        k, v = item.split("=", 1)
+                        params[k.strip()] = v.strip()
         return format_response(api_request("put", f"/nodes/{node}/lxc/{vmid}/config", **params))
 
     @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))

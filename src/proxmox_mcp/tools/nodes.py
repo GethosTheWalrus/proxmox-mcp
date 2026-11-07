@@ -473,6 +473,34 @@ def register(mcp: FastMCP) -> None:
         """
         return format_response(api_request("post", f"/nodes/{node}/wakeonlan"))
 
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=False))
+    def reboot_node(
+        node: Annotated[str, Field(description="PVE host node name to reboot.")],
+    ) -> str:
+        """Reboot a Proxmox VE host node gracefully.
+
+        Use when applying kernel updates or rebooting a node during maintenance.
+        Ensure running VMs and containers have been migrated or cleanly stopped first.
+
+        Args:
+            node: PVE host node name.
+        """
+        return format_response(api_request("post", f"/nodes/{node}/status", command="reboot"))
+
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=False))
+    def shutdown_node(
+        node: Annotated[str, Field(description="PVE host node name to power down.")],
+    ) -> str:
+        """Shut down and power off a Proxmox VE host node.
+
+        Use when decommissioning a host or performing hardware maintenance.
+        Ensure running workloads have been evacuated or stopped first.
+
+        Args:
+            node: PVE host node name.
+        """
+        return format_response(api_request("post", f"/nodes/{node}/status", command="shutdown"))
+
     @mcp.tool(annotations=ToolAnnotations(destructiveHint=False, idempotentHint=False))
     def startall_node(
         node: Annotated[str, Field(description="PVE node name.")],

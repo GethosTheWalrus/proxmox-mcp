@@ -12,11 +12,11 @@ class TestServerImport:
         assert mcp.name == "Proxmox MCP Server"
 
     def test_all_tools_registered(self):
-        """All 286 tools should be registered without duplicates."""
+        """All 297 tools should be registered without duplicates."""
         from proxmox_mcp.server import mcp
 
         tools = mcp._tool_manager._tools
-        assert len(tools) == 286
+        assert len(tools) == 297
 
     def test_no_duplicate_tool_names(self):
         """Tool names should be unique."""
@@ -40,19 +40,19 @@ class TestToolModuleRegistration:
         return len(test_mcp._tool_manager._tools)
 
     def test_nodes_module(self):
-        assert self._count_tools_from_module("nodes") == 34
+        assert self._count_tools_from_module("nodes") == 36
 
     def test_qemu_module(self):
-        assert self._count_tools_from_module("qemu") == 39
+        assert self._count_tools_from_module("qemu") == 40
 
     def test_lxc_module(self):
         assert self._count_tools_from_module("lxc") == 25
 
     def test_storage_module(self):
-        assert self._count_tools_from_module("storage") == 26
+        assert self._count_tools_from_module("storage") == 31
 
     def test_cluster_module(self):
-        assert self._count_tools_from_module("cluster") == 46
+        assert self._count_tools_from_module("cluster") == 49
 
     def test_access_module(self):
         assert self._count_tools_from_module("access") == 27
@@ -109,4 +109,23 @@ class TestToolRoutingConfig:
 
         with patch.dict(os.environ, {}, clear=True):
             assert _is_routed_mode() is False
+
+    def test_always_visible_tools_default(self):
+        from proxmox_mcp.server import _get_always_visible_tools, _DEFAULT_CORE_VISIBLE
+        import os
+
+        with patch.dict(os.environ, {}, clear=True):
+            assert _get_always_visible_tools() == _DEFAULT_CORE_VISIBLE
+
+    def test_always_visible_tools_custom(self):
+        from proxmox_mcp.server import _get_always_visible_tools
+        import os
+
+        with patch.dict(os.environ, {"ALWAYS_VISIBLE_TOOLS": "get_version,list_pools"}):
+            tools = _get_always_visible_tools()
+            assert "get_version" in tools
+            assert "list_pools" in tools
+            assert "route_tools" in tools
+            assert "call_routed_tool" in tools
+            assert "proxmox_api_raw" in tools
 

@@ -35,6 +35,27 @@ class TestClusterTools:
         result = api_request("get", "/version")
         assert result["version"] == "8.2.4"
 
+    def test_update_replication_job(self, mock_proxmox_client):
+        mock_proxmox_client.cluster.replication.__getattr__("100-0").put.return_value = None
+        result = api_request("put", "/cluster/replication/100-0", schedule="daily", rate=50.0, disable=1)
+        mock_proxmox_client.cluster.replication.__getattr__("100-0").put.assert_called_once_with(schedule="daily", rate=50.0, disable=1)
+
+    def test_get_replication_log(self, mock_proxmox_client):
+        mock_proxmox_client.cluster.replication.__getattr__("100-0").log.get.return_value = [
+            {"t": "log line 1", "n": 1},
+        ]
+        result = api_request("get", "/cluster/replication/100-0/log", limit=50)
+        assert len(result) == 1
+        mock_proxmox_client.cluster.replication.__getattr__("100-0").log.get.assert_called_once_with(limit=50)
+
+    def test_get_replication_status(self, mock_proxmox_client):
+        mock_proxmox_client.cluster.replication.__getattr__("100-0").status.get.return_value = {
+            "last_sync": 1700000000,
+            "fail_count": 0,
+        }
+        result = api_request("get", "/cluster/replication/100-0/status")
+        assert result["fail_count"] == 0
+
 
 class TestAccessTools:
     def test_list_users(self, mock_proxmox_client):
@@ -77,6 +98,33 @@ class TestStorageTools:
         ]
         result = api_request("get", "/nodes/pve1/storage")
         assert result[0]["storage"] == "local"
+
+    def test_destroy_zfs_pool(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.disks.zfs.__getattr__("tank").delete.return_value = "UPID:pve1:..."
+        result = api_request("delete", "/nodes/pve1/disks/zfs/tank")
+        assert result is not None
+
+    def test_zfs_scrub(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.disks.zfs.__getattr__("tank").post.return_value = "UPID:pve1:..."
+        result = api_request("post", "/nodes/pve1/disks/zfs/tank", action="scrub")
+        assert result is not None
+        mock_proxmox_client.nodes.pve1.disks.zfs.__getattr__("tank").post.assert_called_once_with(action="scrub")
+
+    def test_delete_lvm(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.disks.lvm.__getattr__("vg0").delete.return_value = "UPID:pve1:..."
+        result = api_request("delete", "/nodes/pve1/disks/lvm/vg0")
+        assert result is not None
+
+    def test_delete_lvmthin(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.disks.lvmthin.__getattr__("thinpool").delete.return_value = "UPID:pve1:..."
+        result = api_request("delete", "/nodes/pve1/disks/lvmthin/thinpool", volume_group="vg0")
+        assert result is not None
+        mock_proxmox_client.nodes.pve1.disks.lvmthin.__getattr__("thinpool").delete.assert_called_once_with(volume_group="vg0")
+
+    def test_delete_directory_storage(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.disks.directory.__getattr__("data").delete.return_value = "UPID:pve1:..."
+        result = api_request("delete", "/nodes/pve1/disks/directory/data")
+        assert result is not None
 
 
 class TestFirewallTools:

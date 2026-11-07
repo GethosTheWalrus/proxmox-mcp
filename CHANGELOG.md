@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/) and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.8] - 2026-11-06
+
+### Added
+- **Node Power Lifecycle**: Added `reboot_node` and `shutdown_node` tools in `nodes.py` (`POST /nodes/{node}/status` with `command: reboot|shutdown`).
+- **Storage Replication CRUD**: Added `update_replication_job` (`PUT /cluster/replication/{id}`), `get_replication_log` (`GET /cluster/replication/{id}/log`), and `get_replication_status` (`GET /cluster/replication/{id}/status`) in `cluster.py`.
+- **ZFS & Disk Management**: Added `destroy_zfs_pool` (`DELETE /nodes/{node}/disks/zfs/{name}`), `zfs_scrub` (`POST /nodes/{node}/disks/zfs/{name}`), `delete_lvm`, `delete_lvmthin`, and `delete_directory_storage` in `storage.py`.
+- **QEMU Unlink**: Added `unlink_vm_disk` (`PUT /nodes/{node}/qemu/{vmid}/unlink`) to safely detach virtual disk images without volume deletion in `qemu.py`.
+- **Dynamic Config & Extra Options**: Added `extra_config` parameter to `update_vm_config` and `update_container_config` allowing dynamic key-value / JSON updates for virtual disks, I/O limits (`mbps_wr`, `iops_wr`), secondary network interfaces (`net1`, `net2`), and mount points (`mp0`).
+- **VM Recovery & Lifecycle Enhancements**: Added `overrule_shutdown` flag to `stop_vm` and `start` flag to `rollback_vm_snapshot`.
+- **Router Ergonomics**: Supported exposing a curated set of 19 core operational tools directly alongside the router in routed mode, configurable via `ALWAYS_VISIBLE_TOOLS`.
+
 ## [1.0.4] - 2026-07-27
 
 ### Refactored

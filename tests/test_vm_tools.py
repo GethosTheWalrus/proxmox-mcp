@@ -42,6 +42,25 @@ class TestQemuTools:
         result = api_request("post", "/nodes/pve1/qemu/100/clone", newid=200, name="clone-vm")
         assert result is not None
 
+    def test_unlink_vm_disk(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").unlink.put.return_value = "UPID:..."
+        result = api_request("put", "/nodes/pve1/qemu/100/unlink", idlist="scsi0,scsi1", force=1)
+        assert result is not None
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").unlink.put.assert_called_once_with(idlist="scsi0,scsi1", force=1)
+
+    def test_stop_vm_overrule_shutdown(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").status.stop.post.return_value = "UPID:..."
+        params = {"overrule-shutdown": 1, "skiplock": 1}
+        result = api_request("post", "/nodes/pve1/qemu/100/status/stop", **params)
+        assert result is not None
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").status.stop.post.assert_called_once_with(**params)
+
+    def test_rollback_vm_snapshot_start(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").snapshot.__getattr__("snap1").rollback.post.return_value = "UPID:..."
+        result = api_request("post", "/nodes/pve1/qemu/100/snapshot/snap1/rollback", start=1)
+        assert result is not None
+        mock_proxmox_client.nodes.pve1.qemu.__getattr__("100").snapshot.__getattr__("snap1").rollback.post.assert_called_once_with(start=1)
+
 
 class TestLxcTools:
     def test_list_containers(self, mock_proxmox_client):

@@ -44,3 +44,15 @@ class TestNodeTools:
         }
         result = api_request("get", "/nodes/pve1/dns")
         assert result["dns1"] == "8.8.8.8"
+
+    def test_reboot_node(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.status.post.return_value = "UPID:pve1:reboot"
+        result = api_request("post", "/nodes/pve1/status", command="reboot")
+        assert result == "UPID:pve1:reboot"
+        mock_proxmox_client.nodes.pve1.status.post.assert_called_once_with(command="reboot")
+
+    def test_shutdown_node(self, mock_proxmox_client):
+        mock_proxmox_client.nodes.pve1.status.post.return_value = "UPID:pve1:shutdown"
+        result = api_request("post", "/nodes/pve1/status", command="shutdown")
+        assert result == "UPID:pve1:shutdown"
+        mock_proxmox_client.nodes.pve1.status.post.assert_called_once_with(command="shutdown")

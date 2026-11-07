@@ -74,9 +74,39 @@ def proxmox_api_raw(
 
 # ── Semantic tool routing ────────────────────────────────────────────
 
-_ALWAYS_VISIBLE = {"route_tools", "call_routed_tool", "proxmox_api_raw"}
+# Core operational tools exposed directly alongside the router in routed mode
+_DEFAULT_CORE_VISIBLE = {
+    "route_tools",
+    "call_routed_tool",
+    "proxmox_api_raw",
+    "get_cluster_status",
+    "list_nodes",
+    "get_node_status",
+    "list_vms",
+    "get_vm_status",
+    "update_vm_config",
+    "start_vm",
+    "stop_vm",
+    "shutdown_vm",
+    "reboot_vm",
+    "list_node_tasks",
+    "get_task_status",
+    "stop_task",
+    "list_replication_jobs",
+    "get_replication_job",
+    "update_replication_job",
+}
 _active_tools: dict[str, Any] = {}  # name → Tool object
 _router_indexed = False
+
+
+def _get_always_visible_tools() -> set[str]:
+    """Return set of tools visible in routed mode, configurable via ALWAYS_VISIBLE_TOOLS."""
+    env_tools = os.environ.get("ALWAYS_VISIBLE_TOOLS")
+    if env_tools:
+        custom = {t.strip() for t in env_tools.split(",") if t.strip()}
+        return custom | {"route_tools", "call_routed_tool", "proxmox_api_raw"}
+    return _DEFAULT_CORE_VISIBLE
 
 
 def _is_routed_mode() -> bool:
@@ -108,9 +138,10 @@ def _ensure_router_indexed() -> None:
 
 
 def _filtered_list_tools() -> list[Any]:
-    """Return only the 3 always-visible tools (static)."""
+    """Return only the always-visible tools (static or configured)."""
     tm = mcp._tool_manager  # type: ignore[attr-defined]
-    return [t for t in tm._tools.values() if t.name in _ALWAYS_VISIBLE]  # type: ignore[attr-defined]
+    visible = _get_always_visible_tools()
+    return [t for t in tm._tools.values() if t.name in visible]  # type: ignore[attr-defined]
 
 
 def _tool_summary(tool: Any) -> str:
@@ -182,7 +213,8 @@ async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None
     if not _is_routed_mode():
         return "Tool routing is not enabled."
 
-    if name in _ALWAYS_VISIBLE:
+    visible = _get_always_visible_tools()
+    if name in visible:
         return f"Cannot call '{name}' through this tool. Call it directly."
 
     if name not in _active_tools:
@@ -200,12 +232,13 @@ async def call_routed_tool(name: str, arguments: str = "{}", ctx: Context = None
 
 
 def _install_routing_hooks() -> None:
-    """Patch FastMCP's tool manager so only the 3 base tools are listed."""
+    """Patch FastMCP's tool manager so core/visible tools are listed in routed mode."""
     if not _is_routed_mode():
         logger.info("Tool routing disabled — all %d tools visible", len(mcp._tool_manager._tools))  # type: ignore[attr-defined]
         return
 
-    logger.info("Tool routing enabled — only 3 base tools visible")
+    visible_count = len(_get_always_visible_tools())
+    logger.info("Tool routing enabled — %d core tools visible", visible_count)
     mcp.tool()(route_tools)
     mcp.tool()(call_routed_tool)
     tm = mcp._tool_manager  # type: ignore[attr-defined]

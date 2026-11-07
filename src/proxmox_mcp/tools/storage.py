@@ -470,6 +470,26 @@ def register(mcp: FastMCP) -> None:
             )
         )
 
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+    def delete_lvm(
+        node: Annotated[str, Field(description="Target host node name.")],
+        name: Annotated[str, Field(description="Volume Group name to destroy.")],
+        cleanup_disks: Annotated[bool, Field(description="If True, wipe partition tables on the underlying disk devices.")] = False,
+    ) -> str:
+        """Destroy an LVM Volume Group on a host node.
+
+        WARNING: Destroys all logical volumes within the volume group.
+
+        Args:
+            node: The node name.
+            name: Volume Group name.
+            cleanup_disks: Wipe partition tables.
+        """
+        params: dict = {}
+        if cleanup_disks:
+            params["cleanup-disks"] = 1
+        return format_response(api_request("delete", f"/nodes/{node}/disks/lvm/{name}", **params))
+
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
     def list_lvmthin_pools(
         node: Annotated[str, Field(description="PVE host node name.")],
@@ -509,6 +529,23 @@ def register(mcp: FastMCP) -> None:
                 add_storage=int(add_to_storage),
             )
         )
+
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+    def delete_lvmthin(
+        node: Annotated[str, Field(description="Target host node name.")],
+        name: Annotated[str, Field(description="LVM Thin Pool name to destroy.")],
+        volume_group: Annotated[str, Field(description="Parent Volume Group name containing the thin pool.")],
+    ) -> str:
+        """Destroy an LVM Thin Pool on a host node.
+
+        WARNING: Destroys all thin volumes allocated in the pool.
+
+        Args:
+            node: The node name.
+            name: Thin pool name.
+            volume_group: Parent Volume Group name.
+        """
+        return format_response(api_request("delete", f"/nodes/{node}/disks/lvmthin/{name}", volume_group=volume_group))
 
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
     def list_zfs_pools(
@@ -578,6 +615,43 @@ def register(mcp: FastMCP) -> None:
             )
         )
 
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+    def destroy_zfs_pool(
+        node: Annotated[str, Field(description="PVE host node name.")],
+        name: Annotated[str, Field(description="ZFS pool name to destroy.")],
+        cleanup_disks: Annotated[bool, Field(description="If True, wipe partition tables on constituent disks.")] = False,
+    ) -> str:
+        """Destroy a ZFS storage pool on a host node.
+
+        WARNING: Destroys all datasets and volumes stored in the pool.
+
+        Args:
+            node: The node name.
+            name: ZFS pool name.
+            cleanup_disks: Wipe partition tables on pool drives.
+        """
+        params: dict = {}
+        if cleanup_disks:
+            params["cleanup-disks"] = 1
+        return format_response(api_request("delete", f"/nodes/{node}/disks/zfs/{name}", **params))
+
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=False, idempotentHint=False))
+    def zfs_scrub(
+        node: Annotated[str, Field(description="PVE host node name.")],
+        name: Annotated[str, Field(description="ZFS pool name to scrub (e.g., 'rpool', 'tank').")],
+        action: Annotated[str, Field(description="Scrub action: 'scrub' (start scrub) or 'cancel' (abort active scrub).")] = "scrub",
+    ) -> str:
+        """Initiate or cancel a ZFS pool data integrity scrub.
+
+        Use when verifying data checksums and repair operations on ZFS pools.
+
+        Args:
+            node: The node name.
+            name: ZFS pool name.
+            action: Action to perform ('scrub' or 'cancel').
+        """
+        return format_response(api_request("post", f"/nodes/{node}/disks/zfs/{name}", action=action))
+
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
     def list_directory_storage(
         node: Annotated[str, Field(description="PVE host node name.")],
@@ -620,6 +694,24 @@ def register(mcp: FastMCP) -> None:
                 add_storage=int(add_to_storage),
             )
         )
+
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
+    def delete_directory_storage(
+        node: Annotated[str, Field(description="Target host node name.")],
+        name: Annotated[str, Field(description="Directory storage mount identifier to remove.")],
+        cleanup_disks: Annotated[bool, Field(description="If True, wipe partition table on underlying device.")] = False,
+    ) -> str:
+        """Unmount and delete a directory storage configuration on a host node.
+
+        Args:
+            node: The node name.
+            name: Storage mount identifier.
+            cleanup_disks: Wipe device partition table.
+        """
+        params: dict = {}
+        if cleanup_disks:
+            params["cleanup-disks"] = 1
+        return format_response(api_request("delete", f"/nodes/{node}/disks/directory/{name}", **params))
 
     @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
     def initialize_gpt(

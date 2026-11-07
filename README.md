@@ -16,14 +16,15 @@ This server is audited against the **[Tool Definition Quality Score (TDQS)](http
 - **Score:** `5.00 / 5.00` (**Tier A+**)
 - **Behavioral Annotations (`ToolAnnotations`):** 100% of tools specify `readOnlyHint`, `destructiveHint`, and `idempotentHint` metadata.
 - **Parameter Descriptions:** 100% of tool parameters use explicit Pydantic `Annotated[T, Field(description=...)]` metadata.
-- **Operational Guidelines:** Standardized docstrings detailing explicit "Use when..." context across all 286 tools.
+- **Operational Guidelines:** Standardized docstrings detailing explicit "Use when..." context across all 297 tools.
+- **Dynamic Hardware Configuration:** Integrated `extra_config` parsing in `update_vm_config` and `update_container_config` to enable setting virtual disks, throttles, secondary network devices, and custom parameters.
 
 ```text
 ---------------- SCORECARD METRICS ----------------
-Tools Evaluated              : 286
-Behavioral Annotations      : 286 / 286 (100.0%)
-100% Parameter Descriptions : 286 / 286 (100.0%)
-Usage Guidelines (Docstrings): 286 / 286 (100.0%)
+Tools Evaluated              : 297
+Behavioral Annotations      : 297 / 297 (100.0%)
+100% Parameter Descriptions : 297 / 297 (100.0%)
+Usage Guidelines (Docstrings): 297 / 297 (100.0%)
 Overall TDQS Score           : 5.00 / 5.00
 TDQS Quality Tier            : Tier A+
 ========================================================
@@ -64,6 +65,8 @@ TDQS Quality Tier            : Tier A+
 - **`get_node_capabilities_qemu`** - Get QEMU capabilities for a node: supported CPU models, machine types, etc.
 - **`get_node_storage_scan`** - Scan for available storage targets (NFS, CIFS, iSCSI, LVM, ZFS, PBS)
 - **`wakeonlan_node`** - Send a Wake-on-LAN magic packet to a node
+- **`reboot_node`** - Gracefully reboot a Proxmox VE host node
+- **`shutdown_node`** - Power off and shut down a Proxmox VE host node
 - **`startall_node`** - Start all VMs and containers on a node (respecting boot order)
 - **`stopall_node`** - Stop all VMs and containers on a node
 - **`get_node_hosts`** - Get the /etc/hosts file content for a node
@@ -95,6 +98,7 @@ TDQS Quality Tier            : Tier A+
 - **`convert_vm_to_template`** - Convert a VM into a template (irreversible)
 - **`resize_vm_disk`** - Resize a VM disk (can only grow, not shrink)
 - **`move_vm_disk`** - Move a VM disk to different storage or attach to another VM
+- **`unlink_vm_disk`** - Unlink and detach a virtual disk from a VM without deleting the volume data
 - **`list_vm_snapshots`** - List all snapshots of a VM
 - **`create_vm_snapshot`** - Create a snapshot of a VM
 - **`delete_vm_snapshot`** - Delete a VM snapshot
@@ -162,13 +166,18 @@ TDQS Quality Tier            : Tier A+
 - **`list_file_restore`** - List files in a backup volume for file-level restore (PBS backups)
 - **`list_lvm_volumes`** - List LVM volume groups on a node
 - **`create_lvm`** - Create a new LVM volume group on a device
+- **`delete_lvm`** - Destroy an LVM volume group on a node
 - **`list_lvmthin_pools`** - List LVM thin pools on a node
 - **`create_lvmthin`** - Create a new LVM thin pool
+- **`delete_lvmthin`** - Destroy an LVM thin pool on a node
 - **`list_zfs_pools`** - List ZFS pools on a node
 - **`get_zfs_pool`** - Get details of a ZFS pool
 - **`create_zfs_pool`** - Create a new ZFS pool
+- **`destroy_zfs_pool`** - Destroy a ZFS storage pool on a node
+- **`zfs_scrub`** - Initiate or cancel a ZFS pool data integrity scrub
 - **`list_directory_storage`** - List directory-based storage mounts on a node
 - **`create_directory_storage`** - Create a directory-based storage mount from a device
+- **`delete_directory_storage`** - Unmount and delete a directory storage configuration on a node
 - **`initialize_gpt`** - Initialize a disk with GPT partition table (WARNING: destroys all data)
 
 ### Cluster
@@ -189,6 +198,9 @@ TDQS Quality Tier            : Tier A+
 - **`list_replication_jobs`** - List all replication jobs in the cluster
 - **`get_replication_job`** - Get a specific replication job configuration
 - **`create_replication_job`** - Create a storage replication job
+- **`update_replication_job`** - Update schedule, rate limit, comment, or disabled state for a replication job
+- **`get_replication_log`** - Get execution logs for a storage replication job
+- **`get_replication_status`** - Get real-time status of a storage replication job
 - **`delete_replication_job`** - Delete a replication job
 - **`list_metric_servers`** - List configured metric servers (InfluxDB, Graphite)
 - **`get_metric_server`** - Get metric server configuration
@@ -475,14 +487,15 @@ If you prefer to run directly from source without containers:
 ### Handling Tool Limits in AI Clients (Antigravity IDE / Cursor)
 
 When connecting `proxmox-mcp` directly, AI clients like **Antigravity IDE** or **Cursor** may reject the server with an error such as:
-> `proxmox: adding this instance with 286 enabled tools would exceed max limit of 100`
+> `proxmox: adding this instance with 297 enabled tools would exceed max limit of 100`
 
 To bypass this limit, set the environment variable **`TOOL_ROUTING=true`** (or `TOOL_ROUTING=1`).
 
 #### How Tool Routing Works
-1. When `TOOL_ROUTING=true` is set, the server exposes only **3 base tools** (`route_tools`, `call_routed_tool`, `proxmox_api_raw`) to the MCP client (well under the 100 tool limit).
-2. The AI assistant uses `route_tools("your intent here")` to perform fast semantic search over all 285 tools.
-3. The AI assistant then executes activated tools via `call_routed_tool`.
+1. When `TOOL_ROUTING=true` is set, the server exposes a curated set of **19 core operational tools** directly (including `get_cluster_status`, `list_nodes`, `get_node_status`, `list_vms`, `get_vm_status`, `update_vm_config`, `start_vm`, `stop_vm`, `shutdown_vm`, `reboot_vm`, `list_node_tasks`, `get_task_status`, `stop_task`, `list_replication_jobs`, `get_replication_job`, `update_replication_job`, `proxmox_api_raw`, `route_tools`, `call_routed_tool`) — staying well under client tool limits while eliminating latency for high-frequency operations.
+2. The AI assistant uses `route_tools("your intent here")` to perform fast semantic search over the remaining 278 specialized tools (SDN, ACME, Ceph, backup schedules, firewall, etc.).
+3. The AI assistant executes activated tools via `call_routed_tool`.
+4. You can customize which tools are directly visible via `ALWAYS_VISIBLE_TOOLS="tool1,tool2"`.
 
 #### Example Config with Tool Routing Enabled (`uvx`):
 ```json
@@ -543,11 +556,12 @@ To bypass this limit, set the environment variable **`TOOL_ROUTING=true`** (or `
 | SSL verification | `PROXMOX_VERIFY_SSL` | `false` |
 | Request timeout (seconds) | `PROXMOX_TIMEOUT` | `30` |
 | Tool routing | `TOOL_ROUTING` | `false` |
+| Always visible tools | `ALWAYS_VISIBLE_TOOLS` | 19 core tools |
 | Enable ContextForge Gateway | `ENABLE_CONTEXTFORGE_GATEWAY` | `false` |
 
 Either `PROXMOX_TOKEN_NAME` + `PROXMOX_TOKEN_VALUE` or `PROXMOX_PASSWORD` is required for authentication.
 
-When `TOOL_ROUTING` is set to `true`, the server exposes only 3 tools — `route_tools`, `call_routed_tool`, and `proxmox_api_raw` — instead of the full set. Use `route_tools` with a natural-language query to find relevant tools, then invoke them via `call_routed_tool`. This significantly reduces LLM context usage. Requires the `router` extra (`pip install proxmox-mcp-server[router]`).
+When `TOOL_ROUTING` is set to `true`, the server exposes the 19 core operational tools directly, plus `route_tools` and `call_routed_tool`. Use `route_tools` with a natural-language query to find specialized tools, then invoke them via `call_routed_tool`. You can customize the visible tool set by passing a comma-separated list to `ALWAYS_VISIBLE_TOOLS`. This significantly reduces LLM context usage while avoiding discovery roundtrips for daily tasks. Requires the `router` extra (`pip install proxmox-mcp-server[router]`).
 
 ## Development
 

@@ -217,10 +217,11 @@ def register(mcp: FastMCP) -> None:
         tags: Annotated[str, Field(description="Semicolon-separated tags.")] = "",
         hotplug: Annotated[str, Field(description="Hotplug features ('disk,network,usb,memory,cpu').")] = "",
         delete: Annotated[str, Field(description="Comma-separated settings to delete.")] = "",
+        extra_config: Annotated[str, Field(description="JSON string or comma-separated key=value pairs for any additional Proxmox QEMU parameters, such as virtual disks (e.g. '{\"scsi0\": \"local-zfs:vm-100-disk-0,mbps_wr=250,discard=on\"}'), secondary network devices, or custom hardware flags.")] = "",
     ) -> str:
         """Update hardware resources, network interfaces, or boot order for an existing VM.
 
-        Use when adjusting VM memory, CPU allocation, network settings, or tags.
+        Use when adjusting VM memory, CPU allocation, network settings, disk throttles, or tags.
 
         Args:
             node: The node name.
@@ -238,6 +239,7 @@ def register(mcp: FastMCP) -> None:
             tags: Semicolon-separated tags.
             hotplug: Hotplug features (disk, network, usb, memory, cpu).
             delete: Comma-separated list of settings to delete.
+            extra_config: JSON string or key=value pairs for extra QEMU options (e.g. disk configs/throttles, net1).
         """
         params: dict = {}
         for key, val in [
@@ -261,6 +263,18 @@ def register(mcp: FastMCP) -> None:
             params["sockets"] = sockets
         if onboot is not None:
             params["onboot"] = int(onboot)
+        if extra_config:
+            import json as _json
+            try:
+                parsed_extra = _json.loads(extra_config)
+                if isinstance(parsed_extra, dict):
+                    params.update(parsed_extra)
+            except _json.JSONDecodeError:
+                # Support key=value,key2=value2 format fallback
+                for item in extra_config.split(","):
+                    if "=" in item:
+                        k, v = item.split("=", 1)
+                        params[k.strip()] = v.strip()
         return format_response(api_request("put", f"/nodes/{node}/qemu/{vmid}/config", **params))
 
     @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
@@ -314,6 +328,7 @@ def register(mcp: FastMCP) -> None:
         vmid: Annotated[int, Field(description="QEMU VM ID.")],
         timeout: Annotated[int, Field(description="Wait timeout in seconds.")] = 0,
         skiplock: Annotated[bool, Field(description="If True, ignore locks (requires root).")] = False,
+        overrule_shutdown: Annotated[bool, Field(description="If True, overrule/cancel any pending or active shutdown task.")] = False,
     ) -> str:
         """Forcefully stop a QEMU VM immediately (hard power kill).
 
@@ -324,12 +339,15 @@ def register(mcp: FastMCP) -> None:
             vmid: The VM ID.
             timeout: Wait timeout in seconds.
             skiplock: Ignore locks (requires root).
+            overrule_shutdown: Cancel active shutdown task and force hard stop.
         """
         params: dict = {}
         if timeout:
             params["timeout"] = timeout
         if skiplock:
             params["skiplock"] = 1
+        if overrule_shutdown:
+            params["overrule-shutdown"] = 1
         return format_response(api_request("post", f"/nodes/{node}/qemu/{vmid}/status/stop", **params))
 
     @mcp.tool(annotations=ToolAnnotations(destructiveHint=False, idempotentHint=False))
@@ -572,6 +590,28 @@ def register(mcp: FastMCP) -> None:
             params["delete"] = 1
         return format_response(api_request("post", f"/nodes/{node}/qemu/{vmid}/move_disk", **params))
 
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=False))
+    def unlink_vm_disk(
+        node: Annotated[str, Field(description="PVE host node name.")],
+        vmid: Annotated[int, Field(description="QEMU VM ID.")],
+        idlist: Annotated[str, Field(description="Comma-separated disk keys to detach (e.g., 'scsi0', 'scsi1,virtio0').")],
+        force: Annotated[bool, Field(description="If True, force detachment even if guest is running or locked.")] = False,
+    ) -> str:
+        """Unlink and detach a virtual disk from a VM without deleting the underlying storage volume.
+
+        Use when safely disconnecting a disk image from a VM so it moves to 'unused[n]' status.
+
+        Args:
+            node: The node name.
+            vmid: The VM ID.
+            idlist: Comma-separated disk keys (e.g. 'scsi0,scsi1').
+            force: Force detachment.
+        """
+        params: dict = {"idlist": idlist}
+        if force:
+            params["force"] = 1
+        return format_response(api_request("put", f"/nodes/{node}/qemu/{vmid}/unlink", **params))
+
     # ── Snapshots ─────────────────────────────────────────────────────
 
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
@@ -644,6 +684,7 @@ def register(mcp: FastMCP) -> None:
         node: Annotated[str, Field(description="PVE host node name.")],
         vmid: Annotated[int, Field(description="QEMU VM ID.")],
         snapname: Annotated[str, Field(description="Snapshot name to revert VM state to.")],
+        start: Annotated[bool, Field(description="If True, automatically start the VM after rollback completes.")] = False,
     ) -> str:
         """Revert QEMU VM hardware configuration and disk contents to a previous snapshot state.
 
@@ -655,8 +696,12 @@ def register(mcp: FastMCP) -> None:
             node: The node name.
             vmid: The VM ID.
             snapname: The snapshot name to rollback to.
+            start: Start the VM after restoring snapshot.
         """
-        return format_response(api_request("post", f"/nodes/{node}/qemu/{vmid}/snapshot/{snapname}/rollback"))
+        params: dict = {}
+        if start:
+            params["start"] = 1
+        return format_response(api_request("post", f"/nodes/{node}/qemu/{vmid}/snapshot/{snapname}/rollback", **params))
 
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
     def get_vm_snapshot_config(

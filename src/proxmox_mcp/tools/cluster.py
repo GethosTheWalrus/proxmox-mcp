@@ -287,6 +287,75 @@ def register(mcp: FastMCP) -> None:
             params["keep"] = 1
         return format_response(api_request("delete", f"/cluster/replication/{id}", **params))
 
+    @mcp.tool(annotations=ToolAnnotations(destructiveHint=False, idempotentHint=True))
+    def update_replication_job(
+        id: Annotated[str, Field(description="Replication job ID formatted as 'GUEST-JOBNUM' (e.g., '100-0').")],
+        schedule: Annotated[str, Field(description="Systemd calendar format schedule (e.g., '*/15', 'daily', '22:00').")] = "",
+        rate: Annotated[float, Field(description="Bandwidth rate limit in MB/s (0 = leave unchanged or unlimited).")] = 0,
+        comment: Annotated[str, Field(description="Updated job description.")] = "",
+        disable: Annotated[bool | None, Field(description="Set True to disable job, False to enable.")] = None,
+        delete: Annotated[str, Field(description="Comma-separated properties to delete from config (e.g., 'rate,comment').")] = "",
+    ) -> str:
+        """Update schedule, bandwidth rate limit, or enabled state for a storage replication job.
+
+        Use when tuning ZFS replication frequency or disabling replication during maintenance.
+
+        Args:
+            id: Replication job ID (format: GUEST-JOBNUM, e.g. '100-0').
+            schedule: Schedule in systemd calendar format.
+            rate: Rate limit in MB/s.
+            comment: Description.
+            disable: True to disable, False to enable.
+            delete: Comma-separated list of properties to remove.
+        """
+        params: dict = {}
+        if schedule:
+            params["schedule"] = schedule
+        if rate > 0:
+            params["rate"] = rate
+        if comment:
+            params["comment"] = comment
+        if disable is not None:
+            params["disable"] = 1 if disable else 0
+        if delete:
+            params["delete"] = delete
+        return format_response(api_request("put", f"/cluster/replication/{id}", **params))
+
+    @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+    def get_replication_log(
+        id: Annotated[str, Field(description="Replication job ID formatted as 'GUEST-JOBNUM' (e.g., '100-0').")],
+        start: Annotated[int, Field(description="Line number to start reading logs from.")] = 0,
+        limit: Annotated[int, Field(description="Maximum number of log lines to retrieve (default 50).")] = 50,
+    ) -> str:
+        """Get execution logs for a storage replication job.
+
+        Use when diagnosing ZFS replication errors, snapshot sync failures, or transfer delays.
+
+        Args:
+            id: Replication job ID (format: GUEST-JOBNUM, e.g. '100-0').
+            start: Starting log line offset.
+            limit: Maximum log lines to return.
+        """
+        params: dict = {}
+        if start > 0:
+            params["start"] = start
+        if limit > 0:
+            params["limit"] = limit
+        return format_response(api_request("get", f"/cluster/replication/{id}/log", **params))
+
+    @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
+    def get_replication_status(
+        id: Annotated[str, Field(description="Replication job ID formatted as 'GUEST-JOBNUM' (e.g., '100-0').")],
+    ) -> str:
+        """Get real-time operational status for a storage replication job.
+
+        Use when inspecting replication run state, last sync timestamp, and failure counters.
+
+        Args:
+            id: Replication job ID (format: GUEST-JOBNUM, e.g. '100-0').
+        """
+        return format_response(api_request("get", f"/cluster/replication/{id}/status"))
+
     # ── Metrics ───────────────────────────────────────────────────────
 
     @mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
